@@ -1,0 +1,21 @@
+{
+  "ruleset_id": "zwds.fufire.core-seed.v1",
+  "ruleset_version": "0.1.0",
+  "ruleset_sha256": null,
+  "school_label": null,
+  "calendar_policy_id": null,
+  "calendar_policy_sha256": null,
+  "time_policy_id": null,
+  "time_policy_sha256": null,
+  "leap_month_policy_id": null,
+  "leap_month_policy_sha256": null,
+  "year_cycle_policy_id": null,
+  "year_cycle_policy_sha256": null,
+  "star_catalog_id": null,
+  "star_catalog_sha256": null,
+  "transformation_table_id": null,
+  "transformation_table_sha256": null,
+  "age_reckoning_id": null,
+  "age_reckoning_sha256": null,
+  "source_status": "SOURCE_NEEDED"
+}

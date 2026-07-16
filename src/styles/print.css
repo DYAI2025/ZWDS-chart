@@ -1,0 +1,184 @@
+/* ── Print Styles ───────────────────────────────────────── */
+@media print {
+  *,
+  *::before,
+  *::after {
+    background: transparent !important;
+    color: #000 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    animation: none !important;
+    transition: none !important;
+  }
+
+  body {
+    background: white !important;
+    color: #000 !important;
+    font-size: 12pt;
+  }
+
+  .atlas-nav,
+  .mineral-backdrop,
+  .hero,
+  .status-strip,
+  .btn,
+  .lang-switch,
+  .skip-link,
+  .mobile-navigator__controls,
+  .intake__actions,
+  .evidence-drawer,
+  .map-dialog-overlay {
+    display: none !important;
+  }
+
+  .section {
+    padding: 12pt 0 !important;
+  }
+
+  .palace-atlas {
+    border: 1pt solid #ccc !important;
+    background: white !important;
+  }
+
+  .palace-cell {
+    background: white !important;
+    border: 1pt solid #ccc !important;
+    color: #000 !important;
+    min-height: auto !important;
+    page-break-inside: avoid;
+  }
+
+  .palace-cell--dimmed {
+    opacity: 1 !important;
+  }
+
+  .palace-cell__hanzi {
+    color: #333 !important;
+  }
+
+  .atlas-center {
+    background: #f5f5f5 !important;
+    border: 1pt solid #ccc !important;
+  }
+
+  .atlas-center__hanzi,
+  .atlas-center__value {
+    color: #333 !important;
+  }
+
+  .inspector {
+    border: 1pt solid #ccc !important;
+    background: white !important;
+    page-break-inside: avoid;
+  }
+
+  .inspector__palace-title,
+  .inspector__hanzi {
+    color: #000 !important;
+  }
+
+  .report-module {
+    border: 1pt solid #ccc !important;
+    background: white !important;
+    page-break-inside: avoid;
+  }
+
+  .report-module__title {
+    color: #000 !important;
+  }
+
+  .report-layout {
+    display: block !important;
+  }
+
+  .report-layout__inspector {
+    position: static !important;
+  }
+
+  .decade-timeline {
+    display: block !important;
+  }
+
+  .decade-item {
+    display: inline-block !important;
+    margin: 2pt !important;
+  }
+
+  .bento {
+    display: block !important;
+  }
+
+  .bento-card {
+    page-break-inside: avoid;
+    border: 1pt solid #ccc !important;
+    margin-bottom: 6pt !important;
+  }
+
+  .truth-badge {
+    border: 1pt solid currentColor !important;
+  }
+
+  .relation-svg {
+    display: none !important;
+  }
+
+  .mobile-navigator {
+    display: none !important;
+  }
+
+  .palace-grid {
+    display: grid !important;
+  }
+
+  /* Footer */
+  .print-footer {
+    display: block !important;
+    margin-top: 24pt;
+    padding-top: 8pt;
+    border-top: 1pt solid #ccc;
+    font-size: 9pt;
+    color: #666 !important;
+  }
+
+  /* Relation text summary for print */
+  .relation-text-summary {
+    display: block !important;
+  }
+}
+
+/* ── Reduced Motion ─────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .mineral-circle,
+  .mineral-line {
+    animation: none !important;
+  }
+
+  .relation-line--harmony,
+  .relation-line--opposition {
+    animation: none !important;
+    stroke-dasharray: none !important;
+    stroke-dashoffset: 0 !important;
+  }
+
+  .bento-card__spotlight,
+  .bento-card__border-glow {
+    display: none !important;
+  }
+
+  .bento-particle {
+    display: none !important;
+  }
+
+  .loading__spinner {
+    animation-duration: 2s !important;
+  }
+}
