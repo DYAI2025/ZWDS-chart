@@ -146,3 +146,9 @@ Remaining: T09 (wire mobile-chromium + webkit install + component stage into ci.
 
 T09 (REQ-018 CI): ci.yml now installs chromium+webkit and runs `npx playwright test` (both desktop-chromium + mobile-WebKit projects) instead of desktop-only; component stage is the vitest jsdom project (already runs). Bumped vite 7.3.2->7.3.6 to clear a HIGH npm-audit advisory (server.fs.deny bypass + launch-editor NTLM, Windows) that would fail CI's `npm audit --audit-level=high`. FULL CI command list verified exit-0 locally on a real npm ci checkout (tsc/eslint/arch/vitest-both/build/playwright-both-16of16/audit). REQ-018 -> real-boundary-smoke (live Actions run would be production-verified).
 M3 (T08, T09) COMPLETE. Remaining: M4 (T10 AMD-002 not-authoritative label). Geocode pin (REQ-002) + key rotation still open.
+
+## T10 DONE (2026-07-17) — M4 complete, slice-1 build DONE
+
+T10 (AMD-002): persistent "illustrative, unreviewed — not authoritative" notice on the MAIN report (all sub-views, role=note, normal flow) + the PDF, bilingual DE/EN. Condition derived from the real model (sourceStatus != SOURCE_REVIEWED) via reportIsSourceReviewed() — self-hiding once a reviewer signs, UNSPOOFABLE (no config flag can hide it while SOURCE_NEEDED). Tests red->green + reviewed-variant absence test; mutation-verified. Verified: vitest 65 pass + 1 skip, eslint 0, tsc 0, arch-gates 0.
+SLICE-1 BUILD COMPLETE (all 5 milestones): M1 CI+fail-closed, M2 harness+partials, M-RECON real-contract, M3 a11y+CI, M4 AMD-002. AMD-001 (hard fail-closed) + AMD-002 (not-authoritative) done; AMD-003 pin PASS for the calculate boundary.
+OPEN before release: geocode real-pin (REQ-002, needs FUFIRE_GEOCODE_PATH or Google provider); source-governance reviewer sign-off (AMD-002 releases the label); key rotation. Then Gate C/D + user acceptance.

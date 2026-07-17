@@ -14,6 +14,30 @@ const GRID = { SI:[1,1],WU:[2,1],WEI:[3,1],SHEN:[4,1],CHEN:[1,2],YOU:[4,2],MAO:[
 
 const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (char) => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[char]));
 
+// AMD-002 / RISK-005: the exported report must carry the SAME persistent
+// "illustrative, unreviewed — not authoritative" notice as the on-screen report,
+// shown under the SAME honest condition — the report is authoritative only when it
+// is genuinely source-reviewed (sourceStatus === 'SOURCE_REVIEWED'). Wording mirrors
+// the browser localization keys (report.notAuthoritative.title/.body). Kept as a
+// standalone string here because the server PDF renderer has no build-time access to
+// the browser localization module; both surfaces are independently tested.
+const NOT_AUTHORITATIVE = {
+  'en-US': {
+    title: 'Illustrative, unreviewed — not authoritative',
+    body: 'This is an illustrative Core-Seed preview. Its interpretation content has not yet been reviewed and signed off by a source-governance reviewer, so it is not an authoritative traditional-school reading.',
+  },
+  'de-DE': {
+    title: 'Illustrativ, ungeprüft — nicht maßgeblich',
+    body: 'Dies ist eine illustrative Core-Seed-Vorschau. Ihre Interpretationsinhalte wurden noch nicht von einer Quellen-Governance-Prüfinstanz geprüft und freigegeben und stellen daher keine maßgebliche Lesung einer traditionellen Schule dar.',
+  },
+};
+
+function notAuthoritativeBlock(report, isDe) {
+  if (report.calculation.sourceStatus === 'SOURCE_REVIEWED') return '';
+  const copy = NOT_AUTHORITATIVE[isDe ? 'de-DE' : 'en-US'];
+  return `<section class="not-authoritative"><b>${escapeHtml(copy.title)}</b><span>${escapeHtml(copy.body)}</span></section>`;
+}
+
 export function renderReportHtml(report, locale = 'en-US') {
   const isDe = locale === 'de-DE';
   const placements = new Map(report.stars.map((placement) => [placement.placementId, placement]));
@@ -29,9 +53,10 @@ export function renderReportHtml(report, locale = 'en-US') {
   }).join('');
   const warningRows = report.quality.warnings.map((warning) => `<li><code>${escapeHtml(warning.code)}</code> ${escapeHtml(warning.message)}</li>`).join('');
   return `<!doctype html><html lang="${isDe ? 'de' : 'en'}"><head><meta charset="utf-8"><style>
-    @page{size:A4;margin:14mm 14mm 20mm}*{box-sizing:border-box}body{font:11px Manrope,Arial,sans-serif;color:#202322;background:#fff}h1,h2{font-family:Georgia,serif;margin:0 0 8mm}h1{font-size:28px}h2{font-size:18px;margin-top:8mm}.meta{display:grid;grid-template-columns:1fr 1fr;gap:3mm;border-block:1px solid #aaa;padding:4mm 0;margin-bottom:6mm}.chart{display:grid;grid-template:repeat(4,42mm)/repeat(4,1fr);gap:1mm;page-break-inside:avoid}.palace{border:1px solid #777;padding:3mm;display:flex;flex-direction:column;gap:1mm;overflow:hidden}.palace>b{font-size:10px}.hanzi{font-family:"Noto Serif TC","Source Han Serif TW",serif}.palace>.hanzi{font-size:19px}.palace small{color:#555}.star{display:block;margin-top:1mm}.center{grid-column:2/4;grid-row:2/4;border:1px solid #b08a48;padding:8mm;display:flex;flex-direction:column;justify-content:center;text-align:center}.limits{page-break-inside:avoid}code{font-size:9px}.source{font-weight:bold}.footer-note{margin-top:8mm;border-top:1px solid #aaa;padding-top:3mm;color:#555}
+    @page{size:A4;margin:14mm 14mm 20mm}*{box-sizing:border-box}body{font:11px Manrope,Arial,sans-serif;color:#202322;background:#fff}h1,h2{font-family:Georgia,serif;margin:0 0 8mm}h1{font-size:28px}h2{font-size:18px;margin-top:8mm}.meta{display:grid;grid-template-columns:1fr 1fr;gap:3mm;border-block:1px solid #aaa;padding:4mm 0;margin-bottom:6mm}.chart{display:grid;grid-template:repeat(4,42mm)/repeat(4,1fr);gap:1mm;page-break-inside:avoid}.palace{border:1px solid #777;padding:3mm;display:flex;flex-direction:column;gap:1mm;overflow:hidden}.palace>b{font-size:10px}.hanzi{font-family:"Noto Serif TC","Source Han Serif TW",serif}.palace>.hanzi{font-size:19px}.palace small{color:#555}.star{display:block;margin-top:1mm}.center{grid-column:2/4;grid-row:2/4;border:1px solid #b08a48;padding:8mm;display:flex;flex-direction:column;justify-content:center;text-align:center}.limits{page-break-inside:avoid}code{font-size:9px}.source{font-weight:bold}.footer-note{margin-top:8mm;border-top:1px solid #aaa;padding-top:3mm;color:#555}.not-authoritative{border:1px solid #a77b43;border-left:4px solid #a77b43;background:#faf3e6;padding:3mm 4mm;margin-bottom:6mm;page-break-inside:avoid}.not-authoritative>b{display:block;color:#8a5f2a;font-size:12px;margin-bottom:1mm}.not-authoritative>span{color:#333}
   </style></head><body>
     <h1>BaZodiac · Zi Wei Dou Shu Atlas</h1>
+    ${notAuthoritativeBlock(report, isDe)}
     <div class="meta"><div><b>Ruleset</b><br>${escapeHtml(report.calculation.rulesetId)} · ${escapeHtml(report.calculation.rulesetVersion)}</div><div><b>${isDe ? 'Quellenstatus' : 'Source status'}</b><br><span class="source">${escapeHtml(report.calculation.sourceStatus)}</span></div><div><b>Fingerprint</b><br><code>${escapeHtml(report.calculation.chartFingerprint)}</code></div><div><b>${isDe ? 'Datenmodus' : 'Data mode'}</b><br>${escapeHtml(report.calculation.dataMode)}</div></div>
     <div class="chart">${cells}<section class="center"><b>MING · ${escapeHtml(report.anchors.mingBranchId)}</b><b>SHEN · ${escapeHtml(report.anchors.shenBranchId)}</b><p>${escapeHtml(report.anchors.bureauId)} · ${report.anchors.bureauNumber}</p></section></div>
     <section class="limits"><h2>${isDe ? 'Zehnjährige Themenfenster' : 'Ten-year theme windows'}</h2><p>${report.decades ? report.decades.map((d) => `${d.ageStart}–${d.ageEnd}: ${escapeHtml(d.palaceId)}`).join(' · ') : '—'}</p></section>

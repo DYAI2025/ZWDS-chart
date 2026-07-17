@@ -241,6 +241,10 @@ export const en: LocaleMessages = {
   'mobile.prevPalace': 'Previous palace',
   'mobile.nextPalace': 'Next palace',
 
+  // Not-authoritative release gate (AMD-002 / RISK-005)
+  'report.notAuthoritative.title': 'Illustrative, unreviewed — not authoritative',
+  'report.notAuthoritative.body': 'This is an illustrative Core-Seed preview. Its interpretation content has not yet been reviewed and signed off by a source-governance reviewer, so it is not an authoritative traditional-school reading.',
+
   // Print
   'print.fingerprint': 'Chart fingerprint',
 

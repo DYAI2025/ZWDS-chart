@@ -845,7 +845,10 @@ h1, h2, h3, h4, h5, h6 {
 
 .report-layout {
   display: grid;
-  grid-template-columns: 1fr var(--inspector-width);
+  /* minmax(0, 1fr) (not 1fr) so the flexible column can shrink below its children's
+     min-content instead of forcing the grid — and the page — wider than the viewport
+     (REQ-016B: no horizontal body scroll at 360px). */
+  grid-template-columns: minmax(0, 1fr) var(--inspector-width);
   gap: var(--space-md);
   padding: var(--space-md);
   max-width: var(--max-content-width);
@@ -854,6 +857,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .report-layout__atlas {
   min-height: 500px;
+  min-width: 0;
 }
 
 .report-layout__inspector {
@@ -866,6 +870,7 @@ h1, h2, h3, h4, h5, h6 {
 .report-layout__timeline {
   grid-column: 1 / -1;
   padding: var(--space-lg) 0;
+  min-width: 0;
 }
 
 /* ── Palace Atlas ───────────────────────────────────────── */
@@ -1364,11 +1369,49 @@ h1, h2, h3, h4, h5, h6 {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-lg);
+  /* Grid items default to min-width:auto (min-content), so this `grid-column: 1/-1`
+     panel refused to shrink below its two side-by-side blocks (~1244px) and pushed the
+     page past the 360px viewport. min-width:0 lets it shrink to its track so flex-wrap
+     can stack the blocks (REQ-016B: no horizontal body scroll). */
+  min-width: 0;
 }
 
 .report-provenance__block {
   flex: 1 1 240px;
   min-width: 0;
+}
+
+/* Long provenance ids / SHA hashes are unbreakable tokens; let them wrap so they
+   never force horizontal overflow on narrow viewports. */
+.report-provenance code {
+  overflow-wrap: anywhere;
+}
+
+/* Persistent "illustrative, unreviewed — not authoritative" release-gate notice
+   (AMD-002 / RISK-005). Sits in normal document flow at the top of the report
+   layout on every sub-view, so it is always visible but never overlaps controls.
+   The amber "source needed" accent signals review-pending without being alarmist. */
+.report-notice {
+  border: 1px solid var(--color-source-needed-on-dark);
+  border-left: 4px solid var(--color-source-needed-on-dark);
+  border-radius: var(--radius-md);
+  background: rgba(212, 173, 102, 0.1);
+  padding: var(--space-md) var(--space-lg);
+  margin-bottom: var(--space-md);
+  min-width: 0;
+}
+
+.report-notice__title {
+  font-weight: 700;
+  color: var(--color-source-needed-on-dark);
+  margin: 0 0 var(--space-xs);
+}
+
+.report-notice__body {
+  font-size: var(--text-sm);
+  color: var(--color-timberwolf);
+  line-height: var(--leading-relaxed);
+  margin: 0;
 }
 
 /* ── Evidence Drawer ────────────────────────────────────── */
@@ -1562,7 +1605,7 @@ h1, h2, h3, h4, h5, h6 {
   }
 
   .report-layout {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .report-layout__inspector {
@@ -1587,6 +1630,12 @@ h1, h2, h3, h4, h5, h6 {
     justify-content: flex-start;
     overflow-x: auto;
     flex-wrap: nowrap;
+    /* As a flex item in the column .app-shell, the nowrap strip would stretch to its
+       ~1260px min-content and push the page sideways; clamp it to the viewport so
+       overflow-x:auto actually clips and scrolls internally (REQ-016B: no horizontal
+       body scroll; the strip is keyboard-scrollable via tabIndex=0). */
+    min-width: 0;
+    max-width: 100%;
   }
 
   .hero__title {
@@ -1613,7 +1662,7 @@ h1, h2, h3, h4, h5, h6 {
   }
 
   .report-layout {
-    grid-template-columns: 1fr 320px;
+    grid-template-columns: minmax(0, 1fr) 320px;
   }
 
   .mobile-navigator {

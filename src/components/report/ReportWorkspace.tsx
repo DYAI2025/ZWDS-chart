@@ -4,7 +4,32 @@ import { EvidenceDrawer, EvidencePage, EvidenceSection } from '@/components/evid
 import { SourceChip, TruthBadge } from '@/components/common/ReportPrimitives';
 import { labelFor, lookupBureau, lookupPalace, lookupStar, lookupTransformation } from '@/data/zwdsCatalog';
 import type { NormalizedZwdsReport } from '@/domain/zwdsTypes';
+import { reportIsSourceReviewed } from '@/domain/zwdsTypes';
 import type { TruthClass } from '@/domain/truthTypes';
+
+// AMD-002 / RISK-005: until the interpretation catalog / ruleset is signed off by a
+// source-governance reviewer, every public report must carry a persistent, prominent
+// "illustrative, unreviewed — not authoritative" notice. It is rendered at the top of
+// the MAIN report surface for EVERY sub-view (never behind a tab, tooltip or <details>)
+// and stays in normal flow so it never overlaps the controls the a11y/touch-target
+// specs measure. The condition is derived from the real model: it shows whenever the
+// report is not genuinely SOURCE_REVIEWED, so it self-hides once a reviewer signs the
+// source and cannot be spoofed away while the data is still SOURCE_NEEDED.
+function NotAuthoritativeNotice() {
+  const { state, t } = useApp();
+  const report = state.report!;
+  if (reportIsSourceReviewed(report)) return null;
+  return <div
+    className="report-notice"
+    role="note"
+    aria-label={t('report.notAuthoritative.title')}
+    data-testid="report-not-authoritative"
+    style={{ gridColumn: '1/-1' }}
+  >
+    <p className="report-notice__title">{t('report.notAuthoritative.title')}</p>
+    <p className="report-notice__body">{t('report.notAuthoritative.body')}</p>
+  </div>;
+}
 
 // Convention identifiers the calculation model may resolve. A null value means
 // the convention has NOT been resolved to a reviewed identifier yet — that is
@@ -65,5 +90,5 @@ function MethodPage() {
 export function ReportWorkspace() {
   const { state, t } = useApp();
   const report = state.report!;
-  return <main className="report-workspace"><div className="report-layout container"><ReportProvenancePanel/>{state.reportSubView === 'atlas' && <PalaceWorkspace/>}{state.reportSubView === 'reading' && <ReadingPage/>}{state.reportSubView === 'evidence' && <EvidencePage/>}{state.reportSubView === 'method' && <MethodPage/>}</div><EvidenceDrawer/><footer className="print-footer">{t('print.fingerprint')}: {report.calculation.chartFingerprint} · {report.calculation.sourceStatus} · {report.calculation.rulesetId}</footer></main>;
+  return <main className="report-workspace"><div className="report-layout container"><NotAuthoritativeNotice/><ReportProvenancePanel/>{state.reportSubView === 'atlas' && <PalaceWorkspace/>}{state.reportSubView === 'reading' && <ReadingPage/>}{state.reportSubView === 'evidence' && <EvidencePage/>}{state.reportSubView === 'method' && <MethodPage/>}</div><EvidenceDrawer/><footer className="print-footer">{t('print.fingerprint')}: {report.calculation.chartFingerprint} · {report.calculation.sourceStatus} · {report.calculation.rulesetId}</footer></main>;
 }

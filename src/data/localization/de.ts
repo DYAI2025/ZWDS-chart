@@ -237,6 +237,10 @@ export const de: LocaleMessages = {
   'mobile.prevPalace': 'Vorheriger Palast',
   'mobile.nextPalace': 'Nächster Palast',
 
+  // Not-authoritative release gate (AMD-002 / RISK-005)
+  'report.notAuthoritative.title': 'Illustrativ, ungeprüft — nicht maßgeblich',
+  'report.notAuthoritative.body': 'Dies ist eine illustrative Core-Seed-Vorschau. Ihre Interpretationsinhalte wurden noch nicht von einer Quellen-Governance-Prüfinstanz geprüft und freigegeben und stellen daher keine maßgebliche Lesung einer traditionellen Schule dar.',
+
   // Print
   'print.fingerprint': 'Chart-Fingerabdruck',
 

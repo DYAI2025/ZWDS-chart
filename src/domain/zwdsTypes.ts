@@ -281,6 +281,23 @@ export function relatedPalaces(
   };
 }
 
+/**
+ * AMD-002 / RISK-005 release gate. The report may be presented as an authoritative
+ * traditional-school reading ONLY when its interpretation source has genuinely been
+ * signed off — i.e. the calculation carries `sourceStatus === 'SOURCE_REVIEWED'`.
+ * Any other value (SOURCE_NEEDED, BLOCKED) means the ruleset/source is not yet
+ * reviewed, so the "illustrative, unreviewed — not authoritative" notice MUST show.
+ *
+ * Derived straight from the real model, so it is self-maintaining: the moment a
+ * source-governance reviewer signs the source and it becomes SOURCE_REVIEWED, the
+ * notice auto-hides. It CANNOT be spoofed to hide while the data is still
+ * SOURCE_NEEDED, because the only value that returns `true` here is the very value
+ * that means the source really was reviewed.
+ */
+export function reportIsSourceReviewed(report: NormalizedZwdsReport): boolean {
+  return report.calculation.sourceStatus === 'SOURCE_REVIEWED';
+}
+
 export function placementsForPalace(
   report: NormalizedZwdsReport,
   palaceId: PalaceId
