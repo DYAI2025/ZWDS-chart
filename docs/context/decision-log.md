@@ -18,9 +18,9 @@
 | D-014 | 2026-07-17 | Wired PRIL enforcement CLIs locally (gitignored wrappers pinning /usr/bin/python3) after the Stop hook blocked on missing CLIs; fixed the real gate failures it caught (confirmation markers, scope heading). Gates now machine-provable: context+scope PASS. | orchestrator | Honest fix, not a bypass; reality-check deferred to Gate C. |
 | D-015 | 2026-07-17 | T02 (AMD-001 hard fail-closed) implemented test-first, independently reviewed (code PASS, security PASS, Watcher value-risk). Reviewer strengthenings applied. Honest reality ledger created (integration-fake; reality-check RED at integration floor — real-boundary pending AMD-003/T11). Iteration 1/4 complete. | orchestrator | Watcher value-risk = user-accepted release-gated RED; code proceeds, value cert pending. |
 | D-016 | 2026-07-17 | T07 (REQ-017): report-pdf token-check reorder + reportStore expiry/prune/token tests. security PASS; code changes-requested (tautological prune test) -> fixed with reportCount/resetReports introspection, mutation-verified. Surfaced+fixed a latent test-isolation bug. | orchestrator | Test strengthened, not gamed. |
+| D-017 | 2026-07-17 | T04 (REQ-011) code done + reviewed (code PASS). Watcher BLOCK on the reality floor (integration-fake < integration); escalation-asymmetry forbids self-downgrade. Escalating the slice-1 done-bar decision to the user; paused. | orchestrator->user | Watcher: keep code, user owns the done-bar / AMD-003. |
 
 ## Open contradictions ledger
 
 None recorded (no `CONTRA-<id>`). The 12 reality-fake REQs are surfaced as `value-risk` in the
 traceability matrix, not laundered into "known limitations"; user reclassification only.
-| D-017 | 2026-07-17 | T04 (REQ-011) code done + reviewed (code PASS). Watcher BLOCK on the reality floor (integration-fake < integration); escalation-asymmetry forbids self-downgrade. Escalating the slice-1 done-bar decision to the user; paused. | orchestrator->user | Watcher: keep code, user owns the done-bar / AMD-003. |
