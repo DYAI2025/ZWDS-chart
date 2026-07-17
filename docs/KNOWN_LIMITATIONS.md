@@ -1,5 +1,14 @@
 # Known Limitations
 
+> **UPDATE — 2026-07-17 (post-slice-1).** Several rows below are STALE (written pre-build in a
+> no-CLI sandbox). Now RESOLVED: **Lockfile/npm ci** (present, `npm ci` works), **Test/lint/E2E
+> execution** (all run green locally + wired in `ci.yml`), **npm advisories** (high cleared via
+> `vite@7.3.6`), **Live FuFirE** (real `/calculate` boundary PINNED — AMD-003 pin PASS, contract
+> reconciled). Still genuinely OPEN: **Live geocoding** (unpinned; user supplied Google keys but no
+> provider wired), **Reviewed hashes / Catalogue digest** (no named source-governance reviewer —
+> OQ-003), **LLM** (slice-2, corpus SOURCE_NEEDED). Canonical current status:
+> `docs/reality/bazodiac-zwds-atlas.evidence.jsonl` + `docs/traceability.md`.
+
 | Item | Status | Why | Next step |
 |---|---|---|---|
 | npm aliases | `MISSING` | Direct manifest editing prohibited here. | Add documented aliases in an allowed environment. |

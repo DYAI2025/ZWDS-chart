@@ -79,11 +79,11 @@ All other REQs: slice-1, unchanged from the matrix above.
 - **Geocode release-gate parity (extends AMD-003 — user-confirmed 2026-07-17):** REQ-002's geocode boundary sits at the same `integration-fake` class with a "backend-confirmed location" value claim, so **AMD-003's real-boundary pin extends to the geocode provider** — one real geocode response pinned before any public "backend-confirmed location" claim. User confirmed the extension at the USER GATE.
 - **AMD-001 × AMD-003 sequencing (hidden-coupling, mitigated):** hard fail-closed on the still-unverified, self-authored contract means a real FuFirE response carrying fields the fixture didn't anticipate would trigger a full refusal. Mitigation is **ordering**: reconcile the first real FuFirE response against the golden fixture (AMD-003 pin) **before** flipping the public "traceable to real data" claim — so first real users never meet routine refusals.
 
-## Notable semantic gaps (from audit, distinct from reality-thinness)
+## Notable semantic gaps (from the pre-build audit — status updated post-slice-1)
 
-- **REQ-013** — server PDF omits Pinyin entirely; REQ text requires Pinyin. Real Chromium A4 render never exercised (no CI Chromium).
-- **REQ-019** — unknown section evidence is soft-dropped (HTTP 200 + `SECTION_EVIDENCE_REJECTED` warning), not hard fail-closed; REQ text says unknown evidence fails closed.
-- **REQ-015** — no LLM integration exists; only a deterministic unknown-evidence filter. Deferred while corpus is SOURCE_NEEDED (OQ-003).
+- **REQ-019 — RESOLVED (T02/AMD-001).** Unknown / BLOCKED / unresolved evidence now HARD fail-closes: `server/normalize.mjs` `generateSections` throws `ContractError('EVIDENCE_UNRESOLVED')` and `/interpret` + `/calculate` return a 502 with a stable requestId and NO partial report/token. The old `SECTION_EVIDENCE_REJECTED` HTTP-200 soft-drop is gone. Enforced by `tests/integration/amd001-unknown-evidence.test.mjs` (mutation-verified).
+- **REQ-013 — OUTSTANDING (slice-2).** Server PDF omits Pinyin; real Chromium A4 render never exercised. Deferred by AMD-004; still owed by the Original Goal.
+- **REQ-015 — OUTSTANDING (slice-2).** No LLM integration exists; only a deterministic unknown-evidence filter. Deferred while the corpus is SOURCE_NEEDED (OQ-003).
 
 ## Confirmation
 

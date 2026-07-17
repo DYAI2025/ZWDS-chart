@@ -40,6 +40,7 @@ async function scan(page: Page) {
 }
 
 test('@a11y report/atlas view is axe-clean at default and at 200% zoom + reduced motion', async ({ page }, testInfo) => {
+  test.slow(); // multiple full axe scans (default + 200% zoom); 30s is too tight under 4-worker CPU contention. 3x timeout, deterministic — not relying on CI retries to mask a timeout.
   const isMobile = testInfo.project.name === 'mobile-chromium';
   await page.goto('/');
   await reachReportView(page);
@@ -72,6 +73,7 @@ test('@a11y report/atlas view is axe-clean at default and at 200% zoom + reduced
 });
 
 test('@a11y report reading / evidence / method sub-views are axe-clean', async ({ page }, testInfo) => {
+  test.slow(); // three sub-view axe scans; 3x timeout for determinism under parallel load.
   // The report sub-view tabs are the desktop atlas-nav links (display:none on mobile, where
   // the mobile navigator is the single surface). Drive the tab sweep on desktop only.
   test.skip(testInfo.project.name === 'mobile-chromium', 'report nav tabs are desktop-only; mobile covered by the atlas-view spec');
