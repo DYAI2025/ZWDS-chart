@@ -3,6 +3,13 @@
 # Without this, Nixpacks auto-detects a Vite app and serves dist/ statically — the BFF never
 # starts, so /api/* returns index.html and there is no live FuFirE path.
 
+# REQ-013 server-side PDF: puppeteer-core needs a real Chromium binary + CJK fonts in the
+# image, or POST /api/report-pdf renders tofu boxes / fails at launch. apt `chromium` installs
+# it at /usr/bin/chromium (matches PUPPETEER_EXECUTABLE_PATH); `fonts-noto-cjk` provides the
+# 命宮/官祿宮 glyphs the report grid renders. Additive to the auto-detected node setup.
+[phases.setup]
+aptPkgs = ["chromium", "fonts-noto-cjk"]
+
 [phases.build]
 cmds = ["npm ci", "npm run build"]
 
