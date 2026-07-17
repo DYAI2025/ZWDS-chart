@@ -55,3 +55,10 @@ fired: it requires the PRIL CLIs at `<repo>/config/claude/bin`, absent because t
   bullets the parser couldn't read (renamed to `## Allowed change scope`, one clean glob per line).
 - Gates verified PASS on the real surface: context-check exit 0, scope-check exit 0 (21 files).
 - `.feature-boundary` intentionally NOT created yet → reality-check skipped until Gate C.
+
+## Phase 1 complete (2026-07-17)
+
+Run `wf_a6d18cef-73b` (tester + planner). Plan: `docs/plans/2026-07-17-bazodiac-zwds-atlas.md`.
+11 tasks, 4 milestones, M=4 iterations. Iteration 1/4 (M1) = T01 (fix 3 CI eslint errors) + T02 (AMD-001 hard fail-closed).
+Tester finding: AMD-002 "not authoritative" label is ABSENT from src/server today → T10.
+Entering Phase 2 (coder/reviewer/security/Watcher loop).
