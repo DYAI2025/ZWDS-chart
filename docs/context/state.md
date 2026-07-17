@@ -14,11 +14,11 @@
 | 0.15 Product Canvas + user confirm | CLEARED (re-confirmed with AMD-001..004 on 2026-07-17) |
 | 0.16 Council challenge gate | CLEARED (ran wf_b440a0e9-841; user adopted all 4 points) |
 | Canvas + Vision RE-confirm | CLEARED (user "Re-confirm as amended" 2026-07-17) |
-| 0.5 PRIL context integrity | IN PROGRESS (reasoning-level; binary absent) |
-| 0.7 Spec-sanity audit | IN PROGRESS |
-| 0.2 PRD final freeze | PENDING (after spec-sanity) |
+| 0.5 PRIL context integrity | CLEARED (reasoning-level; binary absent) |
+| 0.7 Spec-sanity audit | CLEARED (PASS, 0 blockers; run wf_cc04fcd3-88f; 5 refinements applied) |
+| 0.2 PRD final freeze | CLEARED (FROZEN 2026-07-17) |
 | 0.4 Vision + user confirm | CLEARED (user-confirmed with amendments) |
-| USER GATE (DoD + matrix + spec-audit) | PENDING |
+| USER GATE (DoD + matrix + spec-audit) | IN PROGRESS |
 | Vision GO gate | PENDING (needs explicit user GO) |
 | 1..8 | BLOCKED until GO |
 

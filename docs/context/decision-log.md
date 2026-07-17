@@ -10,6 +10,9 @@
 | D-006 | 2026-07-17 | Phase 0.16 council challenge gate ran (Challenger/Advisor/Critic). All 3 converged "pull-pivot", 5 legitimate-blockers. | orchestrator | Run `wf_b440a0e9-841`, 3 independent agent types. |
 | D-007 | 2026-07-17 | User adopted ALL FOUR council steer options → AMD-001..004. Canvas + Vision returned to `draft`; re-confirm required. | **user** | No agent self-confirm. |
 | D-008 | 2026-07-17 | Scope shift (user-authored): slice-1 narrowed to 18 REQs; REQ-013 (PDF) + REQ-015 (LLM) → slice-2. **Original Goal (20 REQs) NOT reduced.** | **user** | Iteration status separated from Original Goal status. |
+| D-009 | 2026-07-17 | User re-confirmed Canvas + Vision as amended. | **user** | "Re-confirm as amended". |
+| D-010 | 2026-07-17 | Phase 0.7 spec-sanity PASS (0 blockers). 5 refinements applied before freeze; PRD FROZEN. | orchestrator | Run `wf_cc04fcd3-88f`; see `docs/context/spec-audit-2026-07-17.md`. |
+| D-011 | 2026-07-17 | Extended AMD-003 real-boundary pin to the geocode provider (parity). Flagged for user veto at USER GATE. | orchestrator | Consistent reading of AMD-003; not silent — surfaced for decision. |
 
 ## Open contradictions ledger
 

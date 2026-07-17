@@ -72,6 +72,12 @@ Original Goal = all 20 REQs (NOT reduced). Iteration-1 = 18 REQs; REQ-013 + REQ-
 
 All other REQs: slice-1, unchanged from the matrix above.
 
+**Spec-sanity refinements (run `wf_cc04fcd3-88f`, verdict PASS, applied before freeze):**
+
+- **wired-in-prod for TRC-013 / TRC-015:** read as **stub/partial**, not full production wiring — REQ-013 omits Pinyin + never really renders; REQ-015 has no real LLM integration (only a deterministic unknown-evidence filter). Both are deferred (slice-2); the `yes` in the matrix means "route reachable through the composition root", not "capability complete".
+- **Geocode release-gate parity (extends AMD-003):** REQ-002's geocode boundary sits at the same `integration-fake` class with a "backend-confirmed location" value claim, so **AMD-003's real-boundary pin extends to the geocode provider** — one real geocode response pinned before any public "backend-confirmed location" claim. (Flagged for user veto at the USER GATE; the consistent reading of AMD-003, not a silent expansion.)
+- **AMD-001 × AMD-003 sequencing (hidden-coupling, mitigated):** hard fail-closed on the still-unverified, self-authored contract means a real FuFirE response carrying fields the fixture didn't anticipate would trigger a full refusal. Mitigation is **ordering**: reconcile the first real FuFirE response against the golden fixture (AMD-003 pin) **before** flipping the public "traceable to real data" claim — so first real users never meet routine refusals.
+
 ## Notable semantic gaps (from audit, distinct from reality-thinness)
 
 - **REQ-013** — server PDF omits Pinyin entirely; REQ text requires Pinyin. Real Chromium A4 render never exercised (no CI Chromium).

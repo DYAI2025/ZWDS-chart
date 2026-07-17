@@ -1,6 +1,6 @@
 # PRD: BaZodiac Zi Wei Dou Shu Atlas
 
-Status: foundation re-confirmed with amendments (final freeze pending Phase 0.7 spec-sanity)  
+Status: FROZEN (Phase 0.7 spec-sanity PASS `wf_cc04fcd3-88f`; 5 refinements applied; final PRD freeze 2026-07-17)  
 Feature Slug: bazodiac-zwds-atlas  
 Owner: BaZodiac Product Team  
 User Confirmation Required: yes  
@@ -68,7 +68,7 @@ Canvas + Vision: user-confirmed (with council amendments AMD-001..004) 2026-07-1
 | REQ-006 | The system builds an Evidence Index and truth-class metadata for ruleset, time, calendar, anchors, palaces, stars, transformations, relations, decades, quality and provenance. | P0 | EXPLICIT | SRC-002 |
 | REQ-007 | The report renders exactly 12 unique palaces in a correct perimeter or equivalent ring with a readable central chart core. | P0 | EXPLICIT | SRC-002 |
 | REQ-008 | Selecting a palace identifies focus, two harmony palaces and opposition and updates a keyboard-accessible inspector. | P0 | EXPLICIT | SRC-002 |
-| REQ-009 | The report renders verified Hanzi, tone-marked Pinyin, DE/EN labels and source status from a versioned catalog. | P0 | EXPLICIT | SRC-002 |
+| REQ-009 | The report renders catalog Hanzi (glyph/policy-verified per EV-009 — NOT content-authoritative; content review is SOURCE_NEEDED and gated by AMD-002), tone-marked Pinyin, DE/EN labels and source status from a versioned catalog. | P0 | EXPLICIT | SRC-002 |
 | REQ-010 | The base report provides deterministic explanations and remains complete when the LLM feature is disabled. | P0 | EXPLICIT | SRC-002 |
 | REQ-011 | Calculation quality, ruleset, source status, unresolved conventions, provenance and chart fingerprint are visible in the main report. | P0 | EXPLICIT | SRC-002 |
 | REQ-012 | When present upstream, 12 ten-year theme windows are displayed without overwriting the natal chart and with age-reckoning metadata preserved. | P1 | EXPLICIT | SRC-002 |
@@ -94,7 +94,7 @@ Canvas + Vision: user-confirmed (with council amendments AMD-001..004) 2026-07-1
 | AC-007 | REQ-007 | the golden fixture renders | the atlas layout is inspected | exactly 12 unique palaces occupy the perimeter and the central core remains readable | EXPLICIT |
 | AC-008 | REQ-008 | a palace is selected by pointer or keyboard | selection changes | focus, two harmony palaces and opposition are visible and announced textually without losing keyboard focus | EXPLICIT |
 | AC-009 | REQ-009 | DE and EN reports render | catalog and glyph checks run | expected Hanzi and tone-marked Pinyin appear from the versioned catalog without mixed script policy | EXPLICIT |
-| AC-010 | REQ-010 | LLM configuration is absent | a valid chart is calculated | the full deterministic report, evidence view and PDF path remain available | EXPLICIT |
+| AC-010 | REQ-010 | LLM configuration is absent | a valid chart is calculated | the full deterministic report and evidence view remain available (the PDF path is slice-2 per AMD-004 and is out of slice-1 AC scope) | EXPLICIT |
 | AC-011 | REQ-011 | the upstream source status is SOURCE_NEEDED or school label is absent | the report renders | the limitation is visible in the main report and not only in a tooltip | EXPLICIT |
 | AC-012 | REQ-012 | the response includes decadal windows | the user selects a window | the related palace is highlighted while natal placements remain unchanged | EXPLICIT |
 | AC-013 | REQ-013 | a DE or EN report is available | server PDF generation completes | extracted PDF text contains language content, Chinese text, Pinyin, fingerprint and source status without clipping | EXPLICIT |
