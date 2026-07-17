@@ -15,8 +15,9 @@ jobs:
       - run: npx tsc --noEmit
       - run: npx eslint .
       - run: node scripts/architecture-gates.mjs
-      - run: npx vitest run
+      - run: npx vitest run          # unit + contract + component (node + jsdom projects)
       - run: npm run build
-      - run: npx playwright install --with-deps chromium
-      - run: npx playwright test --project=desktop-chromium
+      # mobile-chromium uses the iPhone-13 device, which runs on WebKit — install both engines.
+      - run: npx playwright install --with-deps chromium webkit
+      - run: npx playwright test     # e2e + a11y (axe), desktop-chromium AND mobile (WebKit @360px)
       - run: npm audit --audit-level=high

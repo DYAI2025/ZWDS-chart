@@ -141,3 +141,8 @@ M2 tail (T05, T06) COMPLETE. Remaining: M3 (T08 a11y reality-ground, T09 CI wiri
 
 T08 (REQ-016B a11y reality-ground): tests/e2e/atlas-a11y.spec.ts runs axe on the REPORT/atlas view at default AND 200% zoom (native document zoom, non-vacuous guard) + reduced motion, in real chromium+webkit; desktop-only grid features layout-gated (mobile via .mobile-navigator, not skipped-away). Real axe scan CAUGHT + FIXED a genuine contrast bug (black .hanzi palace glyph ~1.3:1 on dark) via new WCAG-AA --color-*-on-dark tokens (base palette untouched; wired in globals.css). Fixed the REQ-008 aria-live gap: AppShell now announces selection + harmony/opposition relations (extracted relatedPalaces to zwdsTypes, shared with PalaceWorkspace — DRY). No axe rules disabled/excluded. Full e2e 16/16 both projects. REQ-008 -> real-boundary-smoke; REQ-016 strengthened (200%/atlas real-verified).
 Remaining: T09 (wire mobile-chromium + webkit install + component stage into ci.yml), T10 (AMD-002 label).
+
+## T09 DONE (2026-07-17) — M3 complete
+
+T09 (REQ-018 CI): ci.yml now installs chromium+webkit and runs `npx playwright test` (both desktop-chromium + mobile-WebKit projects) instead of desktop-only; component stage is the vitest jsdom project (already runs). Bumped vite 7.3.2->7.3.6 to clear a HIGH npm-audit advisory (server.fs.deny bypass + launch-editor NTLM, Windows) that would fail CI's `npm audit --audit-level=high`. FULL CI command list verified exit-0 locally on a real npm ci checkout (tsc/eslint/arch/vitest-both/build/playwright-both-16of16/audit). REQ-018 -> real-boundary-smoke (live Actions run would be production-verified).
+M3 (T08, T09) COMPLETE. Remaining: M4 (T10 AMD-002 not-authoritative label). Geocode pin (REQ-002) + key rotation still open.
