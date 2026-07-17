@@ -29,7 +29,10 @@ const envSchema = z.object({
   RULESET_ID: z.string().default('zwds.fufire.core-seed.v1'),
   LLM_ENABLED: z.enum(['true','false']).default('false').transform((value) => value === 'true'),
   LLM_CORPUS_STATUS: z.literal('SOURCE_NEEDED').default('SOURCE_NEEDED'),
-  PUPPETEER_EXECUTABLE_PATH: z.string().min(1).optional(),
+  // .trim(): a stray trailing space in the stored value (seen on Railway as
+  // "/usr/bin/chromium  ") makes Puppeteer look for a path that does not exist and fail
+  // PDF render with an opaque 503. Normalize it here so config can't be broken by whitespace.
+  PUPPETEER_EXECUTABLE_PATH: z.string().trim().min(1).optional(),
   ALLOWED_ORIGIN: z.string().url().optional(),
 }).superRefine((config, context) => {
   if (config.PORT === 0 && config.NODE_ENV !== 'test') context.addIssue({ code: 'custom', path: ['PORT'], message: 'PORT=0 is allowed only in test mode' });
