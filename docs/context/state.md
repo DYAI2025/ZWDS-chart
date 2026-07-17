@@ -79,3 +79,7 @@ Applied reviewer strengthenings: per-entry BLOCKED check (heterogeneous-status g
 Verified GREEN: vitest 45/45 (amd001 4/4), eslint 0, tsc 0, arch-gates 0.
 Reality ledger docs/reality/bazodiac-zwds-atlas.evidence.jsonl created HONESTLY: all slice-1 evidence is integration-fake (real assembled BFF via supertest, fixture data). plumbline-reality-check PASSES at min-evidence integration-fake, FAILS at integration — the truthful RED. Real-boundary (integration+) needs the AMD-003 pin (T11, external creds). This is the user-accepted release-gated RED; NOT laundered, NOT self-downgraded.
 Iteration 1/4 (M1) COMPLETE: T01 + T02 done.
+
+## Iteration 2/4 — T03 DONE (2026-07-17)
+
+T03 (component-test stage): vitest.config.ts now has two projects — `node` (existing 45 tests, include unchanged) + `component` (jsdom + @testing-library/react, tests/component/**/*.test.tsx). Real render smoke test tests/component/reportSmoke.test.tsx mounts the REAL AppProvider + real reducer (CALCULATION_SUCCESS with DEMO_REPORT) and renders the real StatusStrip — no mocks. Added devDeps: jsdom, @testing-library/{react,dom,jest-dom,user-event}. `npx vitest run` runs BOTH projects. Independent verification (orchestrator): vitest 46/46, eslint 0, tsc 0, arch-gates 0. Enables T04/T05/T06.
