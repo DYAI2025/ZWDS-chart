@@ -39,6 +39,9 @@ Repo-relative globs in scope for the confirmed contract-first slice (CAN-011). O
 - index.html
 - .gitignore
 - .env.example
+- nixpacks.toml
+- railway.json
+- railway.toml
 - CLAUDE.md
 - config/**
 
