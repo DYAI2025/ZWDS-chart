@@ -158,3 +158,7 @@ OPEN before release: geocode real-pin (REQ-002, needs FUFIRE_GEOCODE_PATH or Goo
 Gate C PASS-WITH-RED + Gate D ACCEPT-WITH-NOTES (run wf_0f705a18-075); all actionable findings remediated (e2e flake fixed, ledger 18/18, stale docs corrected). USER ACCEPTED slice-1. /agileteam flow complete through Phase 7 (user acceptance). Phase 4 retro is human-gated in CORE (available via /reflect).
 Slice-1 = 18 REQs delivered + honestly validated (16 pass, REQ-002 partial/geocode-unpinned, REQ-013/015 deferred slice-2). Reality-check passes at real-boundary-smoke; live FuFirE calculate pinned.
 STANDING (user-owned, not slice-1 blockers): geocode real-pin (REQ-002), source-governance reviewer sign-off + catalog entry-status downgrade (AMD-002/OQ-003), AMD-003 n=1 robustness (pin 2-3 profiles + live Actions run), slice-2 (REQ-013 PDF, REQ-015 LLM), ROTATE the exposed FuFirE+Google keys, push/PR decision. .active-feature marker left armed (feature not fully done; enforcement stays live).
+
+## Branch pushed + CI production-verified (2026-07-17)
+
+Pre-push secret scan CLEAN (0 committed key hits; .env gitignored/never committed). Pushed agileteam/bazodiac-zwds-atlas -> origin. GitHub Actions run 29598629529 conclusion=SUCCESS (full pipeline incl. playwright chromium+webkit both projects). REQ-018 -> production-verified. STILL OPEN: rotate exposed keys; geocode pin; reviewer sign-off + catalog entry-status; AMD-003 n=1; slice-2 (REQ-013/015); PR merge decision.
