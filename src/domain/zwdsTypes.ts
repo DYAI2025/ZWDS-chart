@@ -253,6 +253,34 @@ export interface ReportSection {
   sourceStatus: SourceStatus;
 }
 
+export interface PalaceRelations {
+  harmony: PalaceId[];
+  opposition: PalaceId | null;
+}
+
+/**
+ * Resolves the harmony (SQUARE_HARMONY) and opposition palaces related to `palaceId`
+ * from the calculated relation set. Shared by the atlas grid, the relation summary and
+ * the aria-live announcement so all three describe the SAME calculated relationships
+ * (REQ-016B / REQ-008 — the live region must announce relations, not just the name).
+ */
+export function relatedPalaces(
+  report: NormalizedZwdsReport,
+  palaceId: PalaceId | null
+): PalaceRelations {
+  if (!palaceId) return { harmony: [], opposition: null };
+  const harmony = report.relations.find(
+    (relation) => relation.type === 'SQUARE_HARMONY' && relation.palaceIds.includes(palaceId)
+  );
+  const opposition = report.relations.find(
+    (relation) => relation.type === 'OPPOSITION' && relation.palaceIds.includes(palaceId)
+  );
+  return {
+    harmony: harmony?.palaceIds.filter((id) => id !== palaceId) ?? [],
+    opposition: opposition?.palaceIds.find((id) => id !== palaceId) ?? null,
+  };
+}
+
 export function placementsForPalace(
   report: NormalizedZwdsReport,
   palaceId: PalaceId

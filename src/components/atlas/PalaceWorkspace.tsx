@@ -1,25 +1,15 @@
 import { useEffect, useRef } from 'react';
 import { useApp } from '@/app/appContext';
 import type { NormalizedPalace, PalaceId } from '@/domain/zwdsTypes';
-import { placementsForPalace } from '@/domain/zwdsTypes';
+import { placementsForPalace, relatedPalaces } from '@/domain/zwdsTypes';
 import { PALACE_GRID_LAYOUT } from '@/shared/palaceGrid';
 import { labelFor, lookupBranch, lookupPalace, lookupStar, lookupStem, lookupTransformation } from '@/data/zwdsCatalog';
 import { SourceChip, TruthBadge } from '@/components/common/ReportPrimitives';
 
-function related(report: NonNullable<ReturnType<typeof useApp>['state']['report']>, selected: PalaceId | null) {
-  if (!selected) return { harmony: [] as PalaceId[], opposition: null as PalaceId | null };
-  const harmony = report.relations.find((relation) => relation.type === 'SQUARE_HARMONY' && relation.palaceIds.includes(selected));
-  const opposition = report.relations.find((relation) => relation.type === 'OPPOSITION' && relation.palaceIds.includes(selected));
-  return {
-    harmony: harmony?.palaceIds.filter((id) => id !== selected) ?? [],
-    opposition: opposition?.palaceIds.find((id) => id !== selected) ?? null,
-  };
-}
-
 function PalaceCell({ palace }: { palace: NormalizedPalace }) {
   const { state, dispatch, t } = useApp();
   const report = state.report!;
-  const connections = related(report, state.selectedPalaceId);
+  const connections = relatedPalaces(report, state.selectedPalaceId);
   const selected = palace.palaceId === state.selectedPalaceId;
   const harmony = connections.harmony.includes(palace.palaceId);
   const opposition = connections.opposition === palace.palaceId;
@@ -55,7 +45,7 @@ function RelationLines() {
   const source = report.palaces.find((palace) => palace.palaceId === state.selectedPalaceId);
   if (!source) return null;
   const sourceCell = PALACE_GRID_LAYOUT.find((cell) => cell.branchId === source.branchId)!;
-  const connections = related(report, state.selectedPalaceId);
+  const connections = relatedPalaces(report, state.selectedPalaceId);
   const targets = [...connections.harmony.map((id) => ({ id, kind: 'harmony' })), ...(connections.opposition ? [{ id: connections.opposition, kind: 'opposition' }] : [])];
   return <svg className="relation-svg" viewBox="0 0 4 4" preserveAspectRatio="none" aria-hidden="true">{targets.map(({ id, kind }) => {
     const palace = report.palaces.find((item) => item.palaceId === id)!;
@@ -77,7 +67,7 @@ export function PalaceGrid() {
 function RelationSummary({ palaceId }: { palaceId: PalaceId }) {
   const { state, t } = useApp();
   const report = state.report!;
-  const rel = related(report, palaceId);
+  const rel = relatedPalaces(report, palaceId);
   const title = (id: PalaceId) => { const entry = lookupPalace(id); return entry ? `${labelFor(entry, state.language)} · ${entry.hanzi}` : id; };
   return <div className="relation-text-summary"><p><b>{t('inspector.harmonyWith')}:</b> {rel.harmony.map(title).join(', ') || '—'}</p><p><b>{t('inspector.oppositionWith')}:</b> {rel.opposition ? title(rel.opposition) : '—'}</p></div>;
 }

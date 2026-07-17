@@ -15,6 +15,16 @@
   --color-source-needed: #a77b43;
   --color-reviewed: #6e806f;
 
+  /* WCAG-AA (>=4.5:1) status text for the DARK report/atlas surfaces (REQ-016B).
+     The base status colours above are tuned for the light intake surface; on the
+     dark tinted badges/chips of the report they drop below 4.5:1, so report
+     components use these brighter, same-hue variants. Measured with axe-core in a
+     real browser — see tests/e2e/atlas-a11y.spec.ts. */
+  --color-source-needed-on-dark: #d4ad66;
+  --color-reviewed-on-dark: #a6b8a7;
+  --color-raw-umber-on-dark: #c9a98a;
+  --color-gold-muted-on-dark: #cbab6a;
+
   --surface-dark: rgba(45, 48, 47, 0.94);
   --surface-paper: rgba(215, 208, 199, 0.94);
   --surface-umber: rgba(122, 89, 56, 0.92);
