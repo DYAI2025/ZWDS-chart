@@ -51,7 +51,10 @@ export function StatusStrip() {
   const report = state.report;
   if (!report) return null;
   const c = report.calculation;
-  return <div className={`status-strip ${c.dataMode === 'fixture' ? 'status-strip--demo' : ''}`} role="status" aria-label={t('status.ariaLabel')}>
+  // tabIndex=0: on mobile the strip becomes a horizontal scroll container (overflow-x:auto)
+  // with no focusable children, so it must be keyboard-focusable to be scrollable by keyboard
+  // (WCAG 2.1.1 / axe scrollable-region-focusable). REQ-016B.
+  return <div className={`status-strip ${c.dataMode === 'fixture' ? 'status-strip--demo' : ''}`} role="status" aria-label={t('status.ariaLabel')} tabIndex={0}>
     <span className="status-strip__item"><span className="status-strip__label">{t('status.calculation')}:</span><b>{c.calculationStatus}</b></span>
     <span className="status-strip__item"><span className="status-strip__label">{t('status.dataMode')}:</span><b>{c.dataMode}</b></span>
     <span className="status-strip__item"><span className="status-strip__label">{t('status.ruleset')}:</span><b>{c.rulesetId} · {c.rulesetVersion}</b></span>
