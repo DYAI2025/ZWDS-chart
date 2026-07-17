@@ -18,9 +18,13 @@
 | 0.7 Spec-sanity audit | CLEARED (PASS, 0 blockers; run wf_cc04fcd3-88f; 5 refinements applied) |
 | 0.2 PRD final freeze | CLEARED (FROZEN 2026-07-17) |
 | 0.4 Vision + user confirm | CLEARED (user-confirmed with amendments) |
-| USER GATE (DoD + matrix + spec-audit) | IN PROGRESS |
-| Vision GO gate | PENDING (needs explicit user GO) |
-| 1..8 | BLOCKED until GO |
+| USER GATE (DoD + matrix + spec-audit) | CLEARED |
+| Vision GO gate | CLEARED (explicit user GO 2026-07-17; geocode pin extension confirmed) |
+| 1 TDD & QA setup | IN PROGRESS |
+| 2..8 | queued |
+
+**Active-feature marker armed:** `docs/context/.active-feature` = `bazodiac-zwds-atlas`.
+**Slice-1 build order:** AMD-001 (hard fail-closed, REQ-019) FIRST, then close partials (REQ-011, 012, 016, 017, 018) + reality-ground where external resources allow. REQ-013/015 → slice-2. Release gates AMD-002/003 (incl. geocode) tracked, not slice-1 code blockers.
 
 ## Pre-confirmation read-only audit
 

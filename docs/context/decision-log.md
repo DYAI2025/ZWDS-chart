@@ -18,3 +18,5 @@
 
 None recorded (no `CONTRA-<id>`). The 12 reality-fake REQs are surfaced as `value-risk` in the
 traceability matrix, not laundered into "known limitations"; user reclassification only.
+| D-012 | 2026-07-17 | User gave explicit Vision GO. Development starts (Phase 1). `.active-feature` marker armed. | **user** | Bounded autonomy; Watcher may pause; user final authority. |
+| D-013 | 2026-07-17 | User confirmed extending AMD-003 real-boundary pin to the geocode provider. | **user** | Parity with FuFirE pin. |
