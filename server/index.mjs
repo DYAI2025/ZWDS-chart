@@ -147,11 +147,23 @@ export function createApp(config = loadConfig()) {
     }
   });
 
-  app.post('/api/zwds/interpret', limiter('interpret', 10), (req, res) => {
+  app.post('/api/zwds/interpret', limiter('interpret', 10), (req, res, next) => {
     const parsed = z.object({ report: z.record(z.string(), z.unknown()), locale: z.enum(['de-DE','en-US']) }).strict().safeParse(req.body);
     if (!parsed.success || !Array.isArray(parsed.data?.report?.evidenceIndex)) return errorEnvelope(res, 400, 'VALIDATION_FAILED', 'Invalid normalized report.');
-    const result = generateSections(parsed.data.report);
-    return res.json({ sections: result.sections, warnings: result.warnings, llmUsed: false, llmCorpusStatus: 'SOURCE_NEEDED' });
+    const rep = parsed.data.report;
+    // Structural guard: a malformed report must yield 400 VALIDATION_FAILED, not a 500 from a
+    // generateSections field deref — 500 stays reserved for genuine internal faults.
+    if (!rep.calculation || !Array.isArray(rep.palaces) || !Array.isArray(rep.stars) || !rep.quality || !Array.isArray(rep.decades)) {
+      return errorEnvelope(res, 400, 'VALIDATION_FAILED', 'Invalid normalized report.');
+    }
+    try {
+      const result = generateSections(rep);
+      return res.json({ sections: result.sections, warnings: result.warnings, llmUsed: false, llmCorpusStatus: 'SOURCE_NEEDED' });
+    } catch (error) {
+      // AMD-001 / REQ-019: unknown / unsupported / unresolved evidence fails closed (no partial report).
+      if (error instanceof ContractError) return errorEnvelope(res, 502, error.code, error.message);
+      return next(error);
+    }
   });
 
   app.get('/api/zwds/ruleset-status', async (req, res) => {

@@ -70,3 +70,12 @@ Verified GREEN: eslint 0, tsc 0, arch-gates 0, vitest 41/41, build 0.
 NOTE (latent, not fixed): architecture-gates.mjs regex scans raw content incl. comments -> any future doc naming a banned alias re-breaks CI. Intentionally NOT changed (the gate must also scan string literals; stripping comments risks exempting strings). Follow-up hardening candidate only.
 Watcher (value): PASS — a RED CI gate means REQ-018 (reproducible validation) is unmet; green CI is the precondition for proving every other REQ. Aligned with CAN-003 traceability promise. No pause.
 Next: T02 (AMD-001 hard fail-closed).
+
+## Iteration 1/4 — T02 DONE (2026-07-17)
+
+T02 (AMD-001 / REQ-019 hard fail-closed): normalize.mjs generateSections now THROWS ContractError('EVIDENCE_UNRESOLVED') on (1) unresolved evidence id, (2) section OR any cited evidence-entry sourceStatus==='BLOCKED', (3) crosscheck MISMATCH — replacing the HTTP-200 soft-drop. /interpret maps it to fail-closed 502 (+requestId, no partial); /calculate already short-circuits before storeReport (no token on refusal).
+Per-increment chain (run wf_938bb32e-cc1): code-review PASS (mutation-checked — the test bites), security-review PASS (net improvement), Watcher CHANGES-REQUESTED (value-risk, NOT a Vision contradiction: "code may proceed; public value certification may not").
+Applied reviewer strengthenings: per-entry BLOCKED check (heterogeneous-status gap); /interpret structural guard (malformed body -> 400 not 500); warnings-field comment; trailing newline. Added a 400-guard test.
+Verified GREEN: vitest 45/45 (amd001 4/4), eslint 0, tsc 0, arch-gates 0.
+Reality ledger docs/reality/bazodiac-zwds-atlas.evidence.jsonl created HONESTLY: all slice-1 evidence is integration-fake (real assembled BFF via supertest, fixture data). plumbline-reality-check PASSES at min-evidence integration-fake, FAILS at integration — the truthful RED. Real-boundary (integration+) needs the AMD-003 pin (T11, external creds). This is the user-accepted release-gated RED; NOT laundered, NOT self-downgraded.
+Iteration 1/4 (M1) COMPLETE: T01 + T02 done.

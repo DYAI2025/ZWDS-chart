@@ -441,12 +441,26 @@ export function generateSections(report) {
     sectionId: 'sec.source-limits', truthClass: 'SOURCE_NEEDED', evidenceIds: ['ruleset','quality.source_status'], localeTextKey: 'sections.sourceLimits', sourceStatus: report.quality.sourceStatus,
   }));
 
-  const validEvidence = new Set(report.evidenceIndex.map((entry) => entry.evidenceId));
-  const warnings = [];
-  const accepted = sections.filter((section) => {
-    const unknown = section.evidenceIds.filter((id) => !validEvidence.has(id));
-    if (unknown.length > 0) warnings.push({ code: 'SECTION_EVIDENCE_REJECTED', message: `Section ${section.sectionId} rejected`, evidenceIds: unknown });
-    return unknown.length === 0;
-  });
-  return { sections: accepted, warnings };
+  // AMD-001 / REQ-019: unknown / unsupported / unresolved evidence is a HARD fail-closed
+  // refusal, never a partial report with a soft-drop warning.
+  const evidenceById = new Map(report.evidenceIndex.map((entry) => [entry.evidenceId, entry]));
+  for (const section of sections) {
+    const unresolved = section.evidenceIds.filter((id) => !evidenceById.has(id));
+    if (unresolved.length > 0) {
+      throw new ContractError('EVIDENCE_UNRESOLVED', `Section ${section.sectionId} references unresolved evidence: ${unresolved.join(', ')}`);
+    }
+    // Fail closed if the section itself, or ANY evidence entry it cites, rests on BLOCKED evidence.
+    // (Checking cited entries — not only section.sourceStatus — closes the heterogeneous-status gap
+    // that a real FuFirE response could expose; the uniform-status fixture cannot exercise it.)
+    const blocked = section.sourceStatus === 'BLOCKED'
+      || section.evidenceIds.some((id) => evidenceById.get(id)?.sourceStatus === 'BLOCKED');
+    if (blocked) {
+      throw new ContractError('EVIDENCE_UNRESOLVED', `Section ${section.sectionId} rests on BLOCKED evidence`);
+    }
+  }
+  if (report.calculation.crosscheckStatus === 'MISMATCH') {
+    throw new ContractError('EVIDENCE_UNRESOLVED', 'Crosscheck status is MISMATCH; interpretation is fail-closed');
+  }
+  // `warnings` retained (always empty now) for response-shape API stability; the soft-drop path is gone by design.
+  return { sections, warnings: [] };
 }
