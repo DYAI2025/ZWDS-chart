@@ -21,6 +21,7 @@
 | D-017 | 2026-07-17 | T04 (REQ-011) code done + reviewed (code PASS). Watcher BLOCK on the reality floor (integration-fake < integration); escalation-asymmetry forbids self-downgrade. Escalating the slice-1 done-bar decision to the user; paused. | orchestrator->user | Watcher: keep code, user owns the done-bar / AMD-003. |
 | D-018 | 2026-07-17 | User chose SCOPE SHIFT A: reconcile the data contract to the real FuFirE API (CONTRA-001). Deep contract analysis dispatched; plan re-scope pending. | **user** | Biggest, most valuable work; re-founds the data layer. |
 | D-019 | 2026-07-17 | Added `.env.example` to the Canvas Allowed change scope (scope-check flagged it). Reason: I edited .env.example to SCRUB the secrets the user accidentally pasted there — a security remediation; it is a standard tracked config file of the same class already in scope. Recorded transparently, not silent scope-creep. | orchestrator | User may revert if undesired. |
+| D-020 | 2026-07-17 | RECON-server done: server data contract re-founded on real FuFirE; live pin PASS; REQ-004/005 -> real-boundary-smoke; reality-check PASSES at real-boundary-smoke. Review fixes applied (fail-open crosscheck -> allowlist; pin collect() dead fields). CONTRA-001 resolved for calculate boundary. | orchestrator | Landmark: reality gate green after being RED all engagement. |
 
 ## Open contradictions ledger
 
@@ -45,4 +46,3 @@ defer). Not laundered, not self-resolved.
 
 The other fixture-only REQs remain surfaced as `value-risk` in the traceability matrix, not
 laundered into "known limitations"; user reclassification only.
-| D-020 | 2026-07-17 | RECON-server done: server data contract re-founded on real FuFirE; live pin PASS; REQ-004/005 -> real-boundary-smoke; reality-check PASSES at real-boundary-smoke. Review fixes applied (fail-open crosscheck -> allowlist; pin collect() dead fields). CONTRA-001 resolved for calculate boundary. | orchestrator | Landmark: reality gate green after being RED all engagement. |
