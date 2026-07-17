@@ -62,3 +62,11 @@ Run `wf_a6d18cef-73b` (tester + planner). Plan: `docs/plans/2026-07-17-bazodiac-
 11 tasks, 4 milestones, M=4 iterations. Iteration 1/4 (M1) = T01 (fix 3 CI eslint errors) + T02 (AMD-001 hard fail-closed).
 Tester finding: AMD-002 "not authoritative" label is ABSENT from src/server today → T10.
 Entering Phase 2 (coder/reviewer/security/Watcher loop).
+
+## Iteration 1/4 — T01 DONE (2026-07-17)
+
+T01 (REQ-018 CI unblock): fixed 3 eslint errors (AbortController server global; line-scoped no-undef for renderPdf browser-context `document`; `^_` unused-arg ignore for Express 4-arity `_next`) + a false-positive architecture-gate hit (comment literally contained `HUA_QUAN`; reworded — actual code uses canonical HUA_QU). Independent review (agent): no gate weakened; applied its Low fix (file-global document -> line-scoped disable).
+Verified GREEN: eslint 0, tsc 0, arch-gates 0, vitest 41/41, build 0.
+NOTE (latent, not fixed): architecture-gates.mjs regex scans raw content incl. comments -> any future doc naming a banned alias re-breaks CI. Intentionally NOT changed (the gate must also scan string literals; stripping comments risks exempting strings). Follow-up hardening candidate only.
+Watcher (value): PASS — a RED CI gate means REQ-018 (reproducible validation) is unmet; green CI is the precondition for proving every other REQ. Aligned with CAN-003 traceability promise. No pause.
+Next: T02 (AMD-001 hard fail-closed).

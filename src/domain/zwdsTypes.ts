@@ -21,7 +21,7 @@ export const AUX_STAR_IDS = ['YOU_BI', 'WEN_CHANG'] as const;
 export const STAR_IDS = [...MAJOR_STAR_IDS, ...AUX_STAR_IDS] as const;
 export type StarId = (typeof STAR_IDS)[number];
 
-// Canonical transformation IDs (FuFirE: HUA_QU not HUA_QUAN).
+// Canonical transformation IDs — FuFirE spelling HUA_QU (not the longer legacy alias variant).
 export const TRANSFORMATION_IDS = ['HUA_LU', 'HUA_QU', 'HUA_KE', 'HUA_JI'] as const;
 export type TransformationId = (typeof TRANSFORMATION_IDS)[number];
 

@@ -49,6 +49,7 @@ export async function renderPdf(report, locale, executablePath) {
   try {
     const page = await browser.newPage();
     await page.setContent(renderReportHtml(report, locale), { waitUntil: 'networkidle0' });
+    // eslint-disable-next-line no-undef -- runs in the Puppeteer browser context, not Node
     await page.evaluate(() => document.fonts.ready);
     return await page.pdf({
       format: 'A4',

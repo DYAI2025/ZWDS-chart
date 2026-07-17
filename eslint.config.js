@@ -22,7 +22,11 @@ export default [
   },
   {
     files: ['server/**/*.mjs','scripts/**/*.mjs','tests/**/*.mjs'],
-    languageOptions: { globals: { process: 'readonly', Buffer: 'readonly', fetch: 'readonly', URL: 'readonly', DOMException: 'readonly', structuredClone: 'readonly', setTimeout: 'readonly', clearTimeout: 'readonly', setInterval: 'readonly', clearInterval: 'readonly' } },
-    rules: { 'no-undef': 'error' },
+    languageOptions: { globals: { process: 'readonly', Buffer: 'readonly', fetch: 'readonly', URL: 'readonly', DOMException: 'readonly', structuredClone: 'readonly', setTimeout: 'readonly', clearTimeout: 'readonly', setInterval: 'readonly', clearInterval: 'readonly', AbortController: 'readonly' } },
+    rules: {
+      'no-undef': 'error',
+      // Express requires a 4-arity error handler, so the unused `_next` must stay; ignore `_`-prefixed args/vars.
+      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
+    },
   },
 ];
