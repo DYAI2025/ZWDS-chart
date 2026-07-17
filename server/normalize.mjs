@@ -55,6 +55,11 @@ export const rulesetMetadataSchema = z.object({
   age_reckoning_id: nullableId,
   age_reckoning_sha256: nullableHash.optional(),
   source_status: sourceStatusSchema,
+  // The real /v1/metadata/zwds/rulesets endpoint returns two fields the /calculate ruleset block
+  // omits (verified live 2026-07-17): release_status + human_review_required. Optional so both the
+  // metadata endpoint and the (re-pinned) fixture parse; NOT in metadataKeys, so not crosschecked.
+  release_status: z.string().min(1).optional(),
+  human_review_required: z.boolean().optional(),
 }).strict();
 
 // Placement carries the palace ROLE (palace_role_id) + family/scope/brightness/formula. It no longer
