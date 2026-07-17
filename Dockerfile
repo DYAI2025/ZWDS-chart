@@ -24,6 +24,13 @@ COPY package.json package-lock.json ./
 RUN npm ci --include=dev
 
 COPY . .
+
+# VITE_* are BUILD-TIME. Railway injects service variables at runtime, NOT into the Docker
+# build, so without these the SPA would build in the default `fixture` mode and the browser
+# would show demo data instead of calling the live BFF. For this single-service deploy the
+# browser always talks to the same-origin BFF, so pin them here (non-secret, deploy-invariant).
+ENV VITE_DATA_MODE=bff
+ENV VITE_BFF_BASE_URL=/api
 RUN npm run build
 
 # Railway injects PORT (the server reads process.env.PORT); the BFF serves dist/ + /api.
