@@ -26,7 +26,7 @@ describe('BFF fixture integration', () => {
     const response = await request(app).post('/api/zwds/calculate').send(input);
     expect(response.status).toBe(200);
     expect(response.body.report.palaces).toHaveLength(12);
-    expect(response.body.report.stars.find((item) => item.placementId === 'natal:PO_JUN')).toMatchObject({ palaceId: 'TIAN_ZHAI', transformationTypes: ['HUA_QU'] });
+    expect(response.body.report.stars.find((item) => item.placementId === 'natal:PO_JUN')).toMatchObject({ palaceId: 'TIAN_ZHAI', transformationTypes: ['HUA_QUAN'] });
     expect(response.body.reportToken.length).toBeGreaterThan(20);
     expect(response.body.sections.every((section) => section.truthClass && section.evidenceIds.length)).toBe(true);
   });
@@ -39,7 +39,8 @@ describe('BFF fixture integration', () => {
   it('checks ruleset metadata and rejects unknown rulesets', async () => {
     const ok = await request(app).get('/api/zwds/ruleset-status?rulesetId=zwds.fufire.core-seed.v1');
     expect(ok.status).toBe(200);
-    expect(ok.body.crosscheckStatus).toBe('SOURCE_NEEDED');
+    // The re-pinned ruleset now carries a real ruleset_sha256, so the crosscheck resolves to MATCHED.
+    expect(ok.body.crosscheckStatus).toBe('MATCHED');
     expect((await request(app).get('/api/zwds/ruleset-status?rulesetId=unknown')).status).toBe(404);
   });
   it('keeps LLM disabled and returns deterministic sections', async () => {

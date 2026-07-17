@@ -1,0 +1,10 @@
+# AMD-003 pinned-real evidence directory.
+#
+# `node --env-file=.env scripts/amd003-pin.mjs` writes calculate.json (and, when
+# FUFIRE_GEOCODE_PATH is configured, geocode.json) here — the ONE real FuFirE boundary
+# response reconciled against the golden fixture before any "traceable to real data" claim.
+#
+# This .gitkeep keeps the directory present so tests/reality/*.test.mjs resolve their paths
+# and skip cleanly until the pin exists. The pinned response files are NOT gitignored by
+# default; the orchestrator inspects them (confirm no secret leaked into the body, confirm it
+# is the demo profile) and then decides whether to commit them as CI smoke evidence.

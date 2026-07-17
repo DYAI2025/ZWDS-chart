@@ -108,3 +108,11 @@ Iteration 2 remaining (T04 cert, T05, T06) HELD behind this decision.
 ## M-RECON: data-contract re-foundation (2026-07-17)
 
 Analysis wf_3bf7513e-ca2 → R1-R15 plan (docs/plans/2026-07-17-CONTRA-001-reconciliation.md). Full contract re-foundation (~13 files; server/normalize.mjs rewritten). Re-scope: M=4 → 5 milestones; now at M-RECON (largest). DoD = real pin DIVERGENCE→PASS. Executed in 3 increments: RECON-server (R1-R7+server tests, atomic), RECON-client (R8-R14), RECON-verify (R15 + pin PASS). T05/T06 held behind this.
+
+## RECON-server DONE + CONTRA-001 RESOLVED (calculate boundary) (2026-07-17)
+
+RECON-server increment complete. Server data contract re-founded on the REAL FuFirE response. Review (wf_534afead-f89): code changes-requested (fixed: fail-OPEN in deriveCrosscheckStatus -> allowlist semantics; amd003-pin collect() dead field names -> palace_role_id + crosschecks[].status), Watcher changes-requested (reality ledger must record the real evidence -> DONE).
+LIVE pin PASS (parseRawZwds+assertInvariants+normalizeRaw+generateSections all hold on real /v1/calculate/zwds; 29 sections, no over-refusal). Reality ledger: REQ-004 + REQ-005 -> real-boundary-smoke. plumbline-reality-check PASSES at min-evidence integration AND real-boundary-smoke.
+CONTRA-001 RESOLVED for the calculate boundary. Geocode (REQ-002) stays integration-fake (not pinned; user has Google keys — separate provider design).
+Gates: vitest 57 pass + 1 legit skip, eslint 0, tsc 0, arch-gates 0.
+KNOWN residual (closes in RECON-client next): BFF↔FE transformation-id wire — server emits real HUA_QUAN but FE still speaks HUA_QU, so VITE_DATA_MODE=bff renders the Quan glyph as '?' until R8/R9. NOT claimed as bff-end-to-end-done.

@@ -24,7 +24,15 @@
 
 ## Open contradictions ledger
 
-**CONTRA-001 (2026-07-17, OPEN — escalated to user):** The AMD-003 real-boundary pin
+**CONTRA-001 (2026-07-17, RESOLVED for the calculate boundary):** RECON-server re-founded the
+data contract on the REAL FuFirE response; the live pin now returns **PASS** (parse + invariants +
+normalize + generateSections all hold), REQ-004/REQ-005 are **real-boundary-smoke** in the ledger,
+and `plumbline-reality-check` passes at `real-boundary-smoke`. Remaining: the **geocode** boundary
+(REQ-002) is still `integration-fake` (unpinned — user supplied Google keys, a separate provider
+design), and the BFF↔FE transformation-id wire (`HUA_QUAN` vs `HUA_QU`) closes in RECON-client.
+Original finding retained below for the record.
+
+**CONTRA-001 (2026-07-17, original — escalated to user):** The AMD-003 real-boundary pin
 (`node --env-file=.env scripts/amd003-pin.mjs`, real FuFirE) proved the real `/v1/calculate/zwds`
 contract materially diverges from the self-authored golden fixture — real transformation id is
 `HUA_QUAN` (which the architecture gate BANS), real response adds a `catalog` object + stars
@@ -37,3 +45,4 @@ defer). Not laundered, not self-resolved.
 
 The other fixture-only REQs remain surfaced as `value-risk` in the traceability matrix, not
 laundered into "known limitations"; user reclassification only.
+| D-020 | 2026-07-17 | RECON-server done: server data contract re-founded on real FuFirE; live pin PASS; REQ-004/005 -> real-boundary-smoke; reality-check PASSES at real-boundary-smoke. Review fixes applied (fail-open crosscheck -> allowlist; pin collect() dead fields). CONTRA-001 resolved for calculate boundary. | orchestrator | Landmark: reality gate green after being RED all engagement. |

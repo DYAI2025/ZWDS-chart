@@ -1,8 +1,8 @@
 import { z } from 'zod';
 
 const PALACE_IDS = ['MING','XIONG_DI','FU_QI','ZI_NU','CAI_BO','JI_E','QIAN_YI','JIAO_YOU','GUAN_LU','TIAN_ZHAI','FU_DE','FU_MU'];
-const STAR_IDS = ['ZI_WEI','TIAN_JI','TAI_YANG','WU_QU','TIAN_TONG','LIAN_ZHEN','TIAN_FU','TAI_YIN','TAN_LANG','JU_MEN','TIAN_XIANG','TIAN_LIANG','QI_SHA','PO_JUN','YOU_BI','WEN_CHANG'];
-const TRANSFORMATION_IDS = ['HUA_LU','HUA_QU','HUA_KE','HUA_JI'];
+const STAR_IDS = ['ZI_WEI','TIAN_JI','TAI_YANG','WU_QU','TIAN_TONG','LIAN_ZHEN','TIAN_FU','TAI_YIN','TAN_LANG','JU_MEN','TIAN_XIANG','TIAN_LIANG','QI_SHA','PO_JUN','ZUO_FU','WEN_QU','YOU_BI','WEN_CHANG'];
+const TRANSFORMATION_IDS = ['HUA_LU','HUA_QUAN','HUA_KE','HUA_JI'];
 const BRANCH_IDS = ['ZI','CHOU','YIN','MAO','CHEN','SI','WU','WEI','SHEN','YOU','XU','HAI'];
 const STEM_IDS = ['JIA','YI','BING','DING','WU','JI','GENG','XIN','REN','GUI'];
 const BUREAU_IDS = ['WATER_2','WOOD_3','METAL_4','EARTH_5','FIRE_6'];
@@ -20,12 +20,18 @@ export class ContractError extends Error {
 const nullableId = z.string().min(1).nullable();
 const nullableHash = z.string().regex(/^[a-f0-9]{64}$/i).nullable();
 const sourceStatusSchema = z.enum(SOURCE_STATUSES);
+
+// REAL FuFirE lunar date: year_label (not year) + optional month_length. is_leap_month/month_length
+// are optional so responses that omit them still parse; both are present in the pinned real response.
 const lunarDateSchema = z.object({
-  year: z.number().int(),
+  year_label: z.number().int(),
   month: z.number().int().min(1).max(12),
   day: z.number().int().min(1).max(30),
   is_leap_month: z.boolean().optional(),
+  month_length: z.number().int().optional(),
 }).strict();
+
+const latLonSchema = z.object({ lat: z.number().min(-90).max(90), lon: z.number().min(-180).max(180) }).strict();
 
 export const rulesetMetadataSchema = z.object({
   ruleset_id: z.string().min(1),
@@ -37,33 +43,64 @@ export const rulesetMetadataSchema = z.object({
   time_policy_id: nullableId,
   time_policy_sha256: nullableHash,
   leap_month_policy_id: nullableId,
-  leap_month_policy_sha256: nullableHash,
+  // The REAL ruleset omits these three *_sha256 fields, so they are OPTIONAL. When absent on both
+  // the raw ruleset and the pinned metadata, assertRulesetMetadata compares undefined === undefined.
+  leap_month_policy_sha256: nullableHash.optional(),
   year_cycle_policy_id: nullableId,
-  year_cycle_policy_sha256: nullableHash,
+  year_cycle_policy_sha256: nullableHash.optional(),
   star_catalog_id: nullableId,
   star_catalog_sha256: nullableHash,
   transformation_table_id: nullableId,
   transformation_table_sha256: nullableHash,
   age_reckoning_id: nullableId,
-  age_reckoning_sha256: nullableHash,
+  age_reckoning_sha256: nullableHash.optional(),
   source_status: sourceStatusSchema,
 }).strict();
 
+// Placement carries the palace ROLE (palace_role_id) + family/scope/brightness/formula. It no longer
+// carries provenance_ids (the real response omits them; evidence provenance lives in top-level provenance[]).
 const placementSchema = z.object({
   placement_id: z.string().min(1),
   star_id: z.enum(STAR_IDS),
-  palace_id: z.enum(PALACE_IDS),
+  family_id: z.string().min(1),
+  scope: z.string().min(1),
   branch_id: z.enum(BRANCH_IDS),
+  palace_role_id: z.enum(PALACE_IDS),
+  brightness_code: z.string().nullable(),
   transformation_types: z.array(z.enum(TRANSFORMATION_IDS)),
+  formula_id: z.string().min(1),
   source_status: sourceStatusSchema,
-  provenance_ids: z.array(z.string().min(1)),
 }).strict();
 
+// REAL relation shape. normalizeRaw deriveRelations() ignores this block (derives harmony/opposition
+// from the palace ring) — the schema is here purely to validate the contract, not to feed the report.
 const relationSchema = z.object({
-  relation_id: z.string().min(1),
-  type: z.enum(['SQUARE_HARMONY', 'OPPOSITION']),
-  palace_ids: z.array(z.enum(PALACE_IDS)).min(2).max(3),
-  source_status: sourceStatusSchema,
+  focus_palace_role_id: z.enum(PALACE_IDS),
+  focus_branch_id: z.enum(BRANCH_IDS),
+  harmony_branch_ids: z.array(z.enum(BRANCH_IDS)),
+  opposition_branch_id: z.enum(BRANCH_IDS),
+}).strict();
+
+const decadeSchema = z.object({
+  sequence_index_0: z.number().int().min(0).max(11),
+  start_age_inclusive: z.number().int().min(0),
+  end_age_inclusive: z.number().int().min(1),
+  age_reckoning_id: z.string().min(1),
+  direction: z.enum(['forward','backward']),
+  branch_id: z.enum(BRANCH_IDS),
+  palace_role_id: z.enum(PALACE_IDS),
+}).strict();
+
+const provenanceSchema = z.object({
+  provenance_id: z.string().min(1),
+  type: z.string().min(1),
+  title: z.string().min(1),
+  version: z.string().min(1),
+  sha256: z.string().nullable(),
+  // Provenance status is a broader vocabulary than SourceStatus (e.g. USER_PROVIDED); normalizeRaw
+  // coerces it into the SourceStatus universe before it reaches the evidence index.
+  status: z.string().min(1),
+  license: z.string().nullable(),
 }).strict();
 
 export const rawZwdsSchema = z.object({
@@ -74,24 +111,43 @@ export const rawZwdsSchema = z.object({
   chart_fingerprint: z.string().min(1),
   ruleset: rulesetMetadataSchema,
   normalized_input: z.object({
-    datetime_local: z.string().min(1),
-    timezone: z.string().min(1),
-    location: z.object({ lat: z.number().min(-90).max(90), lon: z.number().min(-180).max(180) }).strict(),
-    sex_at_birth: z.enum(['male','female']).optional(),
-    direction_method: z.enum(['year_stem_yinyang_and_sex','explicit','omit']),
+    birth: z.object({
+      datetime_local: z.string().min(1),
+      timezone: z.string().min(1),
+      location: latLonSchema,
+      sex_at_birth: z.enum(['male','female']).optional(),
+      ambiguousTime: z.string().optional(),
+      nonexistentTime: z.string().optional(),
+    }).strict(),
+    calculation: z.object({
+      ruleset_id: z.string().min(1),
+      direction_method: z.enum(['year_stem_yinyang_and_sex','explicit','omit']),
+    }).strict(),
+    output: z.unknown().nullable(),
   }).strict(),
   resolution: z.object({
     chronometry: z.object({
       civil_local: z.string().min(1),
+      utc: z.string().min(1),
       effective_local: z.string().min(1),
-      ambiguous_time: z.string().optional(),
-      nonexistent_time: z.string().optional(),
+      effective_standard: z.string().min(1),
+      timezone: z.string().min(1),
+      location: latLonSchema,
+      local_time_status: z.string().min(1),
+      fold: z.number().int(),
+      warning: z.string().nullable(),
+      hour_branch_id: z.enum(BRANCH_IDS),
+      late_zi_applied: z.boolean(),
+      late_zi_policy_id: nullableId,
     }).strict(),
     calendar: z.object({
-      lunar_date_before_late_zi: lunarDateSchema,
+      calendar_engine_id: z.string().min(1),
+      pre_late_zi_lunar_date: lunarDateSchema,
       chart_lunar_date: lunarDateSchema,
-      late_zi_applied: z.boolean(),
-      hour_branch_id: z.enum(BRANCH_IDS),
+      effective_month_for_chart: z.number().int(),
+      leap_month_policy_id: nullableId,
+      year_cycle: z.unknown().nullable(),
+      warnings: z.array(z.unknown()),
     }).strict(),
   }).strict(),
   chart: z.object({
@@ -101,43 +157,48 @@ export const rawZwdsSchema = z.object({
     shen_palace_branch_id: z.enum(BRANCH_IDS),
     five_elements_bureau: z.object({
       id: z.enum(BUREAU_IDS),
+      phase_id: z.string().min(1),
       number: z.union([z.literal(2),z.literal(3),z.literal(4),z.literal(5),z.literal(6)]),
+      formula_id: z.string().min(1),
+      source_status: sourceStatusSchema,
     }).strict(),
     palaces: z.array(z.object({
-      palace_id: z.enum(PALACE_IDS),
+      palace_role_id: z.enum(PALACE_IDS),
+      sequence_index_0: z.number().int().min(0).max(11),
       branch_id: z.enum(BRANCH_IDS),
       stem_id: z.enum(STEM_IDS),
+      is_ming_palace: z.boolean(),
+      is_shen_palace: z.boolean(),
       placement_ids: z.array(z.string().min(1)),
+      grid_position: z.unknown().nullable(),
     }).strict()),
     star_placements: z.array(placementSchema),
+    // Derived transformations are recomputed from placement.transformation_types; this block is
+    // validated-but-ignored so a divergent chart.transformations cannot silently corrupt the report.
+    transformations: z.array(z.unknown()),
     relations: z.array(relationSchema).nullable(),
-    decadal_limits: z.array(z.object({
-      index: z.number().int().min(1).max(12),
-      age_start: z.number().int().min(0),
-      age_end: z.number().int().min(1),
-      palace_id: z.enum(PALACE_IDS),
-    }).strict()).nullable(),
+    decadal_limits: z.array(decadeSchema).nullable(),
+    completeness: z.unknown().nullable(),
   }).strict(),
+  catalog: z.unknown().nullable(),
   quality: z.object({
     calculation_status: z.enum(['SUCCESS','DEMO_FIXTURE','ERROR']),
     source_status: sourceStatusSchema,
-    crosscheck_status: z.enum(['MATCHED','SOURCE_NEEDED','MISMATCH']),
-    human_review_required: z.boolean(),
     warnings: z.array(z.object({
       code: z.string().min(1),
       message: z.string().min(1),
       evidence_ids: z.array(z.string().min(1)),
     }).strict()),
+    unresolved_conventions: z.array(z.string()),
+    crosschecks: z.array(z.object({
+      oracle_id: z.string().min(1),
+      status: z.string().min(1),
+      note: z.string(),
+    }).strict()),
+    // The real response omits human_review_required; normalizeRaw derives it when absent.
+    human_review_required: z.boolean().optional(),
   }).strict(),
-  provenance: z.array(z.object({
-    record_id: z.string().min(1),
-    data_id: z.string().min(1),
-    origin: z.string().min(1),
-    timestamp: z.string().min(1),
-    source_status: sourceStatusSchema,
-    field_path: z.string().optional(),
-    source_id: z.string().optional(),
-  }).strict()),
+  provenance: z.array(provenanceSchema),
   derivation_trace: z.array(z.unknown()).nullable(),
 }).strict();
 
@@ -154,7 +215,7 @@ export function assertInvariants(raw) {
   const palaces = raw.chart.palaces;
   const placements = raw.chart.star_placements;
   if (palaces.length !== 12) throw new ContractError('FUFIRE_INVARIANT_PALACE_COUNT', `Expected 12 palaces, got ${palaces.length}`);
-  const roles = new Set(palaces.map((palace) => palace.palace_id));
+  const roles = new Set(palaces.map((palace) => palace.palace_role_id));
   if (roles.size !== 12) throw new ContractError('FUFIRE_INVARIANT_ROLE_DUP', 'Duplicate palace roles');
   for (const id of PALACE_IDS) if (!roles.has(id)) throw new ContractError('FUFIRE_INVARIANT_ROLE_MISSING', `Missing palace role ${id}`);
   const branches = new Set(palaces.map((palace) => palace.branch_id));
@@ -169,8 +230,8 @@ export function assertInvariants(raw) {
   for (const palace of palaces) {
     for (const placementId of palace.placement_ids) {
       const placement = placementById.get(placementId);
-      if (!placement) throw new ContractError('FUFIRE_INVARIANT_PLACEMENT_MISSING', `${palace.palace_id} references ${placementId}`);
-      if (placement.palace_id !== palace.palace_id || placement.branch_id !== palace.branch_id) {
+      if (!placement) throw new ContractError('FUFIRE_INVARIANT_PLACEMENT_MISSING', `${palace.palace_role_id} references ${placementId}`);
+      if (placement.palace_role_id !== palace.palace_role_id || placement.branch_id !== palace.branch_id) {
         throw new ContractError('FUFIRE_INVARIANT_PLACEMENT_COORDINATE', `${placementId} conflicts with palace reference`);
       }
       if (referenced.has(placementId)) throw new ContractError('FUFIRE_INVARIANT_PLACEMENT_MULTIREF', `${placementId} referenced by multiple palaces`);
@@ -194,8 +255,8 @@ export function assertInvariants(raw) {
   if (raw.chart.decadal_limits) {
     if (raw.chart.decadal_limits.length !== 12) throw new ContractError('FUFIRE_INVARIANT_DECADE_COUNT', 'Expected 12 decades');
     raw.chart.decadal_limits.forEach((decade, index) => {
-      if (decade.index !== index + 1) throw new ContractError('FUFIRE_INVARIANT_DECADE_ORDER', 'Decades must already be sorted');
-      if (index > 0 && decade.age_start !== raw.chart.decadal_limits[index - 1].age_end + 1) {
+      if (decade.sequence_index_0 !== index) throw new ContractError('FUFIRE_INVARIANT_DECADE_ORDER', 'Decades must already be sorted');
+      if (index > 0 && decade.start_age_inclusive !== raw.chart.decadal_limits[index - 1].end_age_inclusive + 1) {
         throw new ContractError('FUFIRE_INVARIANT_DECADE_GAP', 'Decades overlap or have a gap');
       }
     });
@@ -243,27 +304,58 @@ export function assertRulesetMetadata(rawRuleset, metadataInput) {
   return metadata.data;
 }
 
+// The real /calculate quality block carries a crosschecks[] array (each {oracle_id,status,note})
+// instead of a single crosscheck_status. Fold it into the FE CrosscheckStatus universe.
+function deriveCrosscheckStatus(crosschecks) {
+  if (!crosschecks || crosschecks.length === 0) return 'SOURCE_NEEDED';
+  // ALLOWLIST / fail-closed: only an all-'MATCH' set is treated as verified (MATCHED). An explicit
+  // 'MISMATCH', OR any status outside the known-safe set (e.g. an unseen FAIL/DIVERGENCE token), must
+  // fail closed to 'MISMATCH' (which triggers the generateSections hard refusal) rather than silently
+  // degrading to a non-refusing 'SOURCE_NEEDED'. Only 'MATCH' is known-safe from real data; anything
+  // else is unsafe-until-reconciled (the AMD-003 pin surfaces an over-refusal on a new benign token).
+  if (crosschecks.every((crosscheck) => crosscheck.status === 'MATCH')) return 'MATCHED';
+  return 'MISMATCH';
+}
+
+// Provenance status vocabulary is wider than SourceStatus. Keep evidence sourceStatus inside
+// {SOURCE_REVIEWED,SOURCE_NEEDED,BLOCKED}: an explicit BLOCKED stays BLOCKED (fail-closed), a
+// reviewed record stays reviewed, and anything else (incl. USER_PROVIDED) collapses to SOURCE_NEEDED.
+function coerceProvenanceStatus(status) {
+  if (status === 'SOURCE_REVIEWED' || status === 'BLOCKED') return status;
+  return 'SOURCE_NEEDED';
+}
+
+const mapLunarDate = (date) => ({ year: date.year_label, month: date.month, day: date.day, isLeapMonth: date.is_leap_month });
+
 export function normalizeRaw(input, dataMode = 'fixture') {
   const raw = parseRawZwds(input);
   assertInvariants(raw);
   const sourceStatus = raw.quality.source_status;
+  const crosscheckStatus = deriveCrosscheckStatus(raw.quality.crosschecks);
+  // The real response omits human_review_required; derive it (a not-fully-reviewed chart needs review).
+  const humanReviewRequired = raw.quality.human_review_required ?? (sourceStatus !== 'SOURCE_REVIEWED');
+  const decadeOrdinalByRole = new Map((raw.chart.decadal_limits ?? []).map((decade) => [decade.palace_role_id, decade.sequence_index_0 + 1]));
+  const birth = raw.normalized_input.birth;
+  const chronometry = raw.resolution.chronometry;
+  const calendar = raw.resolution.calendar;
+
   const palaces = raw.chart.palaces.map((palace) => ({
-    palaceId: palace.palace_id,
+    palaceId: palace.palace_role_id,
     branchId: palace.branch_id,
     stemId: palace.stem_id,
     placementIds: [...palace.placement_ids],
     isMing: palace.branch_id === raw.chart.ming_palace_branch_id,
     isShen: palace.branch_id === raw.chart.shen_palace_branch_id,
-    decadeIndex: raw.chart.decadal_limits?.find((decade) => decade.palace_id === palace.palace_id)?.index,
+    decadeIndex: decadeOrdinalByRole.get(palace.palace_role_id),
   }));
   const stars = raw.chart.star_placements.map((placement) => ({
     placementId: placement.placement_id,
     starId: placement.star_id,
-    palaceId: placement.palace_id,
+    palaceId: placement.palace_role_id,
     branchId: placement.branch_id,
     transformationTypes: [...placement.transformation_types],
     sourceStatus: placement.source_status,
-    provenanceIds: [...placement.provenance_ids],
+    provenanceIds: [],
   }));
   const transformations = stars.flatMap((placement) => placement.transformationTypes.map((type) => ({
     transformationId: type,
@@ -272,15 +364,13 @@ export function normalizeRaw(input, dataMode = 'fixture') {
     palaceId: placement.palaceId,
     sourceStatus: placement.sourceStatus,
   })));
-  const relations = raw.chart.relations
-    ? raw.chart.relations.map((relation) => ({ relationId: relation.relation_id, type: relation.type, palaceIds: relation.palace_ids, sourceStatus: relation.source_status }))
-    : deriveRelations(palaces, sourceStatus);
+  const relations = deriveRelations(palaces, sourceStatus);
   const ruleset = raw.ruleset;
   const report = {
     schemaVersion: 'fufire.zwds-evidence.v1',
     calculation: {
       calculationStatus: raw.quality.calculation_status,
-      crosscheckStatus: raw.quality.crosscheck_status,
+      crosscheckStatus,
       requestId: raw.request_id,
       engineVersion: raw.engine_version,
       generatedAt: raw.generated_at,
@@ -301,25 +391,25 @@ export function normalizeRaw(input, dataMode = 'fixture') {
       transformationTableSha256: ruleset.transformation_table_sha256,
       ageReckoningId: ruleset.age_reckoning_id,
       sourceStatus,
-      humanReviewRequired: raw.quality.human_review_required,
+      humanReviewRequired,
       dataMode,
     },
     birthInputSummary: {
-      date: raw.normalized_input.datetime_local.slice(0, 10),
-      time: raw.normalized_input.datetime_local.slice(11, 16),
+      date: birth.datetime_local.slice(0, 10),
+      time: birth.datetime_local.slice(11, 16),
       locationDisplayName: '',
-      timezone: raw.normalized_input.timezone,
-      sexAtBirth: raw.normalized_input.sex_at_birth,
-      directionMethod: raw.normalized_input.direction_method,
+      timezone: birth.timezone,
+      sexAtBirth: birth.sex_at_birth,
+      directionMethod: raw.normalized_input.calculation.direction_method,
       includeDecadalLimits: raw.chart.decadal_limits !== null,
     },
     birthResolution: {
-      civilLocal: raw.resolution.chronometry.civil_local,
-      effectiveLocal: raw.resolution.chronometry.effective_local,
-      lunarDateBeforeLateZi: raw.resolution.calendar.lunar_date_before_late_zi,
-      chartLunarDate: raw.resolution.calendar.chart_lunar_date,
-      lateZiApplied: raw.resolution.calendar.late_zi_applied,
-      hourBranchId: raw.resolution.calendar.hour_branch_id,
+      civilLocal: chronometry.civil_local,
+      effectiveLocal: chronometry.effective_local,
+      lunarDateBeforeLateZi: mapLunarDate(calendar.pre_late_zi_lunar_date),
+      chartLunarDate: mapLunarDate(calendar.chart_lunar_date),
+      lateZiApplied: chronometry.late_zi_applied,
+      hourBranchId: chronometry.hour_branch_id,
     },
     anchors: {
       mingBranchId: raw.chart.ming_palace_branch_id,
@@ -333,25 +423,25 @@ export function normalizeRaw(input, dataMode = 'fixture') {
     transformations,
     relations,
     decades: raw.chart.decadal_limits?.map((decade) => ({
-      index: decade.index,
-      ageStart: decade.age_start,
-      ageEnd: decade.age_end,
-      palaceId: decade.palace_id,
+      index: decade.sequence_index_0 + 1,
+      ageStart: decade.start_age_inclusive,
+      ageEnd: decade.end_age_inclusive,
+      palaceId: decade.palace_role_id,
       sourceStatus,
     })) ?? null,
     quality: {
       sourceStatus,
-      humanReviewRequired: raw.quality.human_review_required,
+      humanReviewRequired,
       warnings: raw.quality.warnings.map((warning) => ({ code: warning.code, message: warning.message, evidenceIds: warning.evidence_ids })),
     },
     provenance: raw.provenance.map((record) => ({
-      recordId: record.record_id,
-      dataId: record.data_id,
-      origin: record.origin,
-      timestamp: record.timestamp,
-      sourceStatus: record.source_status,
-      fieldPath: record.field_path,
-      sourceId: record.source_id,
+      recordId: record.provenance_id,
+      dataId: record.type,
+      origin: record.title,
+      timestamp: record.version,
+      sourceStatus: coerceProvenanceStatus(record.status),
+      fieldPath: undefined,
+      sourceId: record.provenance_id,
     })),
     evidenceIndex: [],
     derivationTrace: raw.derivation_trace,

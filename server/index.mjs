@@ -204,14 +204,16 @@ export function createApp(config = loadConfig()) {
 }
 
 export function assertFixtureCompatible(raw, input) {
-  const [date, timePart] = raw.normalized_input.datetime_local.split('T');
+  // Real FuFirE nests the birth profile under normalized_input.birth.{...}.
+  const birth = raw.normalized_input.birth;
+  const [date, timePart] = birth.datetime_local.split('T');
   const mismatches = [];
   if (input.date !== date) mismatches.push('date');
   if (input.time !== timePart?.slice(0, 5)) mismatches.push('time');
-  if (input.location.timezone !== raw.normalized_input.timezone) mismatches.push('timezone');
-  if (Math.abs(input.location.lat - raw.normalized_input.location.lat) > 0.01) mismatches.push('lat');
-  if (Math.abs(input.location.lon - raw.normalized_input.location.lon) > 0.01) mismatches.push('lon');
-  if (input.sexAtBirth !== raw.normalized_input.sex_at_birth) mismatches.push('sexAtBirth');
+  if (input.location.timezone !== birth.timezone) mismatches.push('timezone');
+  if (Math.abs(input.location.lat - birth.location.lat) > 0.01) mismatches.push('lat');
+  if (Math.abs(input.location.lon - birth.location.lon) > 0.01) mismatches.push('lon');
+  if (input.sexAtBirth !== birth.sex_at_birth) mismatches.push('sexAtBirth');
   if (mismatches.length) {
     const error = new Error(`Fixture mode supports only the bundled demo profile. Deviating fields: ${mismatches.join(', ')}`);
     error.code = 'FIXTURE_PROFILE_MISMATCH';
