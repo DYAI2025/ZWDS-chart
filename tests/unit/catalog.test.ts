@@ -4,7 +4,7 @@ import {
   BRANCH_CATALOGUE, STEM_CATALOGUE, ANIMAL_CATALOGUE, BUREAU_CATALOGUE,
   lookupPalace, lookupStar, CATALOG_ID, CATALOG_VERSION, CATALOG_SHA256,
 } from '@/data/zwdsCatalog';
-import { PALACE_IDS, MAJOR_STAR_IDS, TRANSFORMATION_IDS, BRANCH_IDS, STEM_IDS, ANIMAL_IDS } from '@/domain/zwdsTypes';
+import { PALACE_IDS, MAJOR_STAR_IDS, STAR_IDS, TRANSFORMATION_IDS, BRANCH_IDS, STEM_IDS, ANIMAL_IDS } from '@/domain/zwdsTypes';
 
 const TONE_MARKS = /[āáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ]/;
 const KANA_OR_HANGUL = /[぀-ヿ가-힯]/;
@@ -22,6 +22,12 @@ describe('ZWDS catalogue policy', () => {
     expect(STEM_CATALOGUE.map((e) => e.id).sort()).toEqual([...STEM_IDS].sort());
     expect(ANIMAL_CATALOGUE.map((e) => e.id).sort()).toEqual([...ANIMAL_IDS].sort());
     for (const id of MAJOR_STAR_IDS) expect(lookupStar(id), id).not.toBeNull();
+    // Full 18-star coverage: every canonical star id (14 major + 4 GUIDE_AUX_4, incl. the
+    // real ZUO_FU/WEN_QU) must resolve in the catalogue so no placement renders as '?'.
+    expect(STAR_IDS).toHaveLength(18);
+    for (const id of STAR_IDS) expect(lookupStar(id), id).not.toBeNull();
+    expect(lookupStar('ZUO_FU')?.hanzi).toBe('左輔');
+    expect(lookupStar('WEN_QU')?.hanzi).toBe('文曲');
   });
 
   it('every pinyin contains at least one tone mark', () => {

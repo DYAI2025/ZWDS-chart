@@ -116,3 +116,8 @@ LIVE pin PASS (parseRawZwds+assertInvariants+normalizeRaw+generateSections all h
 CONTRA-001 RESOLVED for the calculate boundary. Geocode (REQ-002) stays integration-fake (not pinned; user has Google keys — separate provider design).
 Gates: vitest 57 pass + 1 legit skip, eslint 0, tsc 0, arch-gates 0.
 KNOWN residual (closes in RECON-client next): BFF↔FE transformation-id wire — server emits real HUA_QUAN but FE still speaks HUA_QU, so VITE_DATA_MODE=bff renders the Quan glyph as '?' until R8/R9. NOT claimed as bff-end-to-end-done.
+
+## RECON-client DONE (2026-07-17)
+
+FE reconciled to reality: zwdsTypes enums (HUA_QUAN; +ZUO_FU/+WEN_QU=18 stars), catalog entries added (左輔/文曲) + HUA_QU->HUA_QUAN, mockZwdsReport rebuilt from the REAL placement map (fixture-mode now matches bff-mode), PDF star hanzi ZUO_FU/WEN_QU, arch-gate UNIFIED (browser scan now also bans HUA_QU — FE migrated off it). New tests/component/transformationGlyph.test.tsx proves the BFF↔FE wire: HUA_QUAN resolves to 化權 (not '?'); mutation-verified (breaking the catalog id fails it). No standalone HUA_QU left in src (grep clean). Existing component tests unchanged + green.
+Verified: vitest 58 pass + 1 skip, eslint 0, tsc 0, arch-gates 0. The BFF↔FE '?' gap from the RECON-server review is CLOSED.

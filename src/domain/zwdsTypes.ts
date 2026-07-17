@@ -15,14 +15,16 @@ export const MAJOR_STAR_IDS = [
   'QI_SHA', 'PO_JUN',
 ] as const;
 
-// Approved auxiliary stars only (fixture scope).
-export const AUX_STAR_IDS = ['YOU_BI', 'WEN_CHANG'] as const;
+// Approved auxiliary stars only (fixture scope). ZUO_FU/WEN_QU are part of the
+// real FuFirE GUIDE_AUX_4 family (star_catalog core-seed.18) alongside YOU_BI/WEN_CHANG.
+export const AUX_STAR_IDS = ['ZUO_FU', 'WEN_QU', 'YOU_BI', 'WEN_CHANG'] as const;
 
 export const STAR_IDS = [...MAJOR_STAR_IDS, ...AUX_STAR_IDS] as const;
 export type StarId = (typeof STAR_IDS)[number];
 
-// Canonical transformation IDs — FuFirE spelling HUA_QU (not the longer legacy alias variant).
-export const TRANSFORMATION_IDS = ['HUA_LU', 'HUA_QU', 'HUA_KE', 'HUA_JI'] as const;
+// Canonical transformation IDs — the REAL FuFirE spelling is HUA_QUAN (化權). The earlier
+// shortened alias form was fabricated and is not emitted by the engine (banned in the arch gates).
+export const TRANSFORMATION_IDS = ['HUA_LU', 'HUA_QUAN', 'HUA_KE', 'HUA_JI'] as const;
 export type TransformationId = (typeof TRANSFORMATION_IDS)[number];
 
 export const BUREAU_IDS = ['WATER_2', 'WOOD_3', 'METAL_4', 'EARTH_5', 'FIRE_6'] as const;

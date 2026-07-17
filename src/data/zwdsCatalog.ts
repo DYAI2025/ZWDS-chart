@@ -95,6 +95,8 @@ export const STAR_CATALOGUE: CatalogueEntry[] = [
 
 // ── Approved auxiliary stars (fixture scope) ──────────────
 export const AUX_STAR_CATALOGUE: CatalogueEntry[] = [
+  entry({ id: 'ZUO_FU', hanzi: '左輔', pinyin: 'zuǒfǔ', de: 'Linke Stütze', en: 'Left Support', sourceId: SRC_BAZODIAC, sourceStatus: 'SOURCE_NEEDED' }),
+  entry({ id: 'WEN_QU', hanzi: '文曲', pinyin: 'wénqǔ', de: 'Stern der Wortkunst', en: 'Wen Qu Star', sourceId: SRC_BAZODIAC, sourceStatus: 'SOURCE_NEEDED' }),
   entry({ id: 'YOU_BI', hanzi: '右弼', pinyin: 'yòubì', de: 'Rechte Stütze', en: 'Right Support', sourceId: SRC_BAZODIAC, sourceStatus: 'SOURCE_NEEDED' }),
   entry({ id: 'WEN_CHANG', hanzi: '文昌', pinyin: 'wénchāng', de: 'Literarischer Glanz', en: 'Literary Brilliance', sourceId: SRC_BAZODIAC, sourceStatus: 'SOURCE_NEEDED' }),
 ];
@@ -104,7 +106,7 @@ export const FULL_STAR_CATALOGUE: CatalogueEntry[] = [...STAR_CATALOGUE, ...AUX_
 // ── Four Transformations (canonical IDs) ──────────────────
 export const TRANSFORMATION_CATALOGUE: CatalogueEntry[] = [
   entry({ id: 'HUA_LU', hanzi: '化祿', pinyin: 'huàlù', de: 'Wandlung des Flusses', en: 'Lu Transformation', sourceId: SRC_PRIMARY, sourceStatus: 'SOURCE_NEEDED' }),
-  entry({ id: 'HUA_QU', hanzi: '化權', pinyin: 'huàquán', de: 'Wandlung der Handlungsmacht', en: 'Quan Transformation', sourceId: SRC_PRIMARY, sourceStatus: 'SOURCE_NEEDED' }),
+  entry({ id: 'HUA_QUAN', hanzi: '化權', pinyin: 'huàquán', de: 'Wandlung der Handlungsmacht', en: 'Quan Transformation', sourceId: SRC_PRIMARY, sourceStatus: 'SOURCE_NEEDED' }),
   entry({ id: 'HUA_KE', hanzi: '化科', pinyin: 'huàkē', de: 'Wandlung der Sichtbarkeit', en: 'Ke Transformation', sourceId: SRC_PRIMARY, sourceStatus: 'SOURCE_NEEDED' }),
   entry({ id: 'HUA_JI', hanzi: '化忌', pinyin: 'huàjì', de: 'Wandlung der Reibung', en: 'Ji Transformation', sourceId: SRC_PRIMARY, sourceStatus: 'SOURCE_NEEDED' }),
 ];

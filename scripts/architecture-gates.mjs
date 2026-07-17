@@ -4,14 +4,14 @@ import path from 'node:path';
 const walk = (dir) => fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => entry.isDirectory() ? walk(path.join(dir, entry.name)) : [path.join(dir, entry.name)]);
 const sourceFiles = walk('src').filter((file) => /\.(ts|tsx)$/.test(file));
 const failures = [];
-// Browser bundle guard: genuinely-invalid aliases that must never leak into src/. HUA_QU is
-// intentionally NOT banned here — the FE (src/) still legitimately uses HUA_QU pending its own later
-// migration to the real canonical HUA_QUAN; this server-contract increment leaves the FE untouched.
-// HUA_QUAN (the real canonical id) is likewise allowed in src/.
-const forbiddenBrowserAliases = /\b(?:ZI_NV|PU_YI|WU_STEM)\b/;
+// Browser bundle guard: genuinely-invalid aliases that must never leak into src/. Now that the FE has
+// migrated OFF the fabricated HUA_QU alias onto the real canonical HUA_QUAN, HUA_QU is banned here too
+// (guarding against a FE regression back to the fabricated alias). The \b boundary keeps \bHUA_QU\b
+// from matching inside HUA_QUAN, so the real canonical id stays allowed in src/.
+const forbiddenBrowserAliases = /\b(?:ZI_NV|PU_YI|HUA_QU|WU_STEM)\b/;
 // Golden fixture guard: the fixture was re-founded on the REAL FuFirE contract (HUA_QUAN canonical),
 // so guard it against regression to the now-fabricated HUA_QU alias. The \b boundary keeps
-// \bHUA_QU\b from matching inside HUA_QUAN.
+// \bHUA_QU\b from matching inside HUA_QUAN. Identical to the browser guard now the split is retired.
 const forbiddenFixtureAliases = /\b(?:ZI_NV|PU_YI|HUA_QU|WU_STEM)\b/;
 for (const file of sourceFiles) {
   const content = fs.readFileSync(file, 'utf8');

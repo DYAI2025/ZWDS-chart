@@ -8,7 +8,7 @@ const PALACE_LABELS = {
   GUAN_LU: ['官祿宮','Wirkungspalast','Career Palace'], TIAN_ZHAI: ['田宅宮','Besitzpalast','Property Palace'],
   FU_DE: ['福德宮','Innere-Haltung-Palast','Fortune Palace'], FU_MU: ['父母宮','Elternpalast','Parents Palace'],
 };
-const STAR_HANZI = { ZI_WEI:'紫微',TIAN_JI:'天機',TAI_YANG:'太陽',WU_QU:'武曲',TIAN_TONG:'天同',LIAN_ZHEN:'廉貞',TIAN_FU:'天府',TAI_YIN:'太陰',TAN_LANG:'貪狼',JU_MEN:'巨門',TIAN_XIANG:'天相',TIAN_LIANG:'天梁',QI_SHA:'七殺',PO_JUN:'破軍',YOU_BI:'右弼',WEN_CHANG:'文昌' };
+const STAR_HANZI = { ZI_WEI:'紫微',TIAN_JI:'天機',TAI_YANG:'太陽',WU_QU:'武曲',TIAN_TONG:'天同',LIAN_ZHEN:'廉貞',TIAN_FU:'天府',TAI_YIN:'太陰',TAN_LANG:'貪狼',JU_MEN:'巨門',TIAN_XIANG:'天相',TIAN_LIANG:'天梁',QI_SHA:'七殺',PO_JUN:'破軍',ZUO_FU:'左輔',WEN_QU:'文曲',YOU_BI:'右弼',WEN_CHANG:'文昌' };
 const TRANSFORM_HANZI = { HUA_LU:'化祿',HUA_QUAN:'化權',HUA_KE:'化科',HUA_JI:'化忌' };
 const GRID = { SI:[1,1],WU:[2,1],WEI:[3,1],SHEN:[4,1],CHEN:[1,2],YOU:[4,2],MAO:[1,3],XU:[4,3],YIN:[1,4],CHOU:[2,4],ZI:[3,4],HAI:[4,4] };
 

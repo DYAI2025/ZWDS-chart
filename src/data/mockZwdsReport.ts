@@ -6,23 +6,29 @@ import type {
 
 const S = 'SOURCE_NEEDED' as const;
 
+// Placement truth mirrors the REAL FuFirE fixture (tests/fixtures/fufire/zwds-core-seed-shanghai-1984.json)
+// exactly — same 18 placements, same palace/branch wiring, same transformation bindings — so fixture-mode
+// (this DEMO_REPORT) and bff-mode (server/normalize.mjs normalizeRaw of that fixture) render identically.
+// PO_JUN carries the canonical HUA_QUAN (not the earlier fabricated shortened alias); ZUO_FU/WEN_QU sit in FU_DE.
 const STARS: NormalizedStarPlacement[] = [
-  ['natal:WU_QU','WU_QU','TIAN_ZHAI','SI',['HUA_KE']],
-  ['natal:PO_JUN','PO_JUN','TIAN_ZHAI','SI',['HUA_QU']],
-  ['natal:TAI_YANG','TAI_YANG','GUAN_LU','WU',['HUA_JI']],
-  ['natal:TIAN_LIANG','TIAN_LIANG','JIAO_YOU','WEI',[]],
-  ['natal:TIAN_JI','TIAN_JI','QIAN_YI','SHEN',[]],
-  ['natal:TAI_YIN','TAI_YIN','QIAN_YI','SHEN',[]],
-  ['natal:TIAN_XIANG','TIAN_XIANG','FU_DE','CHEN',[]],
   ['natal:ZI_WEI','ZI_WEI','JI_E','YOU',[]],
+  ['natal:TIAN_JI','TIAN_JI','QIAN_YI','SHEN',[]],
+  ['natal:TAI_YANG','TAI_YANG','GUAN_LU','WU',['HUA_JI']],
+  ['natal:WU_QU','WU_QU','TIAN_ZHAI','SI',['HUA_KE']],
+  ['natal:TIAN_TONG','TIAN_TONG','FU_DE','CHEN',[]],
+  ['natal:LIAN_ZHEN','LIAN_ZHEN','XIONG_DI','CHOU',['HUA_LU']],
+  ['natal:TIAN_FU','TIAN_FU','JIAO_YOU','WEI',[]],
+  ['natal:TAI_YIN','TAI_YIN','QIAN_YI','SHEN',[]],
   ['natal:TAN_LANG','TAN_LANG','JI_E','YOU',[]],
   ['natal:JU_MEN','JU_MEN','CAI_BO','XU',[]],
-  ['natal:YOU_BI','YOU_BI','CAI_BO','XU',[]],
-  ['natal:WEN_CHANG','WEN_CHANG','CAI_BO','XU',[]],
-  ['natal:LIAN_ZHEN','LIAN_ZHEN','XIONG_DI','CHOU',['HUA_LU']],
+  ['natal:TIAN_XIANG','TIAN_XIANG','ZI_NU','HAI',[]],
+  ['natal:TIAN_LIANG','TIAN_LIANG','FU_QI','ZI',[]],
   ['natal:QI_SHA','QI_SHA','XIONG_DI','CHOU',[]],
-  ['natal:TIAN_TONG','TIAN_TONG','ZI_NU','HAI',[]],
-  ['natal:TIAN_FU','TIAN_FU','ZI_NU','HAI',[]],
+  ['natal:PO_JUN','PO_JUN','TIAN_ZHAI','SI',['HUA_QUAN']],
+  ['natal:ZUO_FU','ZUO_FU','FU_DE','CHEN',[]],
+  ['natal:YOU_BI','YOU_BI','CAI_BO','XU',[]],
+  ['natal:WEN_QU','WEN_QU','FU_DE','CHEN',[]],
+  ['natal:WEN_CHANG','WEN_CHANG','CAI_BO','XU',[]],
 ].map(([placementId, starId, palaceId, branchId, transformationTypes]) => ({
   placementId, starId, palaceId, branchId, transformationTypes,
   sourceStatus: S, provenanceIds: ['prov-raw-1'],
