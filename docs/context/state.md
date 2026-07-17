@@ -171,3 +171,7 @@ Still open: geocode real-pin (REQ-002); source-governance reviewer + catalog ent
 ## Geocode reconciled to real FuFirE (REQ-002, 2026-07-17)
 
 Second real-boundary reconciliation: the app geocode was built against a guessed contract. Real FuFirE = POST /v1/geocode {place} -> 200 single {resolved_name,lat,lon,timezone,confidence} OR 422 ambiguous_place {candidates:[{name,lat,lon,country_code,population}]} (no tz). Rewrote geocodeWithFufire: 200->one result, 422->candidates with timezone derived from lat/lon via tz-lookup (offline), 404->[]. LIVE-verified locally (Shanghai/Berlin/Taipei all correct + valid tz). REQ-002 -> real-boundary-smoke. Railway needs FUFIRE_GEOCODE_PATH=/v1/geocode set, then production-verified.
+
+## Deploy-verify: fixture->bff misconfig fixed + geocode production-verified (2026-07-17)
+
+Deploy-verify (CLAUDE.md rule) on zwds-chart-production.up.railway.app found the deployed SPA was built with VITE_DATA_MODE=fixture and VITE_BFF_BASE_URL=http://api.fufire.space -> end users saw DEMO fixture data, and the frontend never called the live BFF. Fixed Railway vars: VITE_DATA_MODE=bff, VITE_BFF_BASE_URL=/api (same-origin), FUFIRE_GEOCODE_PATH=/v1/geocode. Rebuilt/redeployed. Verified live on the deployed URL: geocode (Shanghai->5 w/ tz, Berlin->1 Europe/Berlin) + full calculate (SUCCESS, MATCHED, 12 palaces, fresh requestId). REQ-002 -> production-verified. VITE_* are build-time; changing them needs a redeploy. Documented in .env.example (single-service production deploy block).
