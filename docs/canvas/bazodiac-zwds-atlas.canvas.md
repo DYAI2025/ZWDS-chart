@@ -18,16 +18,28 @@ Feature Slug: bazodiac-zwds-atlas
 | Allowed Scope | CAN-011 | Contract-first implementation through a stateless technical report slice, including BFF, normalized model, atlas, deterministic explanations, source view and bounded PDF sessions. | EXPLICIT | SRC-003 |
 | Unresolved Questions | CAN-012 | Whether public Release 1 is a Core Seed Preview or waits for reviewed Sanhe-Sihua; whether reports persist; auth/tenant model; reviewer authority; SLOs. | MISSING | SRC-002 |
 
-## Allowed change scope (PRIL Scope Guard)
+## Allowed change scope
 
-Repo-relative paths in scope for the confirmed contract-first slice (CAN-011). Edits outside this set require explicit user scope expansion.
+Repo-relative globs in scope for the confirmed contract-first slice (CAN-011). One glob per line
+(machine-parsed by the PRIL scope guard). Edits outside this set require explicit user scope expansion.
 
-- `src/**` (frontend report client)
-- `server/**` (Express BFF, normalizer, FuFirE/geocode clients, report store, PDF)
-- `tests/**` (unit, integration, e2e, fixtures)
-- `scripts/architecture-gates.mjs`, `eslint.config.js`, `.github/workflows/**`
-- `package.json`, config files (`*.config.ts`, `tsconfig.json`)
-- `docs/**` (governance + engineering docs)
+- src/**
+- server/**
+- tests/**
+- scripts/**
+- docs/**
+- .github/**
+- eslint.config.js
+- vite.config.ts
+- vitest.config.ts
+- playwright.config.ts
+- tsconfig.json
+- package.json
+- package-lock.json
+- index.html
+- .gitignore
+- CLAUDE.md
+- config/**
 
 ## Council Amendments (Phase 0.16, adopted by user 2026-07-17 — pending re-confirm)
 

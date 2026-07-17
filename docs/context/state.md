@@ -39,3 +39,19 @@ never a real FuFirE or real-Chromium boundary. See `docs/traceability.md`.
 - OQ-003 practitioner/source-governance reviewer
 - OQ-004 production SLOs
 - AS-002 glyph policy TW_TRADITIONAL (needs approval)
+
+## PRIL enforcement wiring (2026-07-17)
+
+The global Plumbline Stop hook (`plumbline-enforce.sh`, registered in `~/.claude/settings.json`)
+fired: it requires the PRIL CLIs at `<repo>/config/claude/bin`, absent because this repo was never
+`install.sh`'d. Fix:
+- `config/claude/bin/plumbline-{context,scope,reality,...}-check` = local wrappers that pin
+  `/usr/bin/python3` (bypassing the modern-python PATH shim) against the canonical Plumbline libs at
+  `/Users/benjaminpoersch/Projects/_TOOLZ/plumbline_v1/Plumbline/config/claude/lib`.
+- `config/` is gitignored (machine-specific abs paths; NOT product code). On another machine, run
+  Plumbline `install.sh` to regenerate — the wrappers are a local dev artifact, not committed.
+- Fixed real gate failures the CLIs caught: PRD/traceability lacked an accepted confirmation marker
+  (`Confirmed by user: yes` added); Canvas scope heading had a parenthetical suffix + comma-joined
+  bullets the parser couldn't read (renamed to `## Allowed change scope`, one clean glob per line).
+- Gates verified PASS on the real surface: context-check exit 0, scope-check exit 0 (21 files).
+- `.feature-boundary` intentionally NOT created yet → reality-check skipped until Gate C.

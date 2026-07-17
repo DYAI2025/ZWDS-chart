@@ -2,6 +2,7 @@
 
 Feature Slug: bazodiac-zwds-atlas
 Status: foundation-confirmed (Canvas + Vision user-confirmed 2026-07-17)
+Confirmed by user: yes
 
 ## Mandatory Canvas traceability fields (apply to ALL 20 top-level REQs)
 

@@ -1,6 +1,7 @@
 # PRD: BaZodiac Zi Wei Dou Shu Atlas
 
 Status: FROZEN (Phase 0.7 spec-sanity PASS `wf_cc04fcd3-88f`; 5 refinements applied; final PRD freeze 2026-07-17)  
+Confirmed by user: yes  
 Feature Slug: bazodiac-zwds-atlas  
 Owner: BaZodiac Product Team  
 User Confirmation Required: yes  

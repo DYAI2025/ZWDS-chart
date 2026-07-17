@@ -13,10 +13,11 @@
 | D-009 | 2026-07-17 | User re-confirmed Canvas + Vision as amended. | **user** | "Re-confirm as amended". |
 | D-010 | 2026-07-17 | Phase 0.7 spec-sanity PASS (0 blockers). 5 refinements applied before freeze; PRD FROZEN. | orchestrator | Run `wf_cc04fcd3-88f`; see `docs/context/spec-audit-2026-07-17.md`. |
 | D-011 | 2026-07-17 | Extended AMD-003 real-boundary pin to the geocode provider (parity). Flagged for user veto at USER GATE. | orchestrator | Consistent reading of AMD-003; not silent — surfaced for decision. |
+| D-012 | 2026-07-17 | User gave explicit Vision GO. Development starts (Phase 1). `.active-feature` marker armed. | **user** | Bounded autonomy; Watcher may pause; user final authority. |
+| D-013 | 2026-07-17 | User confirmed extending AMD-003 real-boundary pin to the geocode provider. | **user** | Parity with FuFirE pin. |
 
 ## Open contradictions ledger
 
 None recorded (no `CONTRA-<id>`). The 12 reality-fake REQs are surfaced as `value-risk` in the
 traceability matrix, not laundered into "known limitations"; user reclassification only.
-| D-012 | 2026-07-17 | User gave explicit Vision GO. Development starts (Phase 1). `.active-feature` marker armed. | **user** | Bounded autonomy; Watcher may pause; user final authority. |
-| D-013 | 2026-07-17 | User confirmed extending AMD-003 real-boundary pin to the geocode provider. | **user** | Parity with FuFirE pin. |
+| D-014 | 2026-07-17 | Wired PRIL enforcement CLIs locally (gitignored wrappers pinning /usr/bin/python3) after the Stop hook blocked on missing CLIs; fixed the real gate failures it caught (confirmation markers, scope heading). Gates now machine-provable: context+scope PASS. | orchestrator | Honest fix, not a bypass; reality-check deferred to Gate C. |

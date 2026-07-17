@@ -1,0 +1,14 @@
+# OS / editor cruft
+.DS_Store
+**/.DS_Store
+
+# Local agent/tooling state (never product code)
+.claude/
+.claude-flow/
+
+# Plumbline enforcement CLIs are wired in locally via symlink (machine-specific)
+/config/
+
+# Build / deps
+node_modules/
+dist/
