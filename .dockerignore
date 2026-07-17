@@ -1,0 +1,13 @@
+# Keep the build context small and NEVER ship local secrets or build artifacts into the image.
+.git
+node_modules
+dist
+.env
+.env.*
+!.env.example
+test-results
+playwright-report
+coverage
+*.log
+docs/zwds-unfinished-agent-salvage.zip
+.DS_Store
