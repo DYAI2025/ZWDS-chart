@@ -16,9 +16,9 @@
 | D-012 | 2026-07-17 | User gave explicit Vision GO. Development starts (Phase 1). `.active-feature` marker armed. | **user** | Bounded autonomy; Watcher may pause; user final authority. |
 | D-013 | 2026-07-17 | User confirmed extending AMD-003 real-boundary pin to the geocode provider. | **user** | Parity with FuFirE pin. |
 | D-014 | 2026-07-17 | Wired PRIL enforcement CLIs locally (gitignored wrappers pinning /usr/bin/python3) after the Stop hook blocked on missing CLIs; fixed the real gate failures it caught (confirmation markers, scope heading). Gates now machine-provable: context+scope PASS. | orchestrator | Honest fix, not a bypass; reality-check deferred to Gate C. |
+| D-015 | 2026-07-17 | T02 (AMD-001 hard fail-closed) implemented test-first, independently reviewed (code PASS, security PASS, Watcher value-risk). Reviewer strengthenings applied. Honest reality ledger created (integration-fake; reality-check RED at integration floor — real-boundary pending AMD-003/T11). Iteration 1/4 complete. | orchestrator | Watcher value-risk = user-accepted release-gated RED; code proceeds, value cert pending. |
 
 ## Open contradictions ledger
 
 None recorded (no `CONTRA-<id>`). The 12 reality-fake REQs are surfaced as `value-risk` in the
 traceability matrix, not laundered into "known limitations"; user reclassification only.
-| D-015 | 2026-07-17 | T02 (AMD-001 hard fail-closed) implemented test-first, independently reviewed (code PASS, security PASS, Watcher value-risk). Reviewer strengthenings applied. Honest reality ledger created (integration-fake; reality-check RED at integration floor — real-boundary pending AMD-003/T11). Iteration 1/4 complete. | orchestrator | Watcher value-risk = user-accepted release-gated RED; code proceeds, value cert pending. |
