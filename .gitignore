@@ -12,3 +12,10 @@
 # Build / deps
 node_modules/
 dist/
+
+# Secrets — never commit real credentials (only .env.example is tracked)
+.env
+.env.*
+**/.env
+**/*.env
+!.env.example
