@@ -46,3 +46,4 @@ defer). Not laundered, not self-resolved.
 
 The other fixture-only REQs remain surfaced as `value-risk` in the traceability matrix, not
 laundered into "known limitations"; user reclassification only.
+| D-021 | 2026-07-17 | USER ACCEPTED slice-1 at the acceptance gate (Gate C PASS-WITH-RED + Gate D ACCEPT-WITH-NOTES; all actionable findings remediated). Residuals recorded as user-owned release-gates, not slice-1 blockers. | **user** | /agileteam complete through Phase 7. |
