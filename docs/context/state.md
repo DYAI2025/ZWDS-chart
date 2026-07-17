@@ -104,3 +104,7 @@ User supplied real FuFirE staging creds. Auth determined empirically (x-api-key,
 RESULT: DIVERGENCE (exit 3). Real /v1/calculate/zwds contract materially differs from the fabricated golden fixture — real transformation id HUA_QUAN (arch-gate BANS it), real 'catalog' object, stars ZUO_FU/WEN_QU, different normalized_input/palace structure, different ruleset-hash set. Current strict schema HARD-REJECTS real responses (FUFIRE_CONTRACT_MISMATCH); AMD-001 would refuse them. "12/20 green" was green against fiction.
 CONTRA-001 recorded. Full report docs/reality/AMD-003-pin-2026-07-17.md. Escalated to user as a SCOPE SHIFT decision (reconcile contract to reality vs defer). Pinned real response at tests/fixtures/fufire/pinned-real/calculate.json (untracked pending decision). Security: creds in gitignored .env, never committed/logged; keys were exposed in chat -> user to rotate.
 Iteration 2 remaining (T04 cert, T05, T06) HELD behind this decision.
+
+## M-RECON: data-contract re-foundation (2026-07-17)
+
+Analysis wf_3bf7513e-ca2 → R1-R15 plan (docs/plans/2026-07-17-CONTRA-001-reconciliation.md). Full contract re-foundation (~13 files; server/normalize.mjs rewritten). Re-scope: M=4 → 5 milestones; now at M-RECON (largest). DoD = real pin DIVERGENCE→PASS. Executed in 3 increments: RECON-server (R1-R7+server tests, atomic), RECON-client (R8-R14), RECON-verify (R15 + pin PASS). T05/T06 held behind this.
