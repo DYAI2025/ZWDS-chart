@@ -22,5 +22,16 @@
 
 ## Open contradictions ledger
 
-None recorded (no `CONTRA-<id>`). The 12 reality-fake REQs are surfaced as `value-risk` in the
-traceability matrix, not laundered into "known limitations"; user reclassification only.
+**CONTRA-001 (2026-07-17, OPEN — escalated to user):** The AMD-003 real-boundary pin
+(`node --env-file=.env scripts/amd003-pin.mjs`, real FuFirE) proved the real `/v1/calculate/zwds`
+contract materially diverges from the self-authored golden fixture — real transformation id is
+`HUA_QUAN` (which the architecture gate BANS), real response adds a `catalog` object + stars
+`ZUO_FU`/`WEN_QU`, different `normalized_input`/palace structure, and a different ruleset-hash set.
+The current strict schema hard-rejects real responses (`FUFIRE_CONTRACT_MISMATCH`); AMD-001 would
+refuse them. This contradicts the confirmed value promise CAN-003/VIS-004 ("traceable to REAL
+data"). Full report: `docs/reality/AMD-003-pin-2026-07-17.md`. **Blocks the public "traceable to
+real data" claim. Requires a user SCOPE SHIFT decision** (reconcile the contract to reality vs
+defer). Not laundered, not self-resolved.
+
+The other fixture-only REQs remain surfaced as `value-risk` in the traceability matrix, not
+laundered into "known limitations"; user reclassification only.

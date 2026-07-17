@@ -97,3 +97,10 @@ T04 (REQ-011): schoolProfileStatus + scriptPolicy added to StatusStrip; new alwa
 Review (wf_3819c235-0ad): code PASS (mutation-verified — test bites 3 ways); WATCHER **BLOCK** — value genuinely advances CAN-003/RISK-001 (not hollow), BUT plumbline-reality-check --min-evidence integration fails (integration-fake), and per escalation-asymmetry the Watcher may NOT self-downgrade and an agent's GREEN report is NOT user consent. Watcher directive: keep the code, escalate the DONE-BAR to the user.
 Verified GREEN: vitest 55/55, eslint 0, tsc 0, arch-gates 0, build 0. REQ-011 recorded integration-fake.
 **PAUSED for user done-bar decision** (applies to ALL fixture-only slice-1 tasks, since every one is integration-fake until the AMD-003 real-boundary pin lands — which needs external staging creds). TRC-011 true-line-status stays value-risk until the user decides.
+
+## AMD-003 real-boundary pin RAN — CONTRA-001 (2026-07-17)
+
+User supplied real FuFirE staging creds. Auth determined empirically (x-api-key, no scheme; probe 200 vs 401). Ran scripts/amd003-pin.mjs against real https://api.fufire.space.
+RESULT: DIVERGENCE (exit 3). Real /v1/calculate/zwds contract materially differs from the fabricated golden fixture — real transformation id HUA_QUAN (arch-gate BANS it), real 'catalog' object, stars ZUO_FU/WEN_QU, different normalized_input/palace structure, different ruleset-hash set. Current strict schema HARD-REJECTS real responses (FUFIRE_CONTRACT_MISMATCH); AMD-001 would refuse them. "12/20 green" was green against fiction.
+CONTRA-001 recorded. Full report docs/reality/AMD-003-pin-2026-07-17.md. Escalated to user as a SCOPE SHIFT decision (reconcile contract to reality vs defer). Pinned real response at tests/fixtures/fufire/pinned-real/calculate.json (untracked pending decision). Security: creds in gitignored .env, never committed/logged; keys were exposed in chat -> user to rotate.
+Iteration 2 remaining (T04 cert, T05, T06) HELD behind this decision.
