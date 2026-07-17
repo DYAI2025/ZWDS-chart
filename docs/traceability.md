@@ -35,8 +35,8 @@ Any I/O / remote / external-API / UI feature at `*-fake` is **RED regardless of 
 | TRC-001 | REQ-001 | VIS-001 | CAN-005 | AC-001 | EV-001 intake component + E2E | yes | n/a | aligned | VCK-001 | true |
 | TRC-002 | REQ-002 | VIS-006 | CAN-005 | AC-002 | EV-002 geocode contract + confirm-state | yes | integration-fake | value-risk | VCK-002 | value-risk |
 | TRC-003 | REQ-003 | VIS-004 | CAN-007 | AC-003 | EV-003 static bundle + network | yes | integration-fake | value-risk | VCK-003 | value-risk |
-| TRC-004 | REQ-004 | VIS-005 | CAN-007 | AC-004 | EV-004 pinned schema + ruleset + contract | yes | integration-fake | value-risk | VCK-004 | value-risk |
-| TRC-005 | REQ-005 | VIS-005 | CAN-010 | AC-005 | EV-005 normalizer invariant + property | yes | integration-fake | value-risk | VCK-005 | value-risk |
+| TRC-004 | REQ-004 | VIS-005 | CAN-007 | AC-004 | EV-004 pinned schema + ruleset + contract | yes | real-boundary-smoke | aligned | VCK-004 | true |
+| TRC-005 | REQ-005 | VIS-005 | CAN-010 | AC-005 | EV-005 normalizer invariant + property | yes | real-boundary-smoke | aligned | VCK-005 | true |
 | TRC-006 | REQ-006 | VIS-004 | CAN-003 | AC-006 | EV-006 evidence whitelist validation | yes | integration-fake | value-risk | VCK-006 | value-risk |
 | TRC-007 | REQ-007 | VIS-002 | CAN-005 | AC-007 | EV-007 atlas topology component | yes | real-boundary-smoke | aligned | VCK-007 | true |
 | TRC-008 | REQ-008 | VIS-002 | CAN-005 | AC-008 | EV-008 interaction/keyboard/aria-live | yes | real-boundary-smoke | aligned | VCK-008 | true |

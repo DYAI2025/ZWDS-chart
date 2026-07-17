@@ -121,3 +121,8 @@ KNOWN residual (closes in RECON-client next): BFF↔FE transformation-id wire �
 
 FE reconciled to reality: zwdsTypes enums (HUA_QUAN; +ZUO_FU/+WEN_QU=18 stars), catalog entries added (左輔/文曲) + HUA_QU->HUA_QUAN, mockZwdsReport rebuilt from the REAL placement map (fixture-mode now matches bff-mode), PDF star hanzi ZUO_FU/WEN_QU, arch-gate UNIFIED (browser scan now also bans HUA_QU — FE migrated off it). New tests/component/transformationGlyph.test.tsx proves the BFF↔FE wire: HUA_QUAN resolves to 化權 (not '?'); mutation-verified (breaking the catalog id fails it). No standalone HUA_QU left in src (grep clean). Existing component tests unchanged + green.
 Verified: vitest 58 pass + 1 skip, eslint 0, tsc 0, arch-gates 0. The BFF↔FE '?' gap from the RECON-server review is CLOSED.
+
+## M-RECON COMPLETE (2026-07-17)
+
+RECON-server + RECON-client + RECON-verify all done. Data contract re-founded on real FuFirE end-to-end (server + FE agree). DoD MET: live amd003-pin PASS; reality-check PASS at real-boundary-smoke; REQ-004/005 -> real-boundary-smoke + true-line true in the matrix. Gates: vitest 58/1skip, eslint/tsc/arch/build 0. CONTRA-001 resolved for the calculate boundary.
+Remaining slice-1: T05 (REQ-012 natal-preservation), T06 (REQ-016A 44px) [M2 tail]; T08/T09 (M3 a11y+CI); T10 (M4 AMD-002 label). Geocode real-pin (REQ-002) still open (needs FUFIRE_GEOCODE_PATH or a Google provider — separate design).
