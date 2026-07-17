@@ -167,3 +167,7 @@ Pre-push secret scan CLEAN (0 committed key hits; .env gitignored/never committe
 
 Railway single-service deploy live: BFF serves SPA + API. Deploy-verify caught FUFIRE_RULESET_METADATA_CONTRACT (real /v1/metadata endpoint returns release_status + human_review_required, which .strict() rejected — AMD-003 pin never hit the metadata endpoint). Fixed (2 optional fields). CONFIRMED on the deployed prod URL: live /api/zwds/calculate -> 200 SUCCESS/MATCHED, fresh requestId per call = real FuFirE end-to-end. main @ 2c634e0. REQ-004 -> production-verified.
 Still open: geocode real-pin (REQ-002); source-governance reviewer + catalog entry-status; AMD-003 n=1; slice-2 (REQ-013/015); ROTATE keys.
+
+## Geocode reconciled to real FuFirE (REQ-002, 2026-07-17)
+
+Second real-boundary reconciliation: the app geocode was built against a guessed contract. Real FuFirE = POST /v1/geocode {place} -> 200 single {resolved_name,lat,lon,timezone,confidence} OR 422 ambiguous_place {candidates:[{name,lat,lon,country_code,population}]} (no tz). Rewrote geocodeWithFufire: 200->one result, 422->candidates with timezone derived from lat/lon via tz-lookup (offline), 404->[]. LIVE-verified locally (Shanghai/Berlin/Taipei all correct + valid tz). REQ-002 -> real-boundary-smoke. Railway needs FUFIRE_GEOCODE_PATH=/v1/geocode set, then production-verified.
