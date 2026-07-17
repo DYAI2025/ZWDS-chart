@@ -48,7 +48,13 @@ describe('BFF fixture integration', () => {
     expect(response.body).toMatchObject({ llmUsed: false, llmCorpusStatus: 'SOURCE_NEEDED' });
   });
   it('returns controlled PDF blocker without Chromium', async () => {
-    const response = await request(app).post('/api/report-pdf').send({ reportToken: 'abcdefghijklmnopqrstuvwxyz', locale: 'de-DE' });
+    // Corrected ordering (T07/REQ-017): the token is validated BEFORE the Chromium-runtime
+    // probe, so the 503 PDF_RUNTIME_UNAVAILABLE blocker is only reached with a KNOWN token.
+    // Previously this asserted 503 for an UNKNOWN token, which relied on the 503 guard running
+    // first — the exact ordering bug that hid the expired/unknown-token 404. A real token from
+    // /calculate now passes the token check and surfaces the genuine runtime blocker.
+    const calculated = await request(app).post('/api/zwds/calculate').send(input);
+    const response = await request(app).post('/api/report-pdf').send({ reportToken: calculated.body.reportToken, locale: 'de-DE' });
     expect(response.status).toBe(503);
     expect(response.body.error.code).toBe('PDF_RUNTIME_UNAVAILABLE');
   });

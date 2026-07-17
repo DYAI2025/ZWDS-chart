@@ -83,3 +83,10 @@ Iteration 1/4 (M1) COMPLETE: T01 + T02 done.
 ## Iteration 2/4 — T03 DONE (2026-07-17)
 
 T03 (component-test stage): vitest.config.ts now has two projects — `node` (existing 45 tests, include unchanged) + `component` (jsdom + @testing-library/react, tests/component/**/*.test.tsx). Real render smoke test tests/component/reportSmoke.test.tsx mounts the REAL AppProvider + real reducer (CALCULATION_SUCCESS with DEMO_REPORT) and renders the real StatusStrip — no mocks. Added devDeps: jsdom, @testing-library/{react,dom,jest-dom,user-event}. `npx vitest run` runs BOTH projects. Independent verification (orchestrator): vitest 46/46, eslint 0, tsc 0, arch-gates 0. Enables T04/T05/T06.
+
+## Iteration 2/4 — T07 DONE (2026-07-17)
+
+T07 (REQ-017): /api/report-pdf reordered so token lookup (404 REPORT_TOKEN_UNKNOWN) runs BEFORE the Chromium 503 check — expired/unknown-token rejection is now provable without a PDF runtime. New tests: tests/unit/reportStore.test.mjs (expiry eviction + prune reclaim + 192-bit token entropy) and tests/integration/pdf-token-expiry.test.mjs (2 cases red before the reorder). Updated bff.test.mjs (old 503-on-unknown-token assertion depended on the bug; now fetches a real token -> genuine 503, STRENGTHENED not weakened).
+Review chain (wf_d4695e0c-06c): security PASS; code changes-requested (prune test was tautological — getReport's lazy eviction masked it). FIXED: added reportCount()/resetReports() test-only introspection; prune test now proves count 2->1 without reading the stale token, mutation-verified (no-op prune -> test fails). Surfaced a latent test-isolation bug (module-level records singleton not reset).
+Verified GREEN: vitest 54/54, eslint 0, tsc 0, arch-gates 0. Reality: REQ-017 integration-fake (real assembled BFF, fixture data).
+Iteration 2/4: T03 + T07 done; remaining T04 (REQ-011), T05 (REQ-012), T06 (REQ-016A).

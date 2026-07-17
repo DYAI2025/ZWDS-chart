@@ -181,9 +181,11 @@ export function createApp(config = loadConfig()) {
   app.post('/api/report-pdf', limiter('pdf', 5), async (req, res) => {
     const parsed = z.object({ reportToken: z.string().min(20).max(200), locale: z.enum(['de-DE','en-US']) }).strict().safeParse(req.body);
     if (!parsed.success) return errorEnvelope(res, 400, 'VALIDATION_FAILED', 'Invalid PDF request.');
-    if (!config.PUPPETEER_EXECUTABLE_PATH) return errorEnvelope(res, 503, 'PDF_RUNTIME_UNAVAILABLE', 'Server-side PDF requires a configured Chromium runtime.', true);
+    // Validate the request (token lookup) BEFORE probing Chromium runtime availability, so an
+    // unknown or expired token is rejected with 404 even when no PDF runtime is configured.
     const stored = getReport(parsed.data.reportToken);
     if (!stored) return errorEnvelope(res, 404, 'REPORT_TOKEN_UNKNOWN', 'Report token is unknown or expired.');
+    if (!config.PUPPETEER_EXECUTABLE_PATH) return errorEnvelope(res, 503, 'PDF_RUNTIME_UNAVAILABLE', 'Server-side PDF requires a configured Chromium runtime.', true);
     try {
       const pdf = await renderPdf(stored.report, parsed.data.locale, config.PUPPETEER_EXECUTABLE_PATH);
       const safeFingerprint = stored.report.calculation.chartFingerprint.replace(/[^a-z0-9_-]/gi, '').slice(0, 60) || 'report';

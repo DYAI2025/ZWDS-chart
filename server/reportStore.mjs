@@ -23,3 +23,14 @@ export function pruneReports() {
   const now = Date.now();
   for (const [token, record] of records) if (now - record.createdAt > MAX_AGE_MS) records.delete(token);
 }
+
+// Test-only introspection: lets a test prove pruneReports reclaims never-read stale
+// records (the unbounded-growth risk) without going through getReport's lazy eviction.
+export function reportCount() {
+  return records.size;
+}
+
+// Test-only: clear the in-memory store so tests are isolated from the module-level singleton.
+export function resetReports() {
+  records.clear();
+}

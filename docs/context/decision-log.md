@@ -22,3 +22,4 @@
 
 None recorded (no `CONTRA-<id>`). The 12 reality-fake REQs are surfaced as `value-risk` in the
 traceability matrix, not laundered into "known limitations"; user reclassification only.
+| D-016 | 2026-07-17 | T07 (REQ-017): report-pdf token-check reorder + reportStore expiry/prune/token tests. security PASS; code changes-requested (tautological prune test) -> fixed with reportCount/resetReports introspection, mutation-verified. Surfaced+fixed a latent test-isolation bug. | orchestrator | Test strengthened, not gamed. |
