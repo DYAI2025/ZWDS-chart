@@ -102,7 +102,11 @@ export function DecadeTimeline() {
   const { state, dispatch, t } = useApp();
   const decades = state.report?.decades;
   if (!decades) return null;
-  return <section className="report-layout__timeline"><h2 className="text-editorial">{t('decade.title')}</h2><div className="decade-timeline" role="tablist">{decades.map((decade) => <button key={decade.index} className={`decade-item ${state.selectedDecadeIndex === decade.index ? 'decade-item--selected' : ''}`} role="tab" aria-selected={state.selectedDecadeIndex === decade.index} onClick={() => { dispatch({ type: 'SELECT_DECADE', payload: decade.index }); dispatch({ type: 'SELECT_PALACE', payload: decade.palaceId }); }}><span className="decade-item__age">{decade.ageStart}–{decade.ageEnd}</span><span className="hanzi">{lookupPalace(decade.palaceId)?.hanzi}</span></button>)}</div><p>{t('decade.disclaimer')}</p></section>;
+  // Age-reckoning metadata is real calculation provenance (AC-012): the decade age
+  // ranges are reckoned under this convention. Surface it from the model — never
+  // hardcoded — so a decade selection preserves and shows it rather than dropping it.
+  const ageReckoningId = state.report!.calculation.ageReckoningId;
+  return <section className="report-layout__timeline"><h2 className="text-editorial">{t('decade.title')}</h2><div className="decade-timeline" role="tablist">{decades.map((decade) => <button key={decade.index} className={`decade-item ${state.selectedDecadeIndex === decade.index ? 'decade-item--selected' : ''}`} role="tab" aria-selected={state.selectedDecadeIndex === decade.index} onClick={() => { dispatch({ type: 'SELECT_DECADE', payload: decade.index }); dispatch({ type: 'SELECT_PALACE', payload: decade.palaceId }); }}><span className="decade-item__age">{decade.ageStart}–{decade.ageEnd}</span><span className="hanzi">{lookupPalace(decade.palaceId)?.hanzi}</span></button>)}</div>{ageReckoningId && <p className="decade-timeline__age-reckoning">{t('decade.ageReckoning')}: <code>{ageReckoningId}</code></p>}<p>{t('decade.disclaimer')}</p></section>;
 }
 
 export function MobilePalaceNavigator() {

@@ -126,3 +126,7 @@ Verified: vitest 58 pass + 1 skip, eslint 0, tsc 0, arch-gates 0. The BFF↔FE '
 
 RECON-server + RECON-client + RECON-verify all done. Data contract re-founded on real FuFirE end-to-end (server + FE agree). DoD MET: live amd003-pin PASS; reality-check PASS at real-boundary-smoke; REQ-004/005 -> real-boundary-smoke + true-line true in the matrix. Gates: vitest 58/1skip, eslint/tsc/arch/build 0. CONTRA-001 resolved for the calculate boundary.
 Remaining slice-1: T05 (REQ-012 natal-preservation), T06 (REQ-016A 44px) [M2 tail]; T08/T09 (M3 a11y+CI); T10 (M4 AMD-002 label). Geocode real-pin (REQ-002) still open (needs FUFIRE_GEOCODE_PATH or a Google provider — separate design).
+
+## T05 DONE (2026-07-17)
+
+T05 (REQ-012): natal-preservation locked (decade selection keeps report.palaces+stars byte-identical; mutation-verified the lock bites) + age-reckoning metadata surfaced (ageReckoningId from the real model, mock synced to real east_asian_nominal.guide-v1, +decade.ageReckoning locale key). Verified: vitest 61 pass + 1 skip, eslint 0, tsc 0, arch-gates 0. REQ-012 -> integration-fake.

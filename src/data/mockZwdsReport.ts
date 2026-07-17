@@ -79,7 +79,10 @@ export const DEMO_REPORT: NormalizedZwdsReport = {
     rulesetSha256: null, schoolLabel: null, calendarPolicyId: null, calendarPolicySha256: null,
     timePolicyId: null, timePolicySha256: null, leapMonthPolicyId: null, yearCyclePolicyId: null,
     starCatalogId: null, starCatalogSha256: null, transformationTableId: null,
-    transformationTableSha256: null, ageReckoningId: null, sourceStatus: S,
+    // ageReckoningId mirrors the REAL fixture's ruleset.age_reckoning_id — the same value
+    // server/normalize.mjs surfaces in bff-mode — so fixture-mode carries this AC-012
+    // age-reckoning metadata identically and never silently drops it.
+    transformationTableSha256: null, ageReckoningId: 'east_asian_nominal.guide-v1', sourceStatus: S,
     humanReviewRequired: true, dataMode: 'fixture',
   },
   birthInputSummary: {

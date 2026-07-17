@@ -156,6 +156,7 @@ export const de: LocaleMessages = {
   // Decades
   'decade.title': 'Zehnjährige Themenfenster',
   'decade.short': 'Dekade',
+  'decade.ageReckoning': 'Alterszählung',
   'decade.disclaimer': 'Dekaden markieren lediglich thematische Kontextfenster. Sie sagen keine Ereignisse voraus.',
 
   // Reading

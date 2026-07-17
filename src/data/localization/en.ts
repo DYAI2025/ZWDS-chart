@@ -160,6 +160,7 @@ export const en: LocaleMessages = {
   // Decades
   'decade.title': 'Ten-Year Theme Windows',
   'decade.short': 'Decade',
+  'decade.ageReckoning': 'Age reckoning',
   'decade.disclaimer': 'Decades mark thematic context windows only. They do not predict events.',
 
   // Reading
