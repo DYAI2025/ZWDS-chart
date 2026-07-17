@@ -19,6 +19,8 @@
 | D-015 | 2026-07-17 | T02 (AMD-001 hard fail-closed) implemented test-first, independently reviewed (code PASS, security PASS, Watcher value-risk). Reviewer strengthenings applied. Honest reality ledger created (integration-fake; reality-check RED at integration floor — real-boundary pending AMD-003/T11). Iteration 1/4 complete. | orchestrator | Watcher value-risk = user-accepted release-gated RED; code proceeds, value cert pending. |
 | D-016 | 2026-07-17 | T07 (REQ-017): report-pdf token-check reorder + reportStore expiry/prune/token tests. security PASS; code changes-requested (tautological prune test) -> fixed with reportCount/resetReports introspection, mutation-verified. Surfaced+fixed a latent test-isolation bug. | orchestrator | Test strengthened, not gamed. |
 | D-017 | 2026-07-17 | T04 (REQ-011) code done + reviewed (code PASS). Watcher BLOCK on the reality floor (integration-fake < integration); escalation-asymmetry forbids self-downgrade. Escalating the slice-1 done-bar decision to the user; paused. | orchestrator->user | Watcher: keep code, user owns the done-bar / AMD-003. |
+| D-018 | 2026-07-17 | User chose SCOPE SHIFT A: reconcile the data contract to the real FuFirE API (CONTRA-001). Deep contract analysis dispatched; plan re-scope pending. | **user** | Biggest, most valuable work; re-founds the data layer. |
+| D-019 | 2026-07-17 | Added `.env.example` to the Canvas Allowed change scope (scope-check flagged it). Reason: I edited .env.example to SCRUB the secrets the user accidentally pasted there — a security remediation; it is a standard tracked config file of the same class already in scope. Recorded transparently, not silent scope-creep. | orchestrator | User may revert if undesired. |
 
 ## Open contradictions ledger
 
@@ -35,5 +37,3 @@ defer). Not laundered, not self-resolved.
 
 The other fixture-only REQs remain surfaced as `value-risk` in the traceability matrix, not
 laundered into "known limitations"; user reclassification only.
-| D-018 | 2026-07-17 | User chose SCOPE SHIFT A: reconcile the data contract to the real FuFirE API (CONTRA-001). Deep contract analysis dispatched; plan re-scope pending. | **user** | Biggest, most valuable work; re-founds the data layer. |
-| D-019 | 2026-07-17 | Added `.env.example` to the Canvas Allowed change scope (scope-check flagged it). Reason: I edited .env.example to SCRUB the secrets the user accidentally pasted there — a security remediation; it is a standard tracked config file of the same class already in scope. Recorded transparently, not silent scope-creep. | orchestrator | User may revert if undesired. |
