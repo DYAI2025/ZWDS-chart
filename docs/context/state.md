@@ -183,3 +183,13 @@ Drove the deployed live app in a real browser (VITE_DATA_MODE=bff). Full flow wo
 ## Slice-2 REQ-013 PDF server render: runtime provisioned + local real-render proven (2026-07-18)
 
 Server PDF code (reportStore token -> puppeteer-core renderPdf, full A4 palace-grid HTML incl. AMD-002 not-authoritative block + CJK) was already complete; the gap was NO Chromium/CJK runtime on the deploy (PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium was set but the binary was never installed = pdfConfigured:true yet renderPdf would ENOENT — the classic green-but-broken trap). Fix: nixpacks.toml [phases.setup] aptPkgs=[chromium, fonts-noto-cjk]. Proven LOCALLY end-to-end against a real puppeteer-cache Chromium: calculate -> reportToken -> POST /api/report-pdf -> HTTP 200, 178255-byte 
+## Slice-2 REQ-013 PDF server render — PRODUCTION-VERIFIED on deployed URL (2026-07-18)
+
+The server PDF code was complete; the deploy had no Chromium runtime. Deploy-verify chased it down through several real-config traps:
+1. nixpacks.toml [phases.setup] aptPkgs=[chromium,fonts-noto-cjk] did NOT install chromium (builds stayed ~12s; diagnostic log showed /usr/bin/chromium absent).
+2. PUPPETEER_EXECUTABLE_PATH on Railway had trailing spaces ("/usr/bin/chromium  ") -> puppeteer looked for a nonexistent path. Fixed with zod .trim() + a clean var (regression test config-puppeteer-trim).
+3. Added a redaction-safe pdf.error diagnostic (errKind/errMsg/execExists/execPath) to the report-pdf catch that made each cause visible in the deploy logs.
+4. Also fixed app.set('trust proxy', 1) — Railway's X-Forwarded-For was making express-rate-limit throw on every rate-limited route.
+5. Final fix: pinned a Dockerfile (node:22-slim + apt chromium at /usr/bin/chromium + fonts-noto-cjk). Railway used the Dockerfile over the dormant nixpacks.toml; build now installs chromium.
+
+Result on the DEPLOYED URL: live calculate -> reportToken -> POST /api/report-pdf (de-DE) -> HTTP 200 application/pdf, 158614-byte %PDF; pdftotext extracted German labels, CJK 官祿宮/太陽, the AMD-002 not-authoritative notice, the ten-year windows and the fingerprint. REQ-013 -> production-verified. KNOWN_LIMITATIONS PDF binary smoke -> RESOLVED. Frontend already wired (AtlasNavigation -> BffZwdsProvider.createPdf -> blob download, window.print fallback).

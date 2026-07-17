@@ -17,7 +17,7 @@
 | Live geocoding | `UNVERIFIED` | Approved path absent. | Configure and contract-test it. |
 | Reviewed hashes | `SOURCE_NEEDED` | Not supplied. | Retrieve from authoritative metadata; never fabricate. |
 | LLM | `SOURCE_NEEDED` | No reviewed corpus. | Keep disabled until approved. |
-| PDF binary smoke | `LOCAL_VERIFIED` / deploy pending | Local: real Chromium render proven (178 KB `%PDF`, CJK `官祿宮` extracted). Deploy: `nixpacks.toml` now installs apt `chromium` + `fonts-noto-cjk`. | Pull a PDF from the deployed URL to confirm the container runtime; then mark RESOLVED. |
+| PDF binary smoke | `RESOLVED` (2026-07-18) | Deployed URL served a 158 KB `application/pdf` (`%PDF`), CJK `官祿宮`/`太陽` + not-authoritative notice extracted. Runtime pinned via `Dockerfile` (node:22-slim + apt `chromium` + `fonts-noto-cjk`); Nixpacks `aptPkgs` did NOT provision it. | — |
 | Test/lint/E2E execution | `BLOCKED` | CLI unavailable. | Run configured tools in CI/local shell. |
 | npm advisories | `UNVERIFIED` details | Installer reports 1 high/1 low. | Audit each chain and apply compatible updates only. |
 | Catalogue digest | `SOURCE_NEEDED` | Reviewed digest absent. | Review/pin canonical catalogue content digest. |
