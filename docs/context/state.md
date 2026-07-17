@@ -11,12 +11,14 @@
 | Phase | Status |
 |---|---|
 | 0.0 First-run orientation | DONE |
-| 0.15 Product Canvas + user confirm | CLEARED, then AMENDED (council AMD-001..004) → re-confirm pending |
+| 0.15 Product Canvas + user confirm | CLEARED (re-confirmed with AMD-001..004 on 2026-07-17) |
 | 0.16 Council challenge gate | CLEARED (ran wf_b440a0e9-841; user adopted all 4 points) |
-| Canvas + Vision RE-confirm | PENDING (mandatory after amendments) |
-| 0.2 PRD (drafted, foundation-confirmed) | PENDING final freeze (Phase 0.5) |
-| 0.4 Vision + user confirm | CLEARED, then AMENDED (joint re-confirm pending) |
-| 0.5 USER GATE (PRD+Vision freeze, PRIL, spec-sanity) | PENDING |
+| Canvas + Vision RE-confirm | CLEARED (user "Re-confirm as amended" 2026-07-17) |
+| 0.5 PRIL context integrity | IN PROGRESS (reasoning-level; binary absent) |
+| 0.7 Spec-sanity audit | IN PROGRESS |
+| 0.2 PRD final freeze | PENDING (after spec-sanity) |
+| 0.4 Vision + user confirm | CLEARED (user-confirmed with amendments) |
+| USER GATE (DoD + matrix + spec-audit) | PENDING |
 | Vision GO gate | PENDING (needs explicit user GO) |
 | 1..8 | BLOCKED until GO |
 

@@ -1,10 +1,10 @@
 # PRD: BaZodiac Zi Wei Dou Shu Atlas
 
-Status: foundation-confirmed (final PRD freeze at Phase 0.5, after council challenge + spec-sanity)  
+Status: foundation re-confirmed with amendments (final freeze pending Phase 0.7 spec-sanity)  
 Feature Slug: bazodiac-zwds-atlas  
 Owner: BaZodiac Product Team  
 User Confirmation Required: yes  
-Canvas + Vision: user-confirmed 2026-07-17 (Canvas: `docs/canvas/bazodiac-zwds-atlas.canvas.md`, Vision: `docs/vision/bazodiac-zwds-atlas.vision.md`)
+Canvas + Vision: user-confirmed (with council amendments AMD-001..004) 2026-07-17 (Canvas: `docs/canvas/bazodiac-zwds-atlas.canvas.md`, Vision: `docs/vision/bazodiac-zwds-atlas.vision.md`)
 
 ## Source Summary
 

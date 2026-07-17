@@ -1,8 +1,8 @@
 # Product Vision: BaZodiac Zi Wei Dou Shu Atlas
 
-Status: draft (joint re-confirm pending with Canvas after Phase 0.16 council amendments)
+Status: user-confirmed (re-confirmed with council amendments on 2026-07-17)
 Feature Slug: bazodiac-zwds-atlas
-Confirmation Status: re-confirmation-pending
+Confirmation Status: user-confirmed
 Canvas: `docs/canvas/bazodiac-zwds-atlas.canvas.md`
 
 > **Council amendment note (2026-07-17):** VIS-005/VIS-006 slice-1 scope now excludes REQ-013 (PDF) and
@@ -30,12 +30,11 @@ For German- and English-speaking adults who want to understand Zi Wei Dou Shu wi
 
 ## Confirmation
 
-**Status: re-confirmation-pending (joint with Canvas, after Phase 0.16 council amendments).**
+**Status: user-confirmed (jointly with Canvas, including council amendments AMD-001..004).**
 
-- Prior confirmation (foundation): user, 2026-07-17, "Confirm as-is" + verbatim phrase — valid for the
-  un-amended Vision statement/board.
-- Council amendments AMD-001..004 (Canvas) touch slice scope + release gates; re-confirm covers Canvas + Vision jointly.
-- Method: AgileTeam confirmation gate — "Confirm as-is" + verbatim confirmation phrase.
+- Confirmed by user: yes (ben.poersch@gmail.com), 2026-07-17.
+- Foundation confirmation + re-confirmation (with amendments) both by the user; no agent self-confirmed.
+- Method: AgileTeam confirmation gate — "Confirm as-is", then "Re-confirm as amended" after the Phase 0.16 council steer.
 - Confirmation phrase (verbatim): "Ich bestaetige, dass Product Canvas und Product Vision meine Absicht korrekt wiedergeben und als Grundlage fuer AgileTeam Planning verwendet werden duerfen."
 
 Note: VIS-008 was upgraded from ASSUMPTION to evidence-confirmed by the pre-confirmation read-only audit (12/20 implemented, 8/20 partial, 0 missing). VIS-009 items remain open (OQ-001..004) and are resolved at their natural decision points, not silently.

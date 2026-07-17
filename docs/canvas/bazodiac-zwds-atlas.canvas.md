@@ -1,6 +1,6 @@
 # Product Canvas: BaZodiac Zi Wei Dou Shu Atlas
 
-Status: draft (council amendments adopted 2026-07-17; awaiting user RE-confirm)
+Status: user-confirmed (re-confirmed with council amendments AMD-001..004 on 2026-07-17)
 Feature Slug: bazodiac-zwds-atlas
 
 | Section | ID | Value | Source Type | Source |
@@ -60,13 +60,13 @@ findings; the user adopted all four steer options. These amend the confirmed Can
 
 ## User Confirmation
 
-**Status: draft — RE-confirmation required after council amendments.**
+**Status: user-confirmed (with amendments AMD-001..004).**
 
-- Prior confirmation (foundation): user, 2026-07-17, "Confirm as-is" + verbatim phrase (still valid for the
-  un-amended fields).
-- Amendments AMD-001..004 were adopted by the user via the Phase 0.16 council steer, which returns the
-  Canvas to `draft`. No agent may self-confirm the amended Canvas.
-- Re-confirmation phrase (verbatim): "Ich bestaetige, dass Product Canvas und Product Vision meine Absicht korrekt wiedergeben und als Grundlage fuer AgileTeam Planning verwendet werden duerfen."
+- Confirmed by user: yes (ben.poersch@gmail.com)
+- Foundation confirmation: 2026-07-17, "Confirm as-is" + verbatim phrase.
+- Re-confirmation (with council amendments): 2026-07-17, user selected "Re-confirm as amended" at the Phase 0.16 steer gate.
+- No agent self-confirmed at any point.
+- Confirmation phrase (verbatim): "Ich bestaetige, dass Product Canvas und Product Vision meine Absicht korrekt wiedergeben und als Grundlage fuer AgileTeam Planning verwendet werden duerfen."
 
 ## Evidence note on AS-001 (implementation base)
 
