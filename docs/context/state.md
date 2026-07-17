@@ -162,3 +162,8 @@ STANDING (user-owned, not slice-1 blockers): geocode real-pin (REQ-002), source-
 ## Branch pushed + CI production-verified (2026-07-17)
 
 Pre-push secret scan CLEAN (0 committed key hits; .env gitignored/never committed). Pushed agileteam/bazodiac-zwds-atlas -> origin. GitHub Actions run 29598629529 conclusion=SUCCESS (full pipeline incl. playwright chromium+webkit both projects). REQ-018 -> production-verified. STILL OPEN: rotate exposed keys; geocode pin; reviewer sign-off + catalog entry-status; AMD-003 n=1; slice-2 (REQ-013/015); PR merge decision.
+
+## Deployed + LIVE verified (2026-07-17)
+
+Railway single-service deploy live: BFF serves SPA + API. Deploy-verify caught FUFIRE_RULESET_METADATA_CONTRACT (real /v1/metadata endpoint returns release_status + human_review_required, which .strict() rejected — AMD-003 pin never hit the metadata endpoint). Fixed (2 optional fields). CONFIRMED on the deployed prod URL: live /api/zwds/calculate -> 200 SUCCESS/MATCHED, fresh requestId per call = real FuFirE end-to-end. main @ 2c634e0. REQ-004 -> production-verified.
+Still open: geocode real-pin (REQ-002); source-governance reviewer + catalog entry-status; AMD-003 n=1; slice-2 (REQ-013/015); ROTATE keys.
