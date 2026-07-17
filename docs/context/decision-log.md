@@ -35,3 +35,5 @@ defer). Not laundered, not self-resolved.
 
 The other fixture-only REQs remain surfaced as `value-risk` in the traceability matrix, not
 laundered into "known limitations"; user reclassification only.
+| D-018 | 2026-07-17 | User chose SCOPE SHIFT A: reconcile the data contract to the real FuFirE API (CONTRA-001). Deep contract analysis dispatched; plan re-scope pending. | **user** | Biggest, most valuable work; re-founds the data layer. |
+| D-019 | 2026-07-17 | Added `.env.example` to the Canvas Allowed change scope (scope-check flagged it). Reason: I edited .env.example to SCRUB the secrets the user accidentally pasted there — a security remediation; it is a standard tracked config file of the same class already in scope. Recorded transparently, not silent scope-creep. | orchestrator | User may revert if undesired. |

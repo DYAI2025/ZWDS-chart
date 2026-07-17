@@ -38,6 +38,7 @@ Repo-relative globs in scope for the confirmed contract-first slice (CAN-011). O
 - package-lock.json
 - index.html
 - .gitignore
+- .env.example
 - CLAUDE.md
 - config/**
 
