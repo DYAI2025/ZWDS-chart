@@ -21,3 +21,12 @@ export function createProvider(): ZwdsDataProvider {
 export function getDataModeLabel(): 'fixture' | 'live' {
   return getDataMode() === 'bff' ? 'live' : 'fixture';
 }
+
+/**
+ * True only when the browser runs against the bundled golden fixture (MockZwdsProvider).
+ * Demo-only notices ("not recalculated", "no live geocoding") must be gated on this —
+ * in bff/live mode they are false: entries ARE geocoded and recalculated upstream.
+ */
+export function isFixtureMode(): boolean {
+  return getDataMode() === 'fixture';
+}

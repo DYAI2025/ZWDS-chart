@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { useApp } from '@/app/appContext';
-import { createProvider } from '@/app/providerFactory';
+import { createProvider, isFixtureMode } from '@/app/providerFactory';
 import {
   DEMO_PROFILE, deviatesFromDemo, toBirthInput, validateIntakeStep,
   type ValidationError,
@@ -61,7 +61,7 @@ export function BirthIntakeWizard() {
   const updateDemo = (patch: Partial<typeof values>) => dispatch({ type: 'UPDATE_INTAKE_VALUES', payload: { ...patch, demoModified: true } });
 
   return <section className="intake"><div className="container-narrow">
-    <header className="intake__header"><p className="demo-banner" role="note">{t('intake.demoBanner')}</p><h1 className="text-editorial">{t('intake.title')}</h1>
+    <header className="intake__header">{isFixtureMode() && <p className="demo-banner" role="note">{t('intake.demoBanner')}</p>}<h1 className="text-editorial">{t('intake.title')}</h1>
       <div className="intake__progress" role="tablist" aria-label={t('intake.stepsAria')}>{STEP_KEYS.map((key, index) => <button key={key} role="tab" aria-selected={index === state.intakeStep} className={`intake__step-indicator ${index === state.intakeStep ? 'intake__step-indicator--active' : ''}`} onClick={() => index <= state.intakeStep && dispatch({ type: 'SET_INTAKE_STEP', payload: index })}>{index + 1}. {t(key)}</button>)}</div>
     </header>
     <div className="intake__body">
@@ -95,7 +95,7 @@ export function BirthIntakeWizard() {
         <label className="intake__radio-label"><input id="field-privacyConsent" type="checkbox" checked={values.privacyConsent} onChange={(event) => dispatch({ type: 'UPDATE_INTAKE_VALUES', payload: { privacyConsent: event.target.checked } })}/>{t('intake.privacyConsent')}</label>
       </div>}
 
-      {state.intakeStep === 4 && <div role="tabpanel"><h2 className="intake__step-title">{t('intake.review.title')}</h2><div className="intake__review-section"><p>{values.date} · {values.time} · {values.location?.displayName} · {values.location?.timezone}</p><p>{t(`intake.directionMethod.${values.directionMethod}`)} · {values.locale} · zh-Hant</p></div>{deviatesFromDemo(values) && <p className="intake__demo-warning">{t('intake.demoNotRecalculated')}</p>}<p className="intake__mock-notice">{t('intake.calculate.mockNotice')}</p></div>}
+      {state.intakeStep === 4 && <div role="tabpanel"><h2 className="intake__step-title">{t('intake.review.title')}</h2><div className="intake__review-section"><p>{values.date} · {values.time} · {values.location?.displayName} · {values.location?.timezone}</p><p>{t(`intake.directionMethod.${values.directionMethod}`)} · {values.locale} · zh-Hant</p></div>{isFixtureMode() && deviatesFromDemo(values) && <p className="intake__demo-warning">{t('intake.demoNotRecalculated')}</p>}{isFixtureMode() && <p className="intake__mock-notice">{t('intake.calculate.mockNotice')}</p>}</div>}
 
       <div className="intake__actions"><button className="btn btn--ghost" onClick={() => state.intakeStep ? dispatch({ type: 'SET_INTAKE_STEP', payload: state.intakeStep - 1 }) : dispatch({ type: 'SET_VIEW', payload: 'landing' })}>{t('intake.back')}</button>{state.intakeStep < 4 ? <button className="btn btn--primary" onClick={next}>{t('intake.next')}</button> : <button className="btn btn--primary" onClick={calculate}>{t('intake.calculate')}</button>}</div>
     </div>
