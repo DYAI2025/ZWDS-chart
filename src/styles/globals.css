@@ -1331,6 +1331,25 @@ h1, h2, h3, h4, h5, h6 {
   border-bottom: none;
 }
 
+/* Main-report provenance + unresolved-conventions panel (AC-011 / RISK-001).
+   Owns its own visible surface so the "not buried" guarantee does not depend
+   silently on the .report-module co-class, and lays the two blocks side by side. */
+.report-provenance {
+  background: var(--surface-dark);
+  border: 1px solid var(--border-dark);
+  border-radius: var(--radius-md);
+  padding: var(--space-lg);
+  margin-bottom: var(--space-md);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-lg);
+}
+
+.report-provenance__block {
+  flex: 1 1 240px;
+  min-width: 0;
+}
+
 /* ── Evidence Drawer ────────────────────────────────────── */
 .evidence-drawer {
   position: fixed;

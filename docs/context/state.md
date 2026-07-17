@@ -90,3 +90,10 @@ T07 (REQ-017): /api/report-pdf reordered so token lookup (404 REPORT_TOKEN_UNKNO
 Review chain (wf_d4695e0c-06c): security PASS; code changes-requested (prune test was tautological — getReport's lazy eviction masked it). FIXED: added reportCount()/resetReports() test-only introspection; prune test now proves count 2->1 without reading the stale token, mutation-verified (no-op prune -> test fails). Surfaced a latent test-isolation bug (module-level records singleton not reset).
 Verified GREEN: vitest 54/54, eslint 0, tsc 0, arch-gates 0. Reality: REQ-017 integration-fake (real assembled BFF, fixture data).
 Iteration 2/4: T03 + T07 done; remaining T04 (REQ-011), T05 (REQ-012), T06 (REQ-016A).
+
+## Iteration 2/4 — T04 code DONE, done-bar ESCALATED (2026-07-17)
+
+T04 (REQ-011): schoolProfileStatus + scriptPolicy added to StatusStrip; new always-visible ReportProvenancePanel (all sub-views, self-owned .report-provenance styling) surfaces provenance origins + unresolved conventions on the MAIN report — directly mitigating RISK-001. All values from the real model, no fabrication. Reviewer polish applied: dedicated 'all conventions resolved' key, panel visibility no longer depends solely on the co-class, section aria-label covers both blocks.
+Review (wf_3819c235-0ad): code PASS (mutation-verified — test bites 3 ways); WATCHER **BLOCK** — value genuinely advances CAN-003/RISK-001 (not hollow), BUT plumbline-reality-check --min-evidence integration fails (integration-fake), and per escalation-asymmetry the Watcher may NOT self-downgrade and an agent's GREEN report is NOT user consent. Watcher directive: keep the code, escalate the DONE-BAR to the user.
+Verified GREEN: vitest 55/55, eslint 0, tsc 0, arch-gates 0, build 0. REQ-011 recorded integration-fake.
+**PAUSED for user done-bar decision** (applies to ALL fixture-only slice-1 tasks, since every one is integration-fake until the AMD-003 real-boundary pin lands — which needs external staging creds). TRC-011 true-line-status stays value-risk until the user decides.

@@ -58,6 +58,8 @@ export function StatusStrip() {
     <span className="status-strip__item"><span className="status-strip__label">{t('status.sourceStatus')}:</span><b>{c.sourceStatus}</b></span>
     <span className="status-strip__item"><span className="status-strip__label">Crosscheck:</span><b>{c.crosscheckStatus}</b></span>
     <span className="status-strip__item"><span className="status-strip__label">{t('status.humanReview')}:</span><b>{c.humanReviewRequired ? t('status.humanReview.yes') : t('status.humanReview.no')}</b></span>
+    <span className="status-strip__item"><span className="status-strip__label">{t('status.schoolProfile')}:</span><b>{report.schoolProfileStatus}</b></span>
+    <span className="status-strip__item"><span className="status-strip__label">{t('status.scriptPolicy')}:</span><b>{report.scriptPolicy}</b></span>
     <span className="status-strip__item"><span className="status-strip__label">Fingerprint:</span><b>{c.chartFingerprint}</b></span>
   </div>;
 }

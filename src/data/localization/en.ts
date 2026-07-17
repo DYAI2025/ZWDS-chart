@@ -129,6 +129,7 @@ export const en: LocaleMessages = {
   'status.humanReview.no': 'Not required',
   'status.schoolProfile': 'School profile',
   'status.schoolProfile.notSelected': 'Not selected',
+  'status.scriptPolicy': 'Script policy',
   'status.prototype': 'Prototype data',
 
   // Atlas
@@ -199,6 +200,8 @@ export const en: LocaleMessages = {
   'method.ruleset': 'Ruleset',
   'method.schoolProfile': 'School profile',
   'method.unresolvedConventions': 'Unresolved conventions',
+  'method.unresolvedConventions.none': 'All conventions resolved',
+  'evidence.provenancePanel': 'Provenance & unresolved conventions',
   'method.mockDataDisclaimer': 'This report uses fixture data or a ruleset under review. No Zi Wei Dou Shu calculation runs in the browser. The core seed is not a complete traditional school.',
   'method.truthClasses': 'Truth classes',
   'method.truthClass.CALCULATED_FACT': 'Calculated fact — derived by algorithmic steps from upstream data.',

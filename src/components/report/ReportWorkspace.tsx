@@ -3,7 +3,47 @@ import { PalaceWorkspace } from '@/components/atlas/PalaceWorkspace';
 import { EvidenceDrawer, EvidencePage, EvidenceSection } from '@/components/evidence/EvidenceViews';
 import { SourceChip, TruthBadge } from '@/components/common/ReportPrimitives';
 import { labelFor, lookupBureau, lookupPalace, lookupStar, lookupTransformation } from '@/data/zwdsCatalog';
+import type { NormalizedZwdsReport } from '@/domain/zwdsTypes';
 import type { TruthClass } from '@/domain/truthTypes';
+
+// Convention identifiers the calculation model may resolve. A null value means
+// the convention has NOT been resolved to a reviewed identifier yet — that is
+// exactly what "unresolved conventions" means for AC-011. Derived from the real
+// report, never hardcoded to a status.
+const CONVENTION_FIELDS: Array<keyof NormalizedZwdsReport['calculation']> = [
+  'calendarPolicyId', 'timePolicyId', 'leapMonthPolicyId', 'yearCyclePolicyId',
+  'starCatalogId', 'transformationTableId', 'ageReckoningId',
+];
+
+function unresolvedConventions(report: NormalizedZwdsReport): string[] {
+  return CONVENTION_FIELDS.filter((field) => report.calculation[field] == null);
+}
+
+// AC-011: provenance and unresolved conventions must be readable on the MAIN
+// report surface, not only inside the Evidence/Method tab. This panel is
+// rendered for every report sub-view so the information is never gated behind a
+// tab, tooltip or <details>.
+function ReportProvenancePanel() {
+  const { state, t } = useApp();
+  const report = state.report!;
+  const unresolved = unresolvedConventions(report);
+  return <section className="report-provenance report-module" style={{ gridColumn: '1/-1' }} aria-label={t('evidence.provenancePanel')}>
+    <div className="report-provenance__block">
+      <h2 className="report-module__title">{t('evidence.provenance')}</h2>
+      {report.provenance.length === 0
+        ? <p>{t('evidence.noRecords')}</p>
+        : report.provenance.map((record) => <p className="report-provenance__origin" key={record.recordId}>
+            <b>{record.origin}</b> · <code>{record.dataId}</code> <SourceChip status={record.sourceStatus} label={record.sourceStatus}/>
+          </p>)}
+    </div>
+    <div className="report-provenance__block">
+      <h2 className="report-module__title">{t('method.unresolvedConventions')}</h2>
+      {unresolved.length === 0
+        ? <p>{t('method.unresolvedConventions.none')}</p>
+        : <p className="report-provenance__conventions"><b>{unresolved.length}</b> · {unresolved.map((field) => <code key={field}>{field}</code>).reduce((prev, curr) => <>{prev} {curr}</>)}</p>}
+    </div>
+  </section>;
+}
 
 function ReadingPage() {
   const { state, t } = useApp();
@@ -25,5 +65,5 @@ function MethodPage() {
 export function ReportWorkspace() {
   const { state, t } = useApp();
   const report = state.report!;
-  return <main className="report-workspace"><div className="report-layout container">{state.reportSubView === 'atlas' && <PalaceWorkspace/>}{state.reportSubView === 'reading' && <ReadingPage/>}{state.reportSubView === 'evidence' && <EvidencePage/>}{state.reportSubView === 'method' && <MethodPage/>}</div><EvidenceDrawer/><footer className="print-footer">{t('print.fingerprint')}: {report.calculation.chartFingerprint} · {report.calculation.sourceStatus} · {report.calculation.rulesetId}</footer></main>;
+  return <main className="report-workspace"><div className="report-layout container"><ReportProvenancePanel/>{state.reportSubView === 'atlas' && <PalaceWorkspace/>}{state.reportSubView === 'reading' && <ReadingPage/>}{state.reportSubView === 'evidence' && <EvidencePage/>}{state.reportSubView === 'method' && <MethodPage/>}</div><EvidenceDrawer/><footer className="print-footer">{t('print.fingerprint')}: {report.calculation.chartFingerprint} · {report.calculation.sourceStatus} · {report.calculation.rulesetId}</footer></main>;
 }

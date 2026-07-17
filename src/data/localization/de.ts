@@ -125,6 +125,7 @@ export const de: LocaleMessages = {
   'status.humanReview.no': 'Nicht erforderlich',
   'status.schoolProfile': 'Schulprofil',
   'status.schoolProfile.notSelected': 'Nicht ausgewählt',
+  'status.scriptPolicy': 'Schriftrichtlinie',
   'status.prototype': 'Prototyp-Daten',
 
   // Atlas
@@ -195,6 +196,8 @@ export const de: LocaleMessages = {
   'method.ruleset': 'Regelwerk',
   'method.schoolProfile': 'Schulprofil',
   'method.unresolvedConventions': 'Ungelöste Konventionen',
+  'method.unresolvedConventions.none': 'Alle Konventionen aufgelöst',
+  'evidence.provenancePanel': 'Herkunft & ungelöste Konventionen',
   'method.mockDataDisclaimer': 'Dieser Bericht verwendet Fixture-Daten oder ein sich in Prüfung befindliches Regelwerk. Im Browser läuft keine Zi-Wei-Dou-Shu-Berechnung. Der Core Seed ist keine vollständige traditionelle Schule.',
   'method.truthClasses': 'Wahrheitsklassen',
   'method.truthClass.CALCULATED_FACT': 'Berechnete Tatsache — durch algorithmische Schritte aus Upstream-Daten abgeleitet.',
