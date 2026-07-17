@@ -87,6 +87,11 @@ const limiter = (label, max) => rateLimit({
 export function createApp(config = loadConfig()) {
   const app = express();
   const geocodeProvider = createGeocodeProvider(config);
+  // Railway (and most PaaS) terminate TLS at a single reverse proxy that sets
+  // X-Forwarded-For. Trust exactly one hop so express-rate-limit keys on the real
+  // client IP instead of throwing ERR_ERL_UNEXPECTED_X_FORWARDED_FOR. `1` (not `true`)
+  // keeps it from trusting an arbitrary client-supplied chain.
+  app.set('trust proxy', 1);
   app.disable('x-powered-by');
   app.use(helmet({ contentSecurityPolicy: false, crossOriginResourcePolicy: { policy: 'same-origin' } }));
   app.use(express.json({ limit: '64kb', strict: true }));
@@ -193,7 +198,17 @@ export function createApp(config = loadConfig()) {
       res.setHeader('content-disposition', `attachment; filename="bazodiac-${safeFingerprint}.pdf"`);
       res.setHeader('cache-control', 'no-store');
       return res.status(200).send(Buffer.from(pdf));
-    } catch {
+    } catch (error) {
+      // Redaction-safe diagnostics: the underlying Puppeteer/Chromium failure reason and
+      // whether the configured executable actually exists on disk (ENOENT => runtime not
+      // installed; shared-lib error => installed but missing deps). No PII in any field.
+      logInfo('pdf.error', {
+        requestId: res.locals.requestId,
+        errKind: error?.name,
+        errMsg: String(error?.message ?? error).slice(0, 300),
+        execExists: config.PUPPETEER_EXECUTABLE_PATH ? fs.existsSync(config.PUPPETEER_EXECUTABLE_PATH) : false,
+        execPath: config.PUPPETEER_EXECUTABLE_PATH,
+      });
       return errorEnvelope(res, 503, 'PDF_RENDER_FAILED', 'The PDF renderer failed.', true);
     }
   });
