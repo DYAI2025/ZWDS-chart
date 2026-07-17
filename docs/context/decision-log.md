@@ -7,6 +7,9 @@
 | D-003 | 2026-07-17 | User confirmed Product Canvas + Product Vision as the basis for AgileTeam planning. | **user** | Via confirmation gate ("Confirm as-is") + verbatim phrase. Canvas + Vision → `user-confirmed`. |
 | D-004 | 2026-07-17 | AS-001 upgraded ASSUMPTION → evidence-confirmed (VIS-008). | orchestrator | Backed by D-002 audit. |
 | D-005 | 2026-07-17 | Wrote artifacts to canonical paths on branch `agileteam/bazodiac-zwds-atlas`; PRD kept `foundation-confirmed`, final freeze deferred to Phase 0.5 (after council + spec-sanity). | orchestrator | Respects "council runs before PRD finalize". |
+| D-006 | 2026-07-17 | Phase 0.16 council challenge gate ran (Challenger/Advisor/Critic). All 3 converged "pull-pivot", 5 legitimate-blockers. | orchestrator | Run `wf_b440a0e9-841`, 3 independent agent types. |
+| D-007 | 2026-07-17 | User adopted ALL FOUR council steer options → AMD-001..004. Canvas + Vision returned to `draft`; re-confirm required. | **user** | No agent self-confirm. |
+| D-008 | 2026-07-17 | Scope shift (user-authored): slice-1 narrowed to 18 REQs; REQ-013 (PDF) + REQ-015 (LLM) → slice-2. **Original Goal (20 REQs) NOT reduced.** | **user** | Iteration status separated from Original Goal status. |
 
 ## Open contradictions ledger
 

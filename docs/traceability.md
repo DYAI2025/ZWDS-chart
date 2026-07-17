@@ -59,6 +59,19 @@ Any I/O / remote / external-API / UI feature at `*-fake` is **RED regardless of 
 - **Reality Ledger RED (fake-only on a boundary feature): 12/20** — REQ-002,003,004,005,006,011,012,013,014(aligned but integ-fake),015,017,019 sit at `integration-fake`/`unit-fake`, proven only against a self-authored golden fixture / mocks, never a real FuFirE or real-Chromium boundary. This is the dominant reality risk and is surfaced verbatim; only the user may reclassify it.
 - **True-Line status:** 12 REQs `value-risk`, 8 `true`. No `pause`/`blocked`. The `value-risk` cluster reflects the same reality-thinness — green/wired but the confirmed value claim ("traceable to FuFirE data") is proven only against a fixture.
 
+## Council amendments — slice + status deltas (adopted 2026-07-17)
+
+Original Goal = all 20 REQs (NOT reduced). Iteration-1 = 18 REQs; REQ-013 + REQ-015 → slice-2.
+
+| REQ | Slice | canvas-risk-status delta | true-line-status delta | Note |
+|---|---|---|---|---|
+| REQ-013 (PDF) | slice-2 | deferred-slice-2 | deferred | AMD-004; still owed by Original Goal. |
+| REQ-015 (LLM) | slice-2 | deferred-slice-2 | deferred | AMD-004; corpus SOURCE_NEEDED. |
+| REQ-019 (fail-closed) | slice-1 (early) | value-risk → will-fix-early | value-risk → target true | AMD-001: hard fail-closed, no warning-only pass. |
+| all "traceable to real data" REQs | slice-1 | release-gated (AMD-002/003) | — | Public authoritative claim gated on reviewer sign-off + real-FuFirE pin. |
+
+All other REQs: slice-1, unchanged from the matrix above.
+
 ## Notable semantic gaps (from audit, distinct from reality-thinness)
 
 - **REQ-013** — server PDF omits Pinyin entirely; REQ text requires Pinyin. Real Chromium A4 render never exercised (no CI Chromium).

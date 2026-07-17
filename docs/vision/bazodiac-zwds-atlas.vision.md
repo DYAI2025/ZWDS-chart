@@ -1,9 +1,14 @@
 # Product Vision: BaZodiac Zi Wei Dou Shu Atlas
 
-Status: user-confirmed
+Status: draft (joint re-confirm pending with Canvas after Phase 0.16 council amendments)
 Feature Slug: bazodiac-zwds-atlas
-Confirmation Status: user-confirmed
+Confirmation Status: re-confirmation-pending
 Canvas: `docs/canvas/bazodiac-zwds-atlas.canvas.md`
+
+> **Council amendment note (2026-07-17):** VIS-005/VIS-006 slice-1 scope now excludes REQ-013 (PDF) and
+> REQ-015 (LLM) per Canvas AMD-004 (deferred to slice-2). Original Goal (all 20 REQs) is NOT reduced.
+> Public "traceable to real data" claims are gated on a real-FuFirE pin (AMD-003) and source-governance
+> reviewer sign-off (AMD-002). The Vision statement itself is unchanged; re-confirm covers Canvas + Vision jointly.
 
 ## Product Vision Statement
 
@@ -25,10 +30,11 @@ For German- and English-speaking adults who want to understand Zi Wei Dou Shu wi
 
 ## Confirmation
 
-**Status: user-confirmed.**
+**Status: re-confirmation-pending (joint with Canvas, after Phase 0.16 council amendments).**
 
-- Confirmed by user: yes (ben.poersch@gmail.com)
-- Confirmation date: 2026-07-17
+- Prior confirmation (foundation): user, 2026-07-17, "Confirm as-is" + verbatim phrase — valid for the
+  un-amended Vision statement/board.
+- Council amendments AMD-001..004 (Canvas) touch slice scope + release gates; re-confirm covers Canvas + Vision jointly.
 - Method: AgileTeam confirmation gate — "Confirm as-is" + verbatim confirmation phrase.
 - Confirmation phrase (verbatim): "Ich bestaetige, dass Product Canvas und Product Vision meine Absicht korrekt wiedergeben und als Grundlage fuer AgileTeam Planning verwendet werden duerfen."
 

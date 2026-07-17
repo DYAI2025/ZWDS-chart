@@ -153,6 +153,27 @@ Canvas + Vision: user-confirmed 2026-07-17 (Canvas: `docs/canvas/bazodiac-zwds-a
 | EV-019 | REQ-019 | Negative schema and fail-closed integration fixtures | EXPLICIT |
 | EV-020 | REQ-020 | Static calculation audit and content-safety review | EXPLICIT |
 
+## Slice Plan & Council Amendments (adopted 2026-07-17)
+
+Original Goal = all 20 REQs (status: NOT reduced). Iteration/slice scoping only:
+
+| Slice | REQs | Note |
+|---|---|---|
+| **Slice 1** | REQ-001..012, 014, 016..020 (18 REQs) | Real-proven, hard-fail-closed, bilingual HTML evidence core. |
+| **Slice 2** | REQ-013 (server PDF), REQ-015 (optional LLM) | Deferred per AMD-004. PDF needs real Chromium render + Pinyin; LLM needs a reviewed corpus (SOURCE_NEEDED). |
+
+Council amendments (from confirmed Canvas AMD-001..004):
+
+- **REQ-019 sharpened (AMD-001):** unknown / unsupported / unresolved evidence must **hard fail-closed
+  (no partial report, no warning-only HTTP-200 pass)**. The current soft-drop (`SECTION_EVIDENCE_REJECTED`
+  + HTTP 200) is a defect vs this requirement and is fixed early in slice-1.
+- **Release-blocking gates (AMD-002, AMD-003):** (a) a named source-governance reviewer signs the catalog
+  before any authoritative public claim; (b) at least one real FuFirE response is pinned before any public
+  "traceable to real data" claim. Both are release gates, not slice-1 code blockers; the fixture-grounded
+  build proceeds in parallel.
+- **REQ-013 gap on record:** server PDF currently omits Pinyin and is never really rendered — carried into
+  slice-2 scope.
+
 ## Links
 
 - Vision: `docs/vision/bazodiac-zwds-atlas.vision.md`

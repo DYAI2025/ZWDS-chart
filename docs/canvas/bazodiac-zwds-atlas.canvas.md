@@ -1,6 +1,6 @@
 # Product Canvas: BaZodiac Zi Wei Dou Shu Atlas
 
-Status: user-confirmed
+Status: draft (council amendments adopted 2026-07-17; awaiting user RE-confirm)
 Feature Slug: bazodiac-zwds-atlas
 
 | Section | ID | Value | Source Type | Source |
@@ -29,14 +29,44 @@ Repo-relative paths in scope for the confirmed contract-first slice (CAN-011). E
 - `package.json`, config files (`*.config.ts`, `tsconfig.json`)
 - `docs/**` (governance + engineering docs)
 
+## Council Amendments (Phase 0.16, adopted by user 2026-07-17 — pending re-confirm)
+
+The three-role council challenge gate (run `wf_b440a0e9-841`) produced five legitimate-blocker
+findings; the user adopted all four steer options. These amend the confirmed Canvas above:
+
+- **AMD-001 — Hard fail-closed (augments CAN-007 Constraints).** Unknown / unsupported / unresolved
+  evidence fails closed as a **hard refusal** (no partial report, no warning-only HTTP-200 pass).
+  Fixing REQ-019's current soft-drop is pulled to the front of the build. This is the single guard on
+  the no-fabrication promise (CAN-003).
+- **AMD-002 — Source-governance release gate (augments CAN-006 Non-Goals + CAN-008 Risks).** Until the
+  interpretation catalog is externally signed by a named source-governance reviewer, public output is
+  **labelled "illustrative, unreviewed — not authoritative"** or gated to reviewers only. A named
+  source-governance reviewer (OQ-003) becomes a **release-blocking role**. Resolves RISK-005 into a hard gate.
+- **AMD-003 — Real-FuFirE pin release gate (augments CAN-009 Success Signal + CAN-010 Evidence).** No
+  public "traceable to real data" claim ships until **at least one real FuFirE response is pinned** and
+  matches the golden fixture's shape. Blocked today by missing staging credentials; the fixture-grounded
+  build proceeds in parallel, but the public trust claim is gated on this.
+- **AMD-004 — Narrow slice-1 (amends CAN-011 Allowed Scope).** Iteration-1 scope excludes **REQ-013 (server
+  PDF)** and **REQ-015 (optional LLM)**; slice-1 ships the real-proven, hard-fail-closed, bilingual HTML
+  evidence core. PDF + LLM defer to **slice-2**.
+  **Scope-shift note:** Original Goal = all 20 REQs, status **NOT reduced**. Only the iteration-1 scope
+  shrinks to 18 REQs (REQ-013, REQ-015 deferred), tracked separately in `docs/traceability.md`.
+
+### Release-blocking gates (from amendments)
+
+1. Hard fail-closed on unknown evidence (AMD-001) — engineering gate, in slice-1.
+2. Named source-governance reviewer signs the catalog before any authoritative public claim (AMD-002).
+3. One real FuFirE response pinned before any public "traceable to real data" claim (AMD-003).
+
 ## User Confirmation
 
-**Status: user-confirmed.**
+**Status: draft — RE-confirmation required after council amendments.**
 
-- Confirmed by user: yes (ben.poersch@gmail.com)
-- Confirmation date: 2026-07-17
-- Method: AgileTeam confirmation gate — selected "Confirm as-is" and sent the verbatim phrase.
-- Confirmation phrase (verbatim): "Ich bestaetige, dass Product Canvas und Product Vision meine Absicht korrekt wiedergeben und als Grundlage fuer AgileTeam Planning verwendet werden duerfen."
+- Prior confirmation (foundation): user, 2026-07-17, "Confirm as-is" + verbatim phrase (still valid for the
+  un-amended fields).
+- Amendments AMD-001..004 were adopted by the user via the Phase 0.16 council steer, which returns the
+  Canvas to `draft`. No agent may self-confirm the amended Canvas.
+- Re-confirmation phrase (verbatim): "Ich bestaetige, dass Product Canvas und Product Vision meine Absicht korrekt wiedergeben und als Grundlage fuer AgileTeam Planning verwendet werden duerfen."
 
 ## Evidence note on AS-001 (implementation base)
 
