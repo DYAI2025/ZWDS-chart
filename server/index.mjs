@@ -198,6 +198,15 @@ export function createApp(config = loadConfig()) {
     }
   });
 
+  // Single-service deploy (Railway): serve the built SPA. All /api/* routes above take
+  // precedence; an unknown /api/* path still falls through to the JSON 404 below. Any other
+  // GET returns index.html for client-side routing. No-op when dist/ is absent (API-only run).
+  const distDir = path.join(__dirname, '..', 'dist');
+  if (fs.existsSync(distDir)) {
+    app.use(express.static(distDir));
+    app.get(/^\/(?!api\/).*/, (_req, res) => res.sendFile(path.join(distDir, 'index.html')));
+  }
+
   app.use((_req, res) => errorEnvelope(res, 404, 'NOT_FOUND', 'Unknown route.'));
   app.use((_error, _req, res, _next) => errorEnvelope(res, 500, 'INTERNAL', 'Internal error.'));
   return app;

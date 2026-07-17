@@ -1,0 +1,10 @@
+# Railway / Nixpacks — single-service deploy: build the Vite SPA, then run the Express BFF,
+# which serves BOTH the static SPA (dist/) and the /api routes (same origin, no CORS).
+# Without this, Nixpacks auto-detects a Vite app and serves dist/ statically — the BFF never
+# starts, so /api/* returns index.html and there is no live FuFirE path.
+
+[phases.build]
+cmds = ["npm ci", "npm run build"]
+
+[start]
+cmd = "node server/index.mjs"
