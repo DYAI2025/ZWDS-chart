@@ -13,6 +13,12 @@
 node_modules/
 dist/
 
+# Playwright test artifacts
+test-results/
+playwright-report/
+blob-report/
+.playwright/
+
 # Secrets — never commit real credentials (only .env.example is tracked)
 .env
 .env.*
