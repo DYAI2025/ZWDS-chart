@@ -134,6 +134,9 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .atlas-nav__link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   background: none;
   border: none;
   color: var(--color-timberwolf);
@@ -145,6 +148,7 @@ h1, h2, h3, h4, h5, h6 {
   cursor: pointer;
   transition: color var(--transition-fast), background var(--transition-fast);
   text-decoration: none;
+  min-height: 44px;
 }
 
 .atlas-nav__link:hover {
@@ -172,6 +176,9 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .lang-switch__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   background: none;
   border: none;
   color: var(--color-timberwolf);
@@ -183,6 +190,8 @@ h1, h2, h3, h4, h5, h6 {
   font-family: 'Manrope', sans-serif;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  min-height: 44px;
+  min-width: 44px;
 }
 
 .lang-switch__btn--active {
@@ -408,7 +417,7 @@ h1, h2, h3, h4, h5, h6 {
 .btn--small {
   padding: var(--space-xs) var(--space-md);
   font-size: var(--text-xs);
-  min-height: 36px;
+  min-height: 44px;
 }
 
 .btn--disabled {
@@ -585,7 +594,7 @@ h1, h2, h3, h4, h5, h6 {
   opacity: 0.5;
   padding: var(--space-xs) var(--space-sm);
   border-radius: var(--radius-sm);
-  min-height: 36px;
+  min-height: 44px;
 }
 
 .intake__step-indicator--active {

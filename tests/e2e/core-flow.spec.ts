@@ -7,16 +7,21 @@ test('demo fixture shows explicit status and supports palace/decade navigation',
   await page.getByRole('button', { name: /next/i }).click();
   await page.getByRole('button', { name: /next/i }).click();
   await page.getByRole('button', { name: /next/i }).click();
-  await page.getByText(/privacy notice/i).click();
+  await page.locator('.intake__privacy summary').click();
   await page.getByLabel(/i have read/i).check();
   await page.getByRole('button', { name: /next/i }).click();
   await page.getByRole('button', { name: /calculate atlas/i }).click();
-  await expect(page.getByRole('status')).toContainText('DEMO_FIXTURE');
-  await expect(page.getByRole('status')).toContainText('SOURCE_NEEDED');
-  await page.getByTestId('palace-cell-GUAN_LU').click();
-  await expect(page.getByRole('complementary')).toContainText('natal:TAI_YANG');
-  await page.getByRole('tab', { name: /46/ }).click();
-  await expect(page.getByTestId('palace-cell-GUAN_LU')).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.getByRole('status', { name: /report status/i })).toContainText('DEMO_FIXTURE');
+  await expect(page.getByRole('status', { name: /report status/i })).toContainText('SOURCE_NEEDED');
+  // The 4x4 palace grid is desktop-only (< 768px swaps to MobilePalaceNavigator, covered by
+  // the T08 mobile-a11y specs), so grid-cell navigation is asserted on desktop only. Status
+  // assertions above run on both projects.
+  if (test.info().project.name !== 'mobile-chromium') {
+    await page.getByTestId('palace-cell-GUAN_LU').click();
+    await expect(page.getByRole('complementary')).toContainText('natal:TAI_YANG');
+    await page.getByRole('tab', { name: /46/ }).click();
+    await expect(page.getByTestId('palace-cell-GUAN_LU')).toHaveAttribute('aria-pressed', 'true');
+  }
 });
 
 test('@a11y landing has no serious axe violations and keyboard reaches intake', async ({ page }) => {

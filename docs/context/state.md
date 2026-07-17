@@ -130,3 +130,9 @@ Remaining slice-1: T05 (REQ-012 natal-preservation), T06 (REQ-016A 44px) [M2 tai
 ## T05 DONE (2026-07-17)
 
 T05 (REQ-012): natal-preservation locked (decade selection keeps report.palaces+stars byte-identical; mutation-verified the lock bites) + age-reckoning metadata surfaced (ageReckoningId from the real model, mock synced to real east_asian_nominal.guide-v1, +decade.ageReckoning locale key). Verified: vitest 61 pass + 1 skip, eslint 0, tsc 0, arch-gates 0. REQ-012 -> integration-fake.
+
+## T06 DONE + M2 tail complete (2026-07-17)
+
+T06 (REQ-016A 44px): added min-height:44px to .lang-switch__btn/.atlas-nav__link/.btn--small/.intake__step-indicator. tests/e2e/a11y-touch-targets.spec.ts measures boundingBox() in REAL chromium+webkit (desktop + mobile 360px) — red->green (33x22/36px -> >=44px). ALSO fixed 2 PRE-EXISTING e2e bugs in core-flow.spec.ts that would fail CI: (1) getByText(/privacy notice/i) strict-mode -> .intake__privacy summary; (2) getByRole('status') ambiguous (StatusStrip + aria-live announcer) -> {name:/report status/i}; (3) palace-grid nav gated to desktop (grid is <768px-hidden; mobile uses MobilePalaceNavigator, T08). Full e2e now 10/10 green both projects. REQ-016 -> real-boundary-smoke (44px; 200%/atlas pending T08).
+NOTE for T09: ci.yml runs only --project=desktop-chromium + installs only chromium; mobile-chromium uses the iPhone-13 WebKit device -> T09 must add mobile project + `npx playwright install webkit`.
+M2 tail (T05, T06) COMPLETE. Remaining: M3 (T08 a11y reality-ground, T09 CI wiring), M4 (T10 AMD-002 label).
