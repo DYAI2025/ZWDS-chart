@@ -22,6 +22,7 @@
 | D-018 | 2026-07-17 | User chose SCOPE SHIFT A: reconcile the data contract to the real FuFirE API (CONTRA-001). Deep contract analysis dispatched; plan re-scope pending. | **user** | Biggest, most valuable work; re-founds the data layer. |
 | D-019 | 2026-07-17 | Added `.env.example` to the Canvas Allowed change scope (scope-check flagged it). Reason: I edited .env.example to SCRUB the secrets the user accidentally pasted there — a security remediation; it is a standard tracked config file of the same class already in scope. Recorded transparently, not silent scope-creep. | orchestrator | User may revert if undesired. |
 | D-020 | 2026-07-17 | RECON-server done: server data contract re-founded on real FuFirE; live pin PASS; REQ-004/005 -> real-boundary-smoke; reality-check PASSES at real-boundary-smoke. Review fixes applied (fail-open crosscheck -> allowlist; pin collect() dead fields). CONTRA-001 resolved for calculate boundary. | orchestrator | Landmark: reality gate green after being RED all engagement. |
+| D-021 | 2026-07-17 | USER ACCEPTED slice-1 at the acceptance gate (Gate C PASS-WITH-RED + Gate D ACCEPT-WITH-NOTES; all actionable findings remediated). Residuals recorded as user-owned release-gates, not slice-1 blockers. | **user** | /agileteam complete through Phase 7. |
 
 ## Open contradictions ledger
 
@@ -46,4 +47,8 @@ defer). Not laundered, not self-resolved.
 
 The other fixture-only REQs remain surfaced as `value-risk` in the traceability matrix, not
 laundered into "known limitations"; user reclassification only.
-| D-021 | 2026-07-17 | USER ACCEPTED slice-1 at the acceptance gate (Gate C PASS-WITH-RED + Gate D ACCEPT-WITH-NOTES; all actionable findings remediated). Residuals recorded as user-owned release-gates, not slice-1 blockers. | **user** | /agileteam complete through Phase 7. |
+
+**CONTRA-001 fully reconciled (calculate boundary):** RECON-server + RECON-client + RECON-verify
+all landed — the BFF↔FE `HUA_QUAN` wire is closed (fixture-mode and bff-mode agree), the live pin
+returns PASS, and Gate D re-verified the reconciliation as genuine. Geocode boundary (REQ-002)
+remains the one open external boundary (`integration-fake`, unpinned) — a user-owned release gate.
