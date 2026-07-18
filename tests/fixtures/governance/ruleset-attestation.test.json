@@ -1,0 +1,14 @@
+{
+  "attestationId": "zwds.test.ruleset-attestation",
+  "rulesetId": "zwds.fufire.core-seed.v1",
+  "rulesetVersion": "0.1.0",
+  "reviewedRulesetSha256": "3f5cef4a031d70860f87cd02052b39a8a944ce5e2bef67568f466a0d6f13c47f",
+  "reviewer": { "name": "Test Reviewer (harness)", "org": "test-harness" },
+  "reviewedAt": "2026-07-18",
+  "provenance": {
+    "citation": "TEST-ONLY attestation — NOT a real source-governance sign-off. Exercises the elevation mechanism.",
+    "reviewer": "test-harness",
+    "reviewedAt": "2026-07-18"
+  },
+  "scope": ["ruleset"]
+}

@@ -14,6 +14,8 @@ import { renderPdf } from './pdf/renderPdf.mjs';
 import { loadReviewedCorpus } from './llm/corpus.mjs';
 import { createLlmClient } from './llm/client.mjs';
 import { interpretSections } from './llm/interpret.mjs';
+import { loadRulesetAttestation } from './governance/attestation.mjs';
+import { verifyRulesetGovernance } from './governance/verify.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const FIXTURE_PATH = process.env.FUFIRE_FIXTURE_PATH ?? path.join(__dirname, '..', 'tests', 'fixtures', 'fufire', 'zwds-core-seed-shanghai-1984.json');
@@ -44,6 +46,11 @@ const envSchema = z.object({
   // "/usr/bin/chromium  ") makes Puppeteer look for a path that does not exist and fail
   // PDF render with an opaque 503. Normalize it here so config can't be broken by whitespace.
   PUPPETEER_EXECUTABLE_PATH: z.string().trim().min(1).optional(),
+  // Source-governance: a reviewer's hash-pinned ruleset attestation. Absent by default, so the
+  // report stays SOURCE_NEEDED / not-authoritative. A declared-but-unverifiable attestation
+  // fails boot (loadRulesetAttestation). Never a fabricated sign-off.
+  RULESET_ATTESTATION_PATH: z.string().trim().min(1).optional(),
+  RULESET_ATTESTATION_SHA256: z.string().trim().regex(/^[a-f0-9]{64}$/i).optional(),
   ALLOWED_ORIGIN: z.string().url().optional(),
 }).superRefine((config, context) => {
   if (config.PORT === 0 && config.NODE_ENV !== 'test') context.addIssue({ code: 'custom', path: ['PORT'], message: 'PORT=0 is allowed only in test mode' });
@@ -114,6 +121,10 @@ export function createApp(config = loadConfig()) {
   // interpretSections serves the deterministic sections and never emits ungrounded prose.
   const llmCorpus = config.LLM_ENABLED ? loadReviewedCorpus(config) : { status: 'SOURCE_NEEDED', rulesByKey: new Map() };
   const llmClient = createLlmClient(config);
+  // Source-governance attestation loaded once. loadRulesetAttestation THROWS (failing boot) if
+  // one is declared but not hash-verifiable; with none configured it returns SOURCE_NEEDED and
+  // no chart is ever elevated to authoritative.
+  const rulesetAttestation = loadRulesetAttestation(config);
   // Railway (and most PaaS) terminate TLS at a single reverse proxy that sets
   // X-Forwarded-For. Trust exactly one hop so express-rate-limit keys on the real
   // client IP instead of throwing ERR_ERL_UNEXPECTED_X_FORWARDED_FOR. `1` (not `true`)
@@ -138,6 +149,9 @@ export function createApp(config = loadConfig()) {
     llmConfigured: config.LLM_ENABLED,
     llmCorpusStatus: config.LLM_CORPUS_STATUS,
     pdfConfigured: Boolean(config.PUPPETEER_EXECUTABLE_PATH),
+    // Whether a source-governance attestation is configured (not whether any given chart
+    // elevated — that also requires an exact live-hash match). Default: none.
+    rulesetGovernance: rulesetAttestation.status === 'ATTESTED' ? 'ATTESTED' : 'SOURCE_NEEDED',
     dataMode: config.FUFIRE_MODE,
   }));
 
@@ -163,7 +177,7 @@ export function createApp(config = loadConfig()) {
       if (raw.ruleset?.ruleset_id !== config.RULESET_ID) throw new ContractError('FUFIRE_RULESET_MISMATCH', 'The response uses an unexpected ruleset.');
       const metadata = config.FUFIRE_MODE === 'fixture' ? loadFixtureRuleset() : await fetchRulesetMetadata(raw.ruleset.ruleset_id, config);
       assertRulesetMetadata(raw.ruleset, metadata);
-      const report = normalizeRaw(raw, config.FUFIRE_MODE);
+      const report = normalizeRaw(raw, config.FUFIRE_MODE, rulesetAttestation);
       report.birthInputSummary.locationDisplayName = input.location.displayName;
       const interpretation = input.interpret ? generateSections(report) : { sections: [], warnings: [] };
       report.quality.warnings.push(...interpretation.warnings);
@@ -211,7 +225,26 @@ export function createApp(config = loadConfig()) {
     if (rulesetId !== config.RULESET_ID) return errorEnvelope(res, 404, 'FUFIRE_UNKNOWN_RULESET', 'Unknown ruleset.');
     try {
       const metadata = config.FUFIRE_MODE === 'fixture' ? loadFixtureRuleset() : rulesetMetadataSchema.parse(await fetchRulesetMetadata(rulesetId, config));
-      return res.json({ rulesetId, status: metadata.source_status === 'SOURCE_REVIEWED' ? 'active' : 'under_review', displayVersion: `Core Seed ${metadata.ruleset_version}`, rulesetVersion: metadata.ruleset_version, rulesetSha256: metadata.ruleset_sha256, sourceStatus: metadata.source_status, crosscheckStatus: metadata.ruleset_sha256 ? 'MATCHED' : 'SOURCE_NEEDED' });
+      // Apply source-governance: a hash-pinned reviewer attestation matching this ruleset's
+      // digest elevates it to SOURCE_REVIEWED (active); otherwise it stays under_review.
+      const gov = verifyRulesetGovernance({
+        rulesetId: metadata.ruleset_id,
+        rulesetVersion: metadata.ruleset_version,
+        rulesetSha256: metadata.ruleset_sha256,
+        crosscheckStatus: metadata.ruleset_sha256 ? 'MATCHED' : 'SOURCE_NEEDED',
+        rawSourceStatus: metadata.source_status,
+        hasBlockedEvidence: false,
+      }, rulesetAttestation);
+      return res.json({
+        rulesetId,
+        status: gov.sourceStatus === 'SOURCE_REVIEWED' ? 'active' : 'under_review',
+        displayVersion: `Core Seed ${metadata.ruleset_version}`,
+        rulesetVersion: metadata.ruleset_version,
+        rulesetSha256: metadata.ruleset_sha256,
+        sourceStatus: gov.sourceStatus,
+        crosscheckStatus: gov.governanceStatus === 'MISMATCH' ? 'MISMATCH' : (metadata.ruleset_sha256 ? 'MATCHED' : 'SOURCE_NEEDED'),
+        governance: { status: gov.governanceStatus, reviewedBy: gov.reviewer },
+      });
     } catch (error) {
       if (error instanceof UpstreamError) return errorEnvelope(res, error.status, error.code, error.message, error.retryable);
       return errorEnvelope(res, 502, 'FUFIRE_RULESET_METADATA_CONTRACT', 'Ruleset metadata is unsupported.');

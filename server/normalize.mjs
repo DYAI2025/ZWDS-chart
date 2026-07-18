@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { verifyRulesetGovernance } from './governance/verify.mjs';
 
 const PALACE_IDS = ['MING','XIONG_DI','FU_QI','ZI_NU','CAI_BO','JI_E','QIAN_YI','JIAO_YOU','GUAN_LU','TIAN_ZHAI','FU_DE','FU_MU'];
 const STAR_IDS = ['ZI_WEI','TIAN_JI','TAI_YANG','WU_QU','TIAN_TONG','LIAN_ZHEN','TIAN_FU','TAI_YIN','TAN_LANG','JU_MEN','TIAN_XIANG','TIAN_LIANG','QI_SHA','PO_JUN','ZUO_FU','WEN_QU','YOU_BI','WEN_CHANG'];
@@ -332,11 +333,25 @@ function coerceProvenanceStatus(status) {
 
 const mapLunarDate = (date) => ({ year: date.year_label, month: date.month, day: date.day, isLeapMonth: date.is_leap_month });
 
-export function normalizeRaw(input, dataMode = 'fixture') {
+export function normalizeRaw(input, dataMode = 'fixture', governance = null) {
   const raw = parseRawZwds(input);
   assertInvariants(raw);
-  const sourceStatus = raw.quality.source_status;
   const crosscheckStatus = deriveCrosscheckStatus(raw.quality.crosschecks);
+  const rawSourceStatus = raw.quality.source_status;
+  const hasBlockedEvidence = rawSourceStatus === 'BLOCKED'
+    || (raw.chart.star_placements ?? []).some((placement) => placement.source_status === 'BLOCKED');
+  // Source-governance: a valid, hash-pinned reviewer attestation whose reviewed digest EXACTLY
+  // matches this ruleset's live sha256 elevates SOURCE_NEEDED -> SOURCE_REVIEWED (drops the
+  // AMD-002 not-authoritative notice). With no attestation (the default) the status is unchanged.
+  const governanceVerdict = verifyRulesetGovernance({
+    rulesetId: raw.ruleset.ruleset_id,
+    rulesetVersion: raw.ruleset.ruleset_version,
+    rulesetSha256: raw.ruleset.ruleset_sha256,
+    crosscheckStatus,
+    rawSourceStatus,
+    hasBlockedEvidence,
+  }, governance);
+  const sourceStatus = governanceVerdict.sourceStatus;
   // The real response omits human_review_required; derive it (a not-fully-reviewed chart needs review).
   const humanReviewRequired = raw.quality.human_review_required ?? (sourceStatus !== 'SOURCE_REVIEWED');
   const decadeOrdinalByRole = new Map((raw.chart.decadal_limits ?? []).map((decade) => [decade.palace_role_id, decade.sequence_index_0 + 1]));
@@ -454,6 +469,12 @@ export function normalizeRaw(input, dataMode = 'fixture') {
     schoolProfileStatus: 'NOT_SELECTED',
   };
   report.evidenceIndex = buildEvidenceIndex(report);
+  // Transparency: when governance elevated the chart, record WHO signed off. Null otherwise.
+  report.sourceGovernance = {
+    status: governanceVerdict.governanceStatus,
+    elevated: governanceVerdict.elevated,
+    reviewer: governanceVerdict.reviewer,
+  };
   return report;
 }
 

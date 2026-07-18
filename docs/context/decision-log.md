@@ -79,3 +79,30 @@ why the feature stays gated behind a reviewed corpus.
 
 **Anti-fabrication invariant preserved:** in the shipping/default config (no corpus) nothing LLM
 ships; `llmConfigured:false`, `llmCorpusStatus:SOURCE_NEEDED`, deterministic sections only.
+
+## D-023 — Source-governance elevation layer (authoritative status, 2026-07-18)
+
+**User decision:** build the fail-closed source-governance verify layer AND thread it into the
+report so a genuine reviewer attestation elevates the chart to authoritative. I may NOT fabricate
+a reviewed hash or a reviewer sign-off, so the real reviewed status stays blocked on a human
+reviewer; the buildable, honest deliverable is the verification MECHANISM, shipped INERT.
+
+**Design:** the chart-level `sourceStatus` (raw.quality.source_status) is the single authority
+switch — `report.calculation.sourceStatus === 'SOURCE_REVIEWED'` drops the AMD-002 notice
+(`reportIsSourceReviewed`). server/governance/attestation.mjs loads a reviewer attestation and
+hash-pins its bytes (RULESET_ATTESTATION_SHA256; declared-but-unverifiable => refuse boot).
+server/governance/verify.mjs elevates SOURCE_NEEDED -> SOURCE_REVIEWED ONLY when the attestation's
+reviewedRulesetSha256 EXACTLY equals the live ruleset_sha256 (same id+version), rawSourceStatus is
+SOURCE_NEEDED, there is no BLOCKED evidence, and the crosscheck is not MISMATCH. It only ever
+RAISES SOURCE_NEEDED — never downgrades, never elevates over BLOCKED/MISMATCH/null-hash. Threaded
+through normalizeRaw so the elevated status is consistent across the evidence index + sections;
+surfaced on /api/zwds/ruleset-status (governance.reviewedBy) + /api/config-status (rulesetGovernance).
+
+**Adversarial verification:** 6-vector attack+verify sweep (fabricate-authority, attestation-tamper,
+hash-mismatch-elevate, blocked-or-mismatch-elevate, env-gate-bypass, id-version-null-confusion) →
+**0 confirmed authority bypasses**. Authority cannot be conferred without a valid hash-matching
+attestation.
+
+**Anti-fabrication preserved:** ships with NO attestation => every chart stays SOURCE_NEEDED /
+not-authoritative (default verified). REQ-021 -> integration-fake. The catalogue-digest governance
+(a separate SOURCE_NEEDED item) is NOT built here.
