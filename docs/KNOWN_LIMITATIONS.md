@@ -20,4 +20,4 @@
 | PDF binary smoke | `RESOLVED` (2026-07-18) | Deployed URL served a 158 KB `application/pdf` (`%PDF`), CJK `官祿宮`/`太陽` + not-authoritative notice extracted. Runtime pinned via `Dockerfile` (node:22-slim + apt `chromium` + `fonts-noto-cjk`); Nixpacks `aptPkgs` did NOT provision it. | — |
 | Test/lint/E2E execution | `BLOCKED` | CLI unavailable. | Run configured tools in CI/local shell. |
 | npm advisories | `UNVERIFIED` details | Installer reports 1 high/1 low. | Audit each chain and apply compatible updates only. |
-| Catalogue digest | `SOURCE_NEEDED` | Reviewed digest absent. | Review/pin canonical catalogue content digest. |
+| Catalogue digest | content-pinned, reviewed `SOURCE_NEEDED` | Catalogue content digest computed + PINNED (`CATALOG_CONTENT_SHA256`) with a drift guard (a test recomputes it; silent catalogue drift fails the build). Fail-closed governance built: the catalogue is SOURCE_REVIEWED only when a reviewed pin (`CATALOG_SHA256`, null by default) exactly equals the content digest — surfaced on the report Method page. | A named reviewer sets `CATALOG_SHA256` to the reviewed content digest; never fabricated. |

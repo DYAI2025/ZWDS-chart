@@ -106,3 +106,13 @@ attestation.
 **Anti-fabrication preserved:** ships with NO attestation => every chart stays SOURCE_NEEDED /
 not-authoritative (default verified). REQ-021 -> integration-fake. The catalogue-digest governance
 (a separate SOURCE_NEEDED item) is NOT built here.
+
+## D-024 — Catalogue-digest governance (2026-07-18)
+
+Same fail-closed pattern applied to the FE label catalogue. CATALOG_CONTENT_SHA256 pins the
+deterministic content digest (drift guard: a test recomputes and asserts equality, so silent
+catalogue drift fails the build) — a change-detection pin, NOT a review claim. CATALOG_SHA256
+stays null (the reviewed digest a named catalogue reviewer would pin; never fabricated).
+catalogueGovernanceStatus() is SOURCE_REVIEWED only when the reviewed pin exactly equals the
+content digest; drifted/absent/mismatched => SOURCE_NEEDED. Surfaced on the Method page. FE-only,
+self-contained pure guard (5 unit cases); no report-authority threading, so no adversarial sweep.

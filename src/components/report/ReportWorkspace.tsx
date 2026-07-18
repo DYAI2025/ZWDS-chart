@@ -2,7 +2,7 @@ import { useApp } from '@/app/appContext';
 import { PalaceWorkspace } from '@/components/atlas/PalaceWorkspace';
 import { EvidenceDrawer, EvidencePage, EvidenceSection } from '@/components/evidence/EvidenceViews';
 import { SourceChip, TruthBadge } from '@/components/common/ReportPrimitives';
-import { labelFor, lookupBureau, lookupPalace, lookupStar, lookupTransformation } from '@/data/zwdsCatalog';
+import { labelFor, lookupBureau, lookupPalace, lookupStar, lookupTransformation, CATALOG_ID, CATALOG_VERSION, CATALOG_CONTENT_SHA256, catalogueGovernanceStatus } from '@/data/zwdsCatalog';
 import type { NormalizedZwdsReport } from '@/domain/zwdsTypes';
 import { reportIsSourceReviewed } from '@/domain/zwdsTypes';
 import type { TruthClass } from '@/domain/truthTypes';
@@ -84,7 +84,7 @@ function MethodPage() {
   const { state, t } = useApp();
   const report = state.report!;
   const truthClasses: TruthClass[] = ['CALCULATED_FACT','CATALOG_FACT','TRADITIONAL_RULE','PRODUCT_TRANSLATION','REFLECTIVE_HYPOTHESIS','DEMO_FIXTURE','SOURCE_NEEDED'];
-  return <section className="report-module" style={{ gridColumn: '1/-1' }}><h2 className="report-module__title">{t('method.title')}</h2><p>{t('method.mockDataDisclaimer')}</p><dl><dt>Ruleset</dt><dd>{report.calculation.rulesetId} · {report.calculation.rulesetVersion}</dd><dt>Ruleset SHA-256</dt><dd>{report.calculation.rulesetSha256 ?? 'SOURCE_NEEDED'}</dd><dt>Crosscheck</dt><dd>{report.calculation.crosscheckStatus}</dd><dt>Engine</dt><dd>{report.calculation.engineVersion}</dd></dl><h3>{t('method.truthClasses')}</h3>{truthClasses.map((truthClass) => <p key={truthClass}><TruthBadge truthClass={truthClass} label={t(`truth.${truthClass}`)}/> {t(`method.truthClass.${truthClass}`)}</p>)}<h3>Warnings</h3>{report.quality.warnings.map((warning) => <p key={warning.code}><code>{warning.code}</code> {warning.message}</p>)}</section>;
+  return <section className="report-module" style={{ gridColumn: '1/-1' }}><h2 className="report-module__title">{t('method.title')}</h2><p>{t('method.mockDataDisclaimer')}</p><dl><dt>Ruleset</dt><dd>{report.calculation.rulesetId} · {report.calculation.rulesetVersion}</dd><dt>Ruleset SHA-256</dt><dd>{report.calculation.rulesetSha256 ?? 'SOURCE_NEEDED'}</dd><dt>Crosscheck</dt><dd>{report.calculation.crosscheckStatus}</dd><dt>Engine</dt><dd>{report.calculation.engineVersion}</dd><dt>Catalogue</dt><dd>{CATALOG_ID} · {CATALOG_VERSION}</dd><dt>Catalogue digest</dt><dd><code>{CATALOG_CONTENT_SHA256.slice(0, 16)}…</code> · {catalogueGovernanceStatus()}</dd></dl><h3>{t('method.truthClasses')}</h3>{truthClasses.map((truthClass) => <p key={truthClass}><TruthBadge truthClass={truthClass} label={t(`truth.${truthClass}`)}/> {t(`method.truthClass.${truthClass}`)}</p>)}<h3>Warnings</h3>{report.quality.warnings.map((warning) => <p key={warning.code}><code>{warning.code}</code> {warning.message}</p>)}</section>;
 }
 
 export function ReportWorkspace() {

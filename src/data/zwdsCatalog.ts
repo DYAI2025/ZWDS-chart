@@ -189,3 +189,46 @@ export function labelFor(entryLike: CatalogueEntry | null, lang: 'de' | 'en'): s
   if (!entryLike) return null;
   return lang === 'de' ? entryLike.de : entryLike.en;
 }
+
+// ── Catalogue content digest + source-governance ───────────────────────────────
+// Two distinct pins. CATALOG_CONTENT_SHA256 is the deterministic digest of the CURRENT
+// catalogue content — a change-detection guard, not a review claim; a test recomputes it so
+// silent drift fails the build. CATALOG_SHA256 (declared null above) is the REVIEWED digest a
+// named catalogue reviewer would pin. The catalogue is authoritative (SOURCE_REVIEWED) ONLY
+// when the reviewed pin exactly equals the content digest; with no reviewer it stays
+// SOURCE_NEEDED. The reviewed digest is never fabricated.
+export const FULL_CATALOGUE: CatalogueEntry[] = [
+  ...PALACE_CATALOGUE, ...FULL_STAR_CATALOGUE, ...TRANSFORMATION_CATALOGUE,
+  ...BRANCH_CATALOGUE, ...STEM_CATALOGUE, ...ANIMAL_CATALOGUE, ...BUREAU_CATALOGUE, ...CONCEPT_CATALOGUE,
+];
+
+// Deterministic, stable-ordered serialization — the input to the content digest. Any change to
+// catalogue content (labels, ids, source status, version, region) changes this string.
+export function canonicalCatalogueString(): string {
+  const entries = FULL_CATALOGUE
+    .map((e) => ({
+      id: e.id, stableId: e.stableId, hanzi: e.hanzi, pinyin: e.pinyin, de: e.de, en: e.en,
+      entityType: e.entityType, animalId: e.animalId ?? null, sourceId: e.sourceId,
+      sourceStatus: e.sourceStatus, regionPolicy: e.regionPolicy, traditionalAliases: [...e.traditionalAliases],
+    }))
+    .sort((a, b) => {
+      const ka = `${a.entityType}|${a.stableId}`;
+      const kb = `${b.entityType}|${b.stableId}`;
+      return ka < kb ? -1 : ka > kb ? 1 : 0;
+    });
+  return JSON.stringify({ catalogId: CATALOG_ID, catalogVersion: CATALOG_VERSION, regionPolicy: REGION_POLICY, entries });
+}
+
+// The pinned sha256 of canonicalCatalogueString(). A test recomputes and asserts equality —
+// silent catalogue drift fails the build. This is change-detection, NOT a reviewed claim.
+export const CATALOG_CONTENT_SHA256 = 'fc61984024422566e6a900b202ff8a782b2ac1e9428e3f3fa6e534082f0c773d';
+
+// Fail-closed catalogue authority: SOURCE_REVIEWED only when a reviewed digest is pinned AND it
+// exactly equals the current content digest. A drifted / absent / mismatched reviewed pin =>
+// SOURCE_NEEDED.
+export function catalogueStatusFor(reviewedPin: string | null): SourceStatus {
+  return reviewedPin !== null && reviewedPin === CATALOG_CONTENT_SHA256 ? 'SOURCE_REVIEWED' : 'SOURCE_NEEDED';
+}
+export function catalogueGovernanceStatus(): SourceStatus {
+  return catalogueStatusFor(CATALOG_SHA256);
+}
