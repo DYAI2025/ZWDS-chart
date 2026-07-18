@@ -37,7 +37,7 @@ const REPO_ROOT = path.resolve(__dirname, '..');
 const FIXTURE_PATH = path.join(REPO_ROOT, 'tests/fixtures/fufire/zwds-core-seed-shanghai-1984.json');
 const PINNED_DIR = path.join(REPO_ROOT, 'tests/fixtures/fufire/pinned-real');
 const CALC_PIN = path.join(PINNED_DIR, 'calculate.json');
-const GEO_PIN = path.join(PINNED_DIR, 'geocode.json');
+const geoPinPath = (slug) => path.join(PINNED_DIR, `geocode-${slug}.json`);
 
 const out = (s = '') => process.stdout.write(`${s}\n`);
 
@@ -54,8 +54,14 @@ const DEMO_INPUT = {
   includeDecadalLimits: true,
   interpret: true,
 };
-const GEO_QUERY = 'Shanghai';
-const GEO_LANGUAGE = 'en';
+// Multiple real geocode profiles so the pin is not n=1: a single-match query and ambiguous
+// multi-candidate queries exercise DISTINCT parser branches (200 single vs 422 candidates,
+// upstream-supplied confidence vs offline-derived timezone).
+const GEO_QUERIES = [
+  { slug: 'berlin', query: 'Berlin', language: 'en' },
+  { slug: 'shanghai', query: 'Shanghai', language: 'en' },
+  { slug: 'taipei', query: 'Taipei', language: 'en' },
+];
 
 // Geocode result contract — a kept-in-sync MIRROR of server/geocodeProviders.mjs
 // (geocodeResultSchema + `.max(5)`). Duplicated so this harness does not modify server/;
@@ -302,23 +308,24 @@ async function main() {
   const calcFindings = reconcileCalculate(realCalc, fixture);
   if (calcFindings.length) clean = false;
 
-  // ── Geocode boundary (optional) ──
+  // ── Geocode boundary (optional, multiple profiles: n>=2) ──
   let geoFindings = [];
   let geoError = null;
   if (config.FUFIRE_GEOCODE_PATH) {
-    try {
-      out('');
-      out('Calling real FuFirE geocode boundary ...');
-      // Real signature is geocodeWithFufire(query, language, config) — call it per the code,
-      // not the 2-arg shorthand in the task text.
-      const realGeo = await geocodeWithFufire(GEO_QUERY, GEO_LANGUAGE, config);
-      if (!writeJsonSafe(GEO_PIN, realGeo, config, 'geocode')) clean = false;
-      geoFindings = reconcileGeocode(realGeo);
-      if (geoFindings.length) clean = false;
-    } catch (error) {
-      geoError = error;
-      reportBoundaryError(error, 'geocode');
-      clean = false;
+    for (const { slug, query, language } of GEO_QUERIES) {
+      try {
+        out('');
+        out(`Calling real FuFirE geocode boundary for "${query}" ...`);
+        // Real signature is geocodeWithFufire(query, language, config).
+        const realGeo = await geocodeWithFufire(query, language, config);
+        if (!writeJsonSafe(geoPinPath(slug), realGeo, config, `geocode:${slug}`)) clean = false;
+        const findings = reconcileGeocode(realGeo);
+        if (findings.length) { clean = false; geoFindings = geoFindings.concat(findings); }
+      } catch (error) {
+        geoError = error;
+        reportBoundaryError(error, 'geocode');
+        clean = false;
+      }
     }
   } else {
     out('');

@@ -1,0 +1,26 @@
+[
+  {
+    "displayName": "Taipeh, TW",
+    "lat": 25.05306,
+    "lon": 121.52639,
+    "timezone": "Asia/Taipei",
+    "providerId": "fufire",
+    "confidence": null
+  },
+  {
+    "displayName": "Flughafen Taipeh-Songshan, TW",
+    "lat": 25.06405,
+    "lon": 121.55022,
+    "timezone": "Asia/Taipei",
+    "providerId": "fufire",
+    "confidence": null
+  },
+  {
+    "displayName": "Taipei Veterans General Hospital Heliport, TW",
+    "lat": 25.12031,
+    "lon": 121.52014,
+    "timezone": "Asia/Taipei",
+    "providerId": "fufire",
+    "confidence": null
+  }
+]
