@@ -1,0 +1,42 @@
+[
+  {
+    "displayName": "Shanghai, CN",
+    "lat": 31.22222,
+    "lon": 121.45806,
+    "timezone": "Asia/Shanghai",
+    "providerId": "fufire",
+    "confidence": null
+  },
+  {
+    "displayName": "Shanghai, US",
+    "lat": 34.85009,
+    "lon": -87.08501,
+    "timezone": "America/Chicago",
+    "providerId": "fufire",
+    "confidence": null
+  },
+  {
+    "displayName": "Cornelia, US",
+    "lat": 38.64363,
+    "lon": -93.73938,
+    "timezone": "America/Chicago",
+    "providerId": "fufire",
+    "confidence": null
+  },
+  {
+    "displayName": "Shanghai, US",
+    "lat": 35.26235,
+    "lon": -81.60176,
+    "timezone": "America/New_York",
+    "providerId": "fufire",
+    "confidence": null
+  },
+  {
+    "displayName": "Shanghai, US",
+    "lat": 34.76517,
+    "lon": -78.20749,
+    "timezone": "America/New_York",
+    "providerId": "fufire",
+    "confidence": null
+  }
+]

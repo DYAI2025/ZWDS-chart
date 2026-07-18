@@ -1,8 +1,8 @@
 {
-  "request_id": "req_zwds_74da9b443be341cab5d2deed865f91ff",
+  "request_id": "req_zwds_c3eb973c7ccb463194d06e39f4fdb49c",
   "schema_version": "zwds.raw.v1",
   "engine_version": "0.1.0-core-seed",
-  "generated_at": "2026-07-17T13:11:03.225266Z",
+  "generated_at": "2026-07-18T01:28:50.132238Z",
   "chart_fingerprint": "1c812520115aa12023f84ae92c891bdf66c9b23776c6db6d0320418a54498bf2",
   "ruleset": {
     "ruleset_id": "zwds.fufire.core-seed.v1",
