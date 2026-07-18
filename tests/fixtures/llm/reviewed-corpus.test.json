@@ -1,0 +1,51 @@
+{
+  "corpusId": "zwds.test.reviewed-corpus",
+  "corpusVersion": "0.0.0-test",
+  "sourceStatus": "SOURCE_REVIEWED",
+  "provenance": {
+    "citation": "TEST-ONLY fixture corpus — NOT a real reviewed source. For pipeline tests.",
+    "reviewer": "test-harness",
+    "reviewedAt": "2026-07-18"
+  },
+  "rules": [
+    {
+      "ruleKey": "STAR_IN_PALACE",
+      "ruleVersion": "1.0.0",
+      "guidance": {
+        "de-DE": "Ein Kernstern in einem Palast beschreibt das Grundthema dieses Lebensbereichs; er wird beschreibend, nicht prognostisch gelesen.",
+        "en-US": "A core star in a palace describes the underlying theme of that life area; it is read descriptively, never as a prediction."
+      },
+      "provenance": {
+        "citation": "TEST-ONLY guidance for STAR_IN_PALACE.",
+        "reviewer": "test-harness",
+        "reviewedAt": "2026-07-18"
+      }
+    },
+    {
+      "ruleKey": "STAR_WITH_TRANSFORMATION",
+      "ruleVersion": "1.0.0",
+      "guidance": {
+        "de-DE": "Eine Wandlung an einem Stern verschiebt dessen Betonung; sie markiert einen Akzent im Palast, ohne ein Ereignis vorherzusagen.",
+        "en-US": "A transformation on a star shifts its emphasis; it marks an accent within the palace without forecasting any event."
+      },
+      "provenance": {
+        "citation": "TEST-ONLY guidance for STAR_WITH_TRANSFORMATION.",
+        "reviewer": "test-harness",
+        "reviewedAt": "2026-07-18"
+      }
+    },
+    {
+      "ruleKey": "NO_CORE_STAR_IN_MING",
+      "ruleVersion": "1.0.0",
+      "guidance": {
+        "de-DE": "Ein Lebenspalast ohne Kernstern ist kein Fehler; die Deutung stützt sich dann auf die gegenüberliegenden und verbundenen Paläste.",
+        "en-US": "A Life Palace without a core star is not an error; the reading then leans on the opposite and connected palaces."
+      },
+      "provenance": {
+        "citation": "TEST-ONLY guidance for NO_CORE_STAR_IN_MING.",
+        "reviewer": "test-harness",
+        "reviewedAt": "2026-07-18"
+      }
+    }
+  ]
+}

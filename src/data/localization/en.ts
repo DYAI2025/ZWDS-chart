@@ -221,6 +221,7 @@ export const en: LocaleMessages = {
   'truth.REFLECTIVE_HYPOTHESIS': 'Reflective Hypothesis',
   'truth.DEMO_FIXTURE': 'Demo Fixture',
   'truth.SOURCE_NEEDED': 'Source Needed',
+  'truth.LLM_SYNTHESIZED': 'Reviewed Synthesis',
 
   // Common
   'common.source.SOURCE_REVIEWED': 'Source reviewed',

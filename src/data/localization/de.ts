@@ -217,6 +217,7 @@ export const de: LocaleMessages = {
   'truth.REFLECTIVE_HYPOTHESIS': 'Reflektionshypothese',
   'truth.DEMO_FIXTURE': 'Demo-Fixture',
   'truth.SOURCE_NEEDED': 'Quelle erforderlich',
+  'truth.LLM_SYNTHESIZED': 'Geprüfte Synthese',
 
   // Common
   'common.source.SOURCE_REVIEWED': 'Quelle geprüft',

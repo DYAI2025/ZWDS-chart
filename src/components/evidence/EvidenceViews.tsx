@@ -19,7 +19,10 @@ export function EvidenceSection({ section }: { section: ReportSection }) {
   }
   let text = t(section.localeTextKey);
   for (const [key, value] of Object.entries(params)) text = text.replace(`{${key}}`, value);
-  return <article className="evidence-section report-module__item"><p>{text}</p><TruthBadge truthClass={section.truthClass} label={t(`truth.${section.truthClass}`)}/><p><code>{section.ruleId}@{section.ruleVersion}</code></p>{allValid ? <details><summary>{t('evidence.showIds')}</summary><ul>{section.evidenceIds.map((id) => <li key={id}><code>{id}</code></li>)}</ul></details> : <SourceChip status="BLOCKED" label={t('evidence.invalidIds')}/>}</article>;
+  // REQ-015: an LLM_SYNTHESIZED section carries grounded prose (validated against the reviewed
+  // corpus + this section's own evidence). Show it instead of the deterministic template text;
+  // the truth badge + the persistent not-authoritative banner keep it honestly labelled.
+  return <article className="evidence-section report-module__item"><p>{section.prose ?? text}</p><TruthBadge truthClass={section.truthClass} label={t(`truth.${section.truthClass}`)}/><p><code>{section.ruleId}@{section.ruleVersion}</code></p>{allValid ? <details><summary>{t('evidence.showIds')}</summary><ul>{section.evidenceIds.map((id) => <li key={id}><code>{id}</code></li>)}</ul></details> : <SourceChip status="BLOCKED" label={t('evidence.invalidIds')}/>}</article>;
 }
 
 export function EvidenceDrawer() {

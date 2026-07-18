@@ -251,6 +251,10 @@ export interface ReportSection {
   textParams?: Record<string, string>;
   limitations: string[];
   sourceStatus: SourceStatus;
+  // REQ-015: present only for LLM_SYNTHESIZED sections — grounded prose plus the rule/evidence
+  // citations it was validated against. Absent on deterministic sections (the default).
+  prose?: string;
+  citations?: { ruleKey: string; evidenceIds: string[] }[];
 }
 
 export interface PalaceRelations {

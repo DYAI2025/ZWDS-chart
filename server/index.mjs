@@ -11,6 +11,9 @@ import { calculateZwds, fetchRulesetMetadata, UpstreamError } from './fufireClie
 import { createGeocodeProvider } from './geocodeProviders.mjs';
 import { storeReport, getReport, pruneReports } from './reportStore.mjs';
 import { renderPdf } from './pdf/renderPdf.mjs';
+import { loadReviewedCorpus } from './llm/corpus.mjs';
+import { createLlmClient } from './llm/client.mjs';
+import { interpretSections } from './llm/interpret.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const FIXTURE_PATH = process.env.FUFIRE_FIXTURE_PATH ?? path.join(__dirname, '..', 'tests', 'fixtures', 'fufire', 'zwds-core-seed-shanghai-1984.json');
@@ -28,7 +31,15 @@ const envSchema = z.object({
   FUFIRE_GEOCODE_PATH: z.string().startsWith('/').optional(),
   RULESET_ID: z.string().default('zwds.fufire.core-seed.v1'),
   LLM_ENABLED: z.enum(['true','false']).default('false').transform((value) => value === 'true'),
-  LLM_CORPUS_STATUS: z.literal('SOURCE_NEEDED').default('SOURCE_NEEDED'),
+  // The corpus status may DECLARE SOURCE_REVIEWED, but declaring it is not sufficient: enabling
+  // the LLM also requires a corpus file that loads, validates, and hash-matches at boot (see
+  // loadReviewedCorpus). Default stays SOURCE_NEEDED so the fail-closed default is unchanged.
+  LLM_CORPUS_STATUS: z.enum(['SOURCE_NEEDED','SOURCE_REVIEWED']).default('SOURCE_NEEDED'),
+  LLM_CORPUS_PATH: z.string().trim().min(1).optional(),
+  LLM_CORPUS_SHA256: z.string().trim().regex(/^[a-f0-9]{64}$/i).optional(),
+  LLM_API_KEY: z.string().min(1).optional(),
+  LLM_MODEL: z.string().min(1).default('claude-sonnet-5'),
+  LLM_TIMEOUT_MS: z.coerce.number().int().min(1000).max(60000).default(30000),
   // .trim(): a stray trailing space in the stored value (seen on Railway as
   // "/usr/bin/chromium  ") makes Puppeteer look for a path that does not exist and fail
   // PDF render with an opaque 503. Normalize it here so config can't be broken by whitespace.
@@ -41,7 +52,14 @@ const envSchema = z.object({
       if (!config[key]) context.addIssue({ code: 'custom', path: [key], message: `${key} is required in live mode` });
     }
   }
-  if (config.LLM_ENABLED) context.addIssue({ code: 'custom', path: ['LLM_ENABLED'], message: 'LLM cannot be enabled while the reviewed corpus is SOURCE_NEEDED' });
+  if (config.LLM_ENABLED) {
+    if (config.LLM_CORPUS_STATUS !== 'SOURCE_REVIEWED') {
+      context.addIssue({ code: 'custom', path: ['LLM_ENABLED'], message: 'LLM cannot be enabled while the reviewed corpus is SOURCE_NEEDED' });
+    }
+    for (const key of ['LLM_CORPUS_PATH', 'LLM_CORPUS_SHA256', 'LLM_API_KEY']) {
+      if (!config[key]) context.addIssue({ code: 'custom', path: [key], message: `${key} is required when LLM is enabled` });
+    }
+  }
 });
 
 export const loadConfig = (env = process.env) => envSchema.parse(env);
@@ -90,6 +108,12 @@ const limiter = (label, max) => rateLimit({
 export function createApp(config = loadConfig()) {
   const app = express();
   const geocodeProvider = createGeocodeProvider(config);
+  // LLM stays fail-closed: loadReviewedCorpus THROWS (failing boot) if a corpus is declared
+  // (LLM_CORPUS_PATH set) but cannot be read, hash-matched, or schema-validated. With no
+  // corpus configured it returns SOURCE_NEEDED and createLlmClient returns null, so
+  // interpretSections serves the deterministic sections and never emits ungrounded prose.
+  const llmCorpus = config.LLM_ENABLED ? loadReviewedCorpus(config) : { status: 'SOURCE_NEEDED', rulesByKey: new Map() };
+  const llmClient = createLlmClient(config);
   // Railway (and most PaaS) terminate TLS at a single reverse proxy that sets
   // X-Forwarded-For. Trust exactly one hop so express-rate-limit keys on the real
   // client IP instead of throwing ERR_ERL_UNEXPECTED_X_FORWARDED_FOR. `1` (not `true`)
@@ -111,7 +135,7 @@ export function createApp(config = loadConfig()) {
     fufireConfigured: config.FUFIRE_MODE === 'live',
     liveFufireVerified: false,
     geocodeConfigured: config.FUFIRE_MODE === 'fixture' || Boolean(config.FUFIRE_GEOCODE_PATH),
-    llmConfigured: false,
+    llmConfigured: config.LLM_ENABLED,
     llmCorpusStatus: config.LLM_CORPUS_STATUS,
     pdfConfigured: Boolean(config.PUPPETEER_EXECUTABLE_PATH),
     dataMode: config.FUFIRE_MODE,
@@ -143,9 +167,14 @@ export function createApp(config = loadConfig()) {
       report.birthInputSummary.locationDisplayName = input.location.displayName;
       const interpretation = input.interpret ? generateSections(report) : { sections: [], warnings: [] };
       report.quality.warnings.push(...interpretation.warnings);
-      const reportToken = storeReport(report, interpretation.sections);
-      logInfo('calculate.ok', { requestId: report.calculation.requestId, mode: config.FUFIRE_MODE, rulesetId: report.calculation.rulesetId, fingerprint: report.calculation.chartFingerprint });
-      return res.json({ report, sections: interpretation.sections, reportToken });
+      // Fail-closed LLM synthesis: only runs with a validated corpus; any rejection falls back
+      // to the deterministic sections (llmUsed stays false). Deterministic path is unchanged.
+      const interpreted = interpretation.sections.length > 0
+        ? await interpretSections(interpretation.sections, { corpus: llmCorpus, client: llmClient, locale: input.locale, onReject: (code) => logInfo('llm.reject', { requestId: report.calculation.requestId, code }) })
+        : { sections: interpretation.sections, llmUsed: false };
+      const reportToken = storeReport(report, interpreted.sections);
+      logInfo('calculate.ok', { requestId: report.calculation.requestId, mode: config.FUFIRE_MODE, rulesetId: report.calculation.rulesetId, fingerprint: report.calculation.chartFingerprint, llmUsed: interpreted.llmUsed });
+      return res.json({ report, sections: interpreted.sections, reportToken, llmUsed: interpreted.llmUsed, llmCorpusStatus: config.LLM_CORPUS_STATUS });
     } catch (error) {
       if (error?.code === 'FIXTURE_PROFILE_MISMATCH') return errorEnvelope(res, 409, error.code, error.message);
       if (error instanceof ContractError) return errorEnvelope(res, 502, error.code, error.message);
@@ -155,7 +184,7 @@ export function createApp(config = loadConfig()) {
     }
   });
 
-  app.post('/api/zwds/interpret', limiter('interpret', 10), (req, res, next) => {
+  app.post('/api/zwds/interpret', limiter('interpret', 10), async (req, res, next) => {
     const parsed = z.object({ report: z.record(z.string(), z.unknown()), locale: z.enum(['de-DE','en-US']) }).strict().safeParse(req.body);
     if (!parsed.success || !Array.isArray(parsed.data?.report?.evidenceIndex)) return errorEnvelope(res, 400, 'VALIDATION_FAILED', 'Invalid normalized report.');
     const rep = parsed.data.report;
@@ -166,7 +195,10 @@ export function createApp(config = loadConfig()) {
     }
     try {
       const result = generateSections(rep);
-      return res.json({ sections: result.sections, warnings: result.warnings, llmUsed: false, llmCorpusStatus: 'SOURCE_NEEDED' });
+      const interpreted = result.sections.length > 0
+        ? await interpretSections(result.sections, { corpus: llmCorpus, client: llmClient, locale: parsed.data.locale, onReject: (code) => logInfo('llm.reject', { code }) })
+        : { sections: result.sections, llmUsed: false };
+      return res.json({ sections: interpreted.sections, warnings: result.warnings, llmUsed: interpreted.llmUsed, llmCorpusStatus: config.LLM_CORPUS_STATUS });
     } catch (error) {
       // AMD-001 / REQ-019: unknown / unsupported / unresolved evidence fails closed (no partial report).
       if (error instanceof ContractError) return errorEnvelope(res, 502, error.code, error.message);

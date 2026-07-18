@@ -16,7 +16,7 @@
 | Live FuFirE | `UNVERIFIED` | No approved staging auth. | Configure staging and record non-PII smoke evidence. |
 | Live geocoding | `UNVERIFIED` | Approved path absent. | Configure and contract-test it. |
 | Reviewed hashes | `SOURCE_NEEDED` | Not supplied. | Retrieve from authoritative metadata; never fabricate. |
-| LLM | `SOURCE_NEEDED` | No reviewed corpus. | Keep disabled until approved. |
+| LLM | pipeline built, `DISABLED` (no corpus) | Fail-closed synthesis pipeline shipped (REQ-015): gate refuses boot without a validated, hash-pinned reviewed corpus; grounding + numeric-containment guard rejects any ungrounded/predictive prose → deterministic fallback (adversarial sweep: 0 fail-closed violations). Residual limit: the guard is structural + numeric, NOT full semantic — non-numeric predictive prose still relies on the reviewed corpus + human output review. | Supply a genuinely source-reviewed corpus + sign-off, then enable and verify against the real LLM boundary. |
 | PDF binary smoke | `RESOLVED` (2026-07-18) | Deployed URL served a 158 KB `application/pdf` (`%PDF`), CJK `官祿宮`/`太陽` + not-authoritative notice extracted. Runtime pinned via `Dockerfile` (node:22-slim + apt `chromium` + `fonts-noto-cjk`); Nixpacks `aptPkgs` did NOT provision it. | — |
 | Test/lint/E2E execution | `BLOCKED` | CLI unavailable. | Run configured tools in CI/local shell. |
 | npm advisories | `UNVERIFIED` details | Installer reports 1 high/1 low. | Audit each chain and apply compatible updates only. |

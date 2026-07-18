@@ -52,3 +52,30 @@ laundered into "known limitations"; user reclassification only.
 all landed — the BFF↔FE `HUA_QUAN` wire is closed (fixture-mode and bff-mode agree), the live pin
 returns PASS, and Gate D re-verified the reconciliation as genuine. Geocode boundary (REQ-002)
 remains the one open external boundary (`integration-fake`, unpinned) — a user-owned release gate.
+
+## D-022 — REQ-015 fail-closed LLM synthesis pipeline (slice-2, 2026-07-18)
+
+**Scope-Shift decision (user):** build the fail-closed LLM pipeline as infrastructure; do NOT
+enable ungrounded synthesis. `Original Goal Status` (user-facing LLM interpretation) stays
+**NOT DONE** — it is blocked on a genuinely source-reviewed rules corpus, which cannot be
+fabricated. `Current Iteration Status`: pipeline built + guard-tested + shipped DISABLED.
+
+**Design:** interpretation stays deterministic (`generateSections`) by default. When — and only
+when — a validated, hash-pinned reviewed corpus is configured, the LLM may compose prose GROUNDED
+in that corpus + the chart's own evidence. Multi-layer fail-closed: (1) env gate refuses boot
+unless `LLM_ENABLED` + `SOURCE_REVIEWED` + corpus path + `LLM_CORPUS_SHA256` + api key; (2)
+`loadReviewedCorpus` hash-pins the corpus bytes (mismatch/invalid/missing => refuse boot); (3)
+`validateSynthesis` rejects any citation to a rule not supplied for the section, any evidence id
+not belonging to the section, empty/uncited/duplicate/malformed/non-JSON output, and any number
+not present in the reviewed guidance (numeric containment); (4) ANY rejection discards the entire
+synthesis and serves the deterministic sections — never a partial mix, never a 500.
+
+**Adversarial verification:** 6-vector attack+verify sweep (semantic-fabrication, evidence-borrow,
+env-gate-bypass, corpus-hash-bypass, type-confusion, partial-mix-leak) → **0 confirmed fail-closed
+violations**. The one surfaced item (structural guard cannot police non-numeric semantic
+faithfulness) is a documented architectural limit, mitigated by numeric containment + the
+requirement that the corpus itself be human-reviewed; it is not a fail-closed violation. This is
+why the feature stays gated behind a reviewed corpus.
+
+**Anti-fabrication invariant preserved:** in the shipping/default config (no corpus) nothing LLM
+ships; `llmConfigured:false`, `llmCorpusStatus:SOURCE_NEEDED`, deterministic sections only.
