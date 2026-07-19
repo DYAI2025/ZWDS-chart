@@ -43,6 +43,19 @@ describe('BFF fixture integration', () => {
     expect(ok.body.crosscheckStatus).toBe('MATCHED');
     expect((await request(app).get('/api/zwds/ruleset-status?rulesetId=unknown')).status).toBe(404);
   });
+  it('separates a malformed ruleset-status request (400) from an unknown ruleset (404)', async () => {
+    // A caller that forgets the param gets a validation error, not "this ruleset does not exist".
+    for (const url of ['/api/zwds/ruleset-status', '/api/zwds/ruleset-status?rulesetId=']) {
+      const missing = await request(app).get(url);
+      expect(missing.status, url).toBe(400);
+      expect(missing.body.error.code, url).toBe('VALIDATION_FAILED');
+    }
+    // A supplied-but-unrecognized ruleset still fails closed with no metadata leaked.
+    const unknown = await request(app).get('/api/zwds/ruleset-status?rulesetId=zwds.fufire.not-a-ruleset.v9');
+    expect(unknown.status).toBe(404);
+    expect(unknown.body.error.code).toBe('FUFIRE_UNKNOWN_RULESET');
+    expect(unknown.body.rulesetSha256).toBeUndefined();
+  });
   it('keeps LLM disabled and returns deterministic sections', async () => {
     const calculated = await request(app).post('/api/zwds/calculate').send(input);
     const response = await request(app).post('/api/zwds/interpret').send({ report: calculated.body.report, locale: 'de-DE' });
