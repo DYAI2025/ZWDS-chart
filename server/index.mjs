@@ -221,7 +221,12 @@ export function createApp(config = loadConfig()) {
   });
 
   app.get('/api/zwds/ruleset-status', async (req, res) => {
+    // A malformed request (no rulesetId) is a client error, not a missing resource — 400 so a
+    // caller that forgot the param is not told the ruleset does not exist. A rulesetId that IS
+    // supplied but does not match still fails closed as 404: never return metadata for an
+    // unrecognized ruleset.
     const rulesetId = String(req.query.rulesetId ?? '');
+    if (rulesetId === '') return errorEnvelope(res, 400, 'VALIDATION_FAILED', 'rulesetId is required.');
     if (rulesetId !== config.RULESET_ID) return errorEnvelope(res, 404, 'FUFIRE_UNKNOWN_RULESET', 'Unknown ruleset.');
     try {
       const metadata = config.FUFIRE_MODE === 'fixture' ? loadFixtureRuleset() : rulesetMetadataSchema.parse(await fetchRulesetMetadata(rulesetId, config));
