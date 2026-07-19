@@ -74,6 +74,10 @@ async function reachReportView(page: Page): Promise<void> {
   await page.getByRole('button', { name: /calculate atlas/i }).click();
   // Report view is reached once the report-only nav tabs mount (attached even where hidden).
   await expect(page.locator('.atlas-nav__link').first()).toBeAttached();
+  // Guided is the default sub-view; switch to the traditional atlas so the palace cells this
+  // spec measures are mounted (works on desktop and mobile).
+  const toTraditional = page.getByTestId('guided-to-traditional');
+  if (await toTraditional.count()) await toTraditional.click();
 }
 
 test('every interactive control meets the 44px minimum touch target (REQ-016A)', async ({ page }) => {

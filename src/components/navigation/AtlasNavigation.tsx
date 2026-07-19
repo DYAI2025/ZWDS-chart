@@ -2,6 +2,13 @@ import { useState } from 'react';
 import { useApp } from '@/app/appContext';
 import type { ReportSubView } from '@/app/appReducer';
 import { createProvider } from '@/app/providerFactory';
+import { FEATURE_FLAGS } from '@/app/featureFlags';
+
+// Guided tab leads when enabled; the traditional sub-views always remain reachable.
+const REPORT_TABS: ReportSubView[] = [
+  ...(FEATURE_FLAGS.guidedSummary ? (['guided'] as ReportSubView[]) : []),
+  'atlas', 'reading', 'evidence', 'method',
+];
 
 export function AtlasNavigation() {
   const { state, dispatch, t } = useApp();
@@ -32,7 +39,7 @@ export function AtlasNavigation() {
     <nav className="atlas-nav" aria-label="Main navigation"><div className="atlas-nav__inner">
       <span className="atlas-nav__brand text-editorial">BaZodiac</span>
       {isReport && <div className="atlas-nav__links" role="tablist" aria-label="Report views">
-        {(['atlas','reading','evidence','method'] as ReportSubView[]).map((sub) => <button key={sub} role="tab" aria-selected={state.reportSubView === sub} className={`atlas-nav__link ${state.reportSubView === sub ? 'atlas-nav__link--active' : ''}`} onClick={() => dispatch({ type: 'SET_REPORT_SUB_VIEW', payload: sub })}>{t(`nav.${sub}`)}</button>)}
+        {REPORT_TABS.map((sub) => <button key={sub} role="tab" aria-selected={state.reportSubView === sub} className={`atlas-nav__link ${state.reportSubView === sub ? 'atlas-nav__link--active' : ''}`} onClick={() => dispatch({ type: 'SET_REPORT_SUB_VIEW', payload: sub })}>{t(`nav.${sub}`)}</button>)}
       </div>}
       <span style={{ flex: 1 }} />
       <div className="atlas-nav__actions">

@@ -1,10 +1,13 @@
 import type { NormalizedZwdsReport, PalaceId, ReportSection } from '@/domain/zwdsTypes';
 import type { IntakeFormValues } from '@/domain/intakeTypes';
 import { INITIAL_INTAKE_VALUES } from '@/domain/intakeTypes';
+import { FEATURE_FLAGS } from './featureFlags';
 
 // ── State ─────────────────────────────────────────────────
 export type AppView = 'landing' | 'intake' | 'loading' | 'report' | 'error';
-export type ReportSubView = 'atlas' | 'reading' | 'evidence' | 'method';
+// 'guided' is the Western-adaptation plain-language entry view (Iteration 1); the four
+// traditional sub-views remain reachable so nothing is hidden.
+export type ReportSubView = 'guided' | 'atlas' | 'reading' | 'evidence' | 'method';
 export type Language = 'de' | 'en';
 
 export interface AppState {
@@ -97,6 +100,9 @@ export function appReducer(state: AppState, action: AppAction): AppState {
         view: 'report',
         selectedPalaceId: mingPalace.palaceId,
         selectedDecadeIndex: 1,
+        // Guided-first entry when enabled (docs/plans/2026-07-19…): the plain-language
+        // summary is shown before the traditional atlas. Reversible via the flag.
+        reportSubView: FEATURE_FLAGS.guidedDefault && FEATURE_FLAGS.guidedSummary ? 'guided' : 'atlas',
         calculationStatus: report.calculation.dataMode === 'fixture' ? 'DEMO_FIXTURE' : 'LIVE',
         evidenceDrawerOpen: false,
       };

@@ -1,4 +1,5 @@
 import { useApp } from '@/app/appContext';
+import { GuidedView } from '@/components/guided/GuidedView';
 import { PalaceWorkspace } from '@/components/atlas/PalaceWorkspace';
 import { EvidenceDrawer, EvidencePage, EvidenceSection } from '@/components/evidence/EvidenceViews';
 import { SourceChip, TruthBadge } from '@/components/common/ReportPrimitives';
@@ -90,5 +91,5 @@ function MethodPage() {
 export function ReportWorkspace() {
   const { state, t } = useApp();
   const report = state.report!;
-  return <main className="report-workspace"><div className="report-layout container"><NotAuthoritativeNotice/><ReportProvenancePanel/>{state.reportSubView === 'atlas' && <PalaceWorkspace/>}{state.reportSubView === 'reading' && <ReadingPage/>}{state.reportSubView === 'evidence' && <EvidencePage/>}{state.reportSubView === 'method' && <MethodPage/>}</div><EvidenceDrawer/><footer className="print-footer">{t('print.fingerprint')}: {report.calculation.chartFingerprint} · {report.calculation.sourceStatus} · {report.calculation.rulesetId}</footer></main>;
+  return <main className="report-workspace"><div className="report-layout container"><NotAuthoritativeNotice/><ReportProvenancePanel/>{state.reportSubView === 'guided' && <GuidedView/>}{state.reportSubView === 'atlas' && <PalaceWorkspace/>}{state.reportSubView === 'reading' && <ReadingPage/>}{state.reportSubView === 'evidence' && <EvidencePage/>}{state.reportSubView === 'method' && <MethodPage/>}</div><EvidenceDrawer/><footer className="print-footer">{t('print.fingerprint')}: {report.calculation.chartFingerprint} · {report.calculation.sourceStatus} · {report.calculation.rulesetId}</footer></main>;
 }

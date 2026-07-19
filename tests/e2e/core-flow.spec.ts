@@ -13,10 +13,15 @@ test('demo fixture shows explicit status and supports palace/decade navigation',
   await page.getByRole('button', { name: /calculate atlas/i }).click();
   await expect(page.getByRole('status', { name: /report status/i })).toContainText('DEMO_FIXTURE');
   await expect(page.getByRole('status', { name: /report status/i })).toContainText('SOURCE_NEEDED');
+  // Guided summary is the default report sub-view (Western-adaptation Iteration 1): the
+  // "prominent ≠ good/bad" line is present before the traditional atlas, on both projects.
+  await expect(page.getByTestId('guided-not-verdict')).toBeVisible();
   // The 4x4 palace grid is desktop-only (< 768px swaps to MobilePalaceNavigator, covered by
   // the T08 mobile-a11y specs), so grid-cell navigation is asserted on desktop only. Status
   // assertions above run on both projects.
   if (test.info().project.name !== 'mobile-chromium') {
+    // Switch from the guided view to the traditional atlas for grid-cell navigation.
+    await page.getByTestId('guided-to-traditional').click();
     await page.getByTestId('palace-cell-GUAN_LU').click();
     await expect(page.getByRole('complementary')).toContainText('natal:TAI_YANG');
     await page.getByRole('tab', { name: /46/ }).click();
